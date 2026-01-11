@@ -130,7 +130,7 @@ export default function WidgetTCItau() {
         <div className="flex justify-between">
           <span>Ciclo:</span>
           <span className="font-semibold">
-            {formatDate(tc.fecha_inicio_real || tc.fecha_inicio_estimada, 'dd/MM')} → {formatDate(tc.fecha_fin_real || tc.fecha_fin_estimada, 'dd/MM')}
+            {formatDate(tc.fecha_inicio_real || tc.fecha_inicio_estimada)} → {formatDate(tc.fecha_fin_real || tc.fecha_fin_estimada)}
           </span>
         </div>
 
@@ -176,7 +176,7 @@ export default function WidgetTCItau() {
                   type="date"
                   required
                   value={formCiclo.fecha_inicio_estimada}
-                  onChange={(e) => setFormCiclo({...formCiclo, fecha_inicio_estimada: e.target.value})}
+                  onChange={(e) => setFormCiclo({ ...formCiclo, fecha_inicio_estimada: e.target.value })}
                 />
               </div>
 
@@ -186,7 +186,7 @@ export default function WidgetTCItau() {
                   type="date"
                   required
                   value={formCiclo.fecha_fin_estimada}
-                  onChange={(e) => setFormCiclo({...formCiclo, fecha_fin_estimada: e.target.value})}
+                  onChange={(e) => setFormCiclo({ ...formCiclo, fecha_fin_estimada: e.target.value })}
                 />
               </div>
 
@@ -196,7 +196,7 @@ export default function WidgetTCItau() {
                   type="date"
                   required
                   value={formCiclo.fecha_pago_resto}
-                  onChange={(e) => setFormCiclo({...formCiclo, fecha_pago_resto: e.target.value})}
+                  onChange={(e) => setFormCiclo({ ...formCiclo, fecha_pago_resto: e.target.value })}
                 />
               </div>
 
@@ -223,7 +223,7 @@ export default function WidgetTCItau() {
                   type="date"
                   required
                   value={formFactura.fecha_inicio_real}
-                  onChange={(e) => setFormFactura({...formFactura, fecha_inicio_real: e.target.value})}
+                  onChange={(e) => setFormFactura({ ...formFactura, fecha_inicio_real: e.target.value })}
                 />
               </div>
 
@@ -233,7 +233,7 @@ export default function WidgetTCItau() {
                   type="date"
                   required
                   value={formFactura.fecha_fin_real}
-                  onChange={(e) => setFormFactura({...formFactura, fecha_fin_real: e.target.value})}
+                  onChange={(e) => setFormFactura({ ...formFactura, fecha_fin_real: e.target.value })}
                 />
               </div>
 
@@ -243,7 +243,7 @@ export default function WidgetTCItau() {
                   type="date"
                   required
                   value={formFactura.fecha_factura}
-                  onChange={(e) => setFormFactura({...formFactura, fecha_factura: e.target.value})}
+                  onChange={(e) => setFormFactura({ ...formFactura, fecha_factura: e.target.value })}
                 />
               </div>
 
@@ -253,7 +253,7 @@ export default function WidgetTCItau() {
                   type="date"
                   required
                   value={formFactura.fecha_vencimiento}
-                  onChange={(e) => setFormFactura({...formFactura, fecha_vencimiento: e.target.value})}
+                  onChange={(e) => setFormFactura({ ...formFactura, fecha_vencimiento: e.target.value })}
                 />
               </div>
 
@@ -263,13 +263,13 @@ export default function WidgetTCItau() {
                   type="number"
                   required
                   value={formFactura.monto_minimo}
-                  onChange={(e) => setFormFactura({...formFactura, monto_minimo: e.target.value})}
+                  onChange={(e) => setFormFactura({ ...formFactura, monto_minimo: e.target.value })}
                 />
               </div>
 
               <div className="bg-blue-50 p-3 rounded">
                 <p className="text-sm">
-                  <strong>Total gastado:</strong> {formatCurrency(tc.total_gastado)}<br/>
+                  <strong>Total gastado:</strong> {formatCurrency(tc.total_gastado)}<br />
                   <strong>Resto a pagar:</strong> {formatCurrency(tc.total_gastado - parseFloat(formFactura.monto_minimo || '0'))}
                 </p>
               </div>

@@ -20,6 +20,7 @@ interface ProyeccionMensual {
   mes_numero: number;
   anio: number;
   saldo_inicial: number;
+  saldo_inicial_tabla2?: number;
   ingresos: number;
   ingresos_tiene_override: boolean;
   gastos_efectivo: number;
@@ -51,7 +52,7 @@ export default function OpcionDosPage() {
     try {
       const res = await fetch(`/api/estadisticas/proyectar?meses=${mesesMostrar}`);
       const data = await res.json();
-      
+
       if (data.error) {
         console.error('Error en API:', data.error);
         alert('Error al cargar proyección: ' + data.error);
@@ -59,7 +60,7 @@ export default function OpcionDosPage() {
       }
 
       setProyeccion(data.proyeccion);
-      
+
       const categoriasMap = new Map();
       data.proyeccion.forEach((p: ProyeccionMensual) => {
         p.gastos_efectivo_detalle?.forEach(detalle => {
@@ -72,7 +73,7 @@ export default function OpcionDosPage() {
           }
         });
       });
-      
+
       setCategorias(Array.from(categoriasMap.values()));
       setConfig(data.config || {});
       setCambiosPendientes({});
@@ -192,7 +193,7 @@ export default function OpcionDosPage() {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Tabla 2 - Gastos Reales en Efectivo</h1>
             <p className="text-gray-600 text-sm">
-              Saldo inicial: {formatearMoneda(config.saldo_inicial || 0)} | 
+              Saldo inicial: {formatearMoneda(config.saldo_inicial || 0)} |
               Sueldo base: {formatearMoneda(config.sueldo_minimo || 0)}
               {config.periodo_actual && ` | Período actual: ${config.periodo_actual.mes}/${config.periodo_actual.anio}`}
             </p>
@@ -287,7 +288,7 @@ export default function OpcionDosPage() {
               </tr>
             </thead>
             <tbody>
-                            {/* Saldo Inicial */}
+              {/* Saldo Inicial */}
               <tr className="border-b-2 border-gray-200 hover:bg-gray-50 transition-colors">
                 <td className="px-4 py-3 font-semibold text-gray-700 sticky left-0 bg-white z-10 border-r-2 border-gray-200">
                   💵 Saldo Inicial
@@ -322,11 +323,10 @@ export default function OpcionDosPage() {
                               const numero = Number(e.target.value.replace(/\D/g, ''));
                               handleCambioLocal('sueldo', `${p.anio}-${p.mes_numero}`, numero);
                             }}
-                            className={`w-full pl-6 pr-2 py-2 border-2 rounded-lg text-right font-medium transition-all ${
-                              tieneOverride 
-                                ? 'border-yellow-400 bg-yellow-50 text-yellow-700' 
+                            className={`w-full pl-6 pr-2 py-2 border-2 rounded-lg text-right font-medium transition-all ${tieneOverride
+                                ? 'border-yellow-400 bg-yellow-50 text-yellow-700'
                                 : 'border-gray-300 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
-                            }`}
+                              }`}
                           />
                         </div>
                       ) : (
@@ -339,7 +339,7 @@ export default function OpcionDosPage() {
                 })}
               </tr>
 
-                            {/* Gastos Efectivo - Fila Principal */}
+              {/* Gastos Efectivo - Fila Principal */}
               <tr className="border-b-2 border-gray-200 bg-red-50">
                 <td className="px-4 py-3 font-semibold text-gray-700 sticky left-0 bg-red-50 z-10 border-r-2 border-gray-200">
                   <button
@@ -370,7 +370,7 @@ export default function OpcionDosPage() {
                   </td>
                   {proyeccion.map((p) => {
                     const detalle = p.gastos_efectivo_detalle?.find(d => d.categoria_id === cat.categoria_id);
-                    
+
                     if (!detalle) {
                       return (
                         <td key={p.mes} className="px-4 py-2 text-center text-gray-400 text-sm border-l border-gray-100">
@@ -395,11 +395,10 @@ export default function OpcionDosPage() {
                                 const numero = Number(e.target.value.replace(/\D/g, ''));
                                 handleCambioLocal('efectivo', `${detalle.categoria_id}-${p.anio}-${p.mes_numero}`, numero);
                               }}
-                              className={`w-full pl-5 pr-2 py-1 border-2 rounded text-right text-xs font-medium transition-all ${
-                                tieneOverride 
-                                  ? 'border-yellow-500 bg-yellow-100 text-yellow-700' 
+                              className={`w-full pl-5 pr-2 py-1 border-2 rounded text-right text-xs font-medium transition-all ${tieneOverride
+                                  ? 'border-yellow-500 bg-yellow-100 text-yellow-700'
                                   : 'border-gray-300 hover:border-blue-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-200'
-                              }`}
+                                }`}
                             />
                           </div>
                         ) : (
@@ -422,9 +421,8 @@ export default function OpcionDosPage() {
                 {proyeccion.map((p) => (
                   <td
                     key={p.mes}
-                    className={`px-4 py-4 text-center text-lg font-bold border-l border-gray-200 ${
-                      p.saldo_final_con_efectivo < 0 ? 'text-red-600' : 'text-green-600'
-                    }`}
+                    className={`px-4 py-4 text-center text-lg font-bold border-l border-gray-200 ${p.saldo_final_con_efectivo < 0 ? 'text-red-600' : 'text-green-600'
+                      }`}
                   >
                     {formatearMoneda(p.saldo_final_con_efectivo)}
                   </td>

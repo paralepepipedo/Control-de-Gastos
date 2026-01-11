@@ -51,7 +51,7 @@ export async function GET(request: Request) {
     // 4. OBTENER GASTOS FIJOS ACTIVOS
     const { data: gastosFijos, error: errorGastosFijos } = await supabase
       .from('gastos_fijos')
-      .select('id, nombre, monto_provision, categoria_id, categorias(nombre), dia_vencimiento')
+      .select('id, nombre, monto_provision, categoria_id, categorias!inner(nombre), dia_vencimiento')
       .eq('activo', true)
       .order('nombre', { ascending: true });
 
@@ -91,7 +91,7 @@ export async function GET(request: Request) {
       const gastosPorCategoria: { [key: number]: number } = {};
       gastosActual?.forEach(gasto => {
         if (gasto.categoria_id) {
-          gastosPorCategoria[gasto.categoria_id] = 
+          gastosPorCategoria[gasto.categoria_id] =
             (gastosPorCategoria[gasto.categoria_id] || 0) + Number(gasto.monto);
         }
       });
@@ -106,9 +106,9 @@ export async function GET(request: Request) {
       totalGastosEfectivoActual = gastosEfectivoActual.reduce((sum, g) => sum + g.monto, 0);
     }
 
-        // 8. PROYECTAR MES POR MES
+    // 8. PROYECTAR MES POR MES
     const proyeccion = [];
-    
+
     // VARIABLES SEPARADAS PARA CADA TABLA
     let saldoAcumuladoTabla1 = 1434841; // Para Tabla 1 (Gastos Fijos)
     let saldoAcumuladoTabla2 = 1434841; // Para Tabla 2 (Gastos Efectivo)
@@ -129,7 +129,7 @@ export async function GET(request: Request) {
       // ==============================================
       // TABLA 2 - GASTOS EFECTIVO (INDEPENDIENTE)
       // ==============================================
-      
+
       let saldoInicialTabla2: number;
       let ingresosMesTabla2: number;
       let sueldoTieneOverrideTabla2: boolean;
@@ -148,7 +148,7 @@ export async function GET(request: Request) {
 
       } else {
         // MESES NORMALES - TABLA 2
-        
+
         // Saldo inicial = Saldo final del mes anterior (TABLA 2)
         saldoInicialTabla2 = saldoAcumuladoTabla2;
 
@@ -176,7 +176,7 @@ export async function GET(request: Request) {
           const gastosPorCategoria: { [key: number]: number } = {};
           gastosMes?.forEach(gasto => {
             if (gasto.categoria_id) {
-              gastosPorCategoria[gasto.categoria_id] = 
+              gastosPorCategoria[gasto.categoria_id] =
                 (gastosPorCategoria[gasto.categoria_id] || 0) + Number(gasto.monto);
             }
           });
@@ -245,7 +245,7 @@ export async function GET(request: Request) {
 
       } else {
         // MESES NORMALES - TABLA 1
-        
+
         // Saldo inicial = Saldo final del mes anterior (TABLA 1)
         saldoInicialTabla1 = saldoAcumuladoTabla1;
 
@@ -269,7 +269,7 @@ export async function GET(request: Request) {
             monto: montoFinal,
             monto_original: Number(gf.monto_provision),
             tiene_override: !!override,
-            categoria: gf.categorias?.nombre || 'Sin categoría',
+            categoria: (gf.categorias as any)?.[0]?.nombre || 'Sin categoría',
             dia_vencimiento: gf.dia_vencimiento,
           };
         }) || [];
@@ -306,23 +306,23 @@ export async function GET(request: Request) {
         mes_nombre: format(mesFecha, 'MMM yyyy'),
         mes_numero: mesNumero,
         anio: anio,
-        
+
         // DATOS TABLA 1 (Gastos Fijos)
         saldo_inicial: saldoInicialTabla1,
         saldo_final: saldoFinalTabla1,
         gastos_fijos: totalGastosFijos,
         gastos_fijos_detalle: gastosDetalle,
-        
+
         // DATOS TABLA 2 (Gastos Efectivo)
         saldo_inicial_tabla2: saldoInicialTabla2,
         saldo_final_con_efectivo: saldoFinalTabla2,
         gastos_efectivo: totalGastosEfectivo,
         gastos_efectivo_detalle: gastosEfectivoDetalle,
-        
+
         // DATOS COMPARTIDOS
         ingresos: ingresosMesTabla1, // Mismo para ambas tablas
         ingresos_tiene_override: sueldoTieneOverrideTabla1,
-        
+
         // MÉTRICAS
         variacion: variacion,
         solvencia_porcentaje: solvencia,
@@ -356,7 +356,7 @@ export async function GET(request: Request) {
   } catch (error: any) {
     console.error('Error en proyección:', error);
     return NextResponse.json(
-      { 
+      {
         error: error.message,
         stack: error.stack
       },

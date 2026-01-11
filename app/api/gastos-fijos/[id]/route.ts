@@ -3,9 +3,10 @@ import { supabase } from '@/lib/supabase';
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     
     const { data, error } = await supabase
@@ -18,7 +19,7 @@ export async function PUT(
         metodo_pago: body.metodo_pago,
         activo: body.activo
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single();
 
@@ -32,15 +33,16 @@ export async function PUT(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     
     const { data, error } = await supabase
       .from('gastos_fijos')
       .update(body)
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single();
 

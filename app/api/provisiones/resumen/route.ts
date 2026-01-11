@@ -47,23 +47,23 @@ export async function GET(request: Request) {
     const totalProvisionado = provisiones?.reduce((sum, p) => sum + Number(p.monto_provision), 0) || 0;
 
     // B. Gastos PAGADOS que consumen presupuesto de efectivo
-// Regla: SOLO cuentan los pagados con método "efectivo".
-// Los gastos pagados con tarjeta NO descuentan provisión hasta que se pague la TC con efectivo.
-const gastosPagados = todosLosGastos?.filter(
-  g => g.pagado && g.metodo_pago === 'efectivo'
-) || [];
+    // Regla: SOLO cuentan los pagados con método "efectivo".
+    // Los gastos pagados con tarjeta NO descuentan provisión hasta que se pague la TC con efectivo.
+    const gastosPagados = todosLosGastos?.filter(
+      g => g.pagado && g.metodo_pago === 'efectivo'
+    ) || [];
 
-const totalPagadoPresupuesto = gastosPagados.reduce(
-  (sum, g) => sum + Number(g.monto),
-  0
-);
+    const totalPagadoPresupuesto = gastosPagados.reduce(
+      (sum, g) => sum + Number(g.monto),
+      0
+    );
 
     // C. Lógica Tarjeta de Crédito
     // 1. Total consumido en TC este mes
     const gastosTC = todosLosGastos?.filter(g => g.metodo_pago === 'tarjeta') || [];
     const totalGastadoTC = gastosTC.reduce((sum, g) => sum + Number(g.monto), 0);
 
-         // 2. Pagos mínimos realizados a la tarjeta:
+    // 2. Pagos mínimos realizados a la tarjeta:
     // Consideramos gastos con descripción que contenga "tc itau minimo",
     // método "efectivo" y marcados como pagados (ignorando mayúsculas).
     const pagosHaciaTC = todosLosGastos?.filter(g => {
@@ -81,9 +81,9 @@ const totalPagadoPresupuesto = gastosPagados.reduce(
     const deudaTCPendiente = totalGastadoTC - totalPagadoATC;
 
 
-        // D. Construir detalles - Sumar TODOS los gastos pagados (efectivo + tarjeta)
+    // D. Construir detalles - Sumar TODOS los gastos pagados (efectivo + tarjeta)
     const todosLosPagados = todosLosGastos?.filter(g => g.pagado) || [];
-    
+
     const gastosPagadosPorCat: Record<number, number> = {};
     todosLosPagados.forEach(g => {
       if (g.categoria_id) gastosPagadosPorCat[g.categoria_id] = (gastosPagadosPorCat[g.categoria_id] || 0) + Number(g.monto);
@@ -91,11 +91,12 @@ const totalPagadoPresupuesto = gastosPagados.reduce(
 
 
     const detalles = provisiones?.map(p => {
-      const gf = p.gastos_fijos;
+      const gf = (p.gastos_fijos as any)?.[0];
+      const cat = (gf?.categorias as any)?.[0];
       const gastado = gf?.categoria_id ? (gastosPagadosPorCat[gf.categoria_id] || 0) : 0;
       return {
         nombre: gf?.nombre || 'Provisión',
-        icono: gf?.categorias?.icono || '📄',
+        icono: cat?.icono || '📄',
         tipo: gf?.tipo || 'fijo',
         provisionado: Number(p.monto_provision),
         gastado,
@@ -111,7 +112,7 @@ const totalPagadoPresupuesto = gastosPagados.reduce(
         total_gastado: totalPagadoPresupuesto, // Para la barra de presupuesto
         saldo_total: totalProvisionado - totalPagadoPresupuesto,
         porcentaje_usado: totalProvisionado > 0 ? (totalPagadoPresupuesto / totalProvisionado) * 100 : 0,
-        
+
         // DATOS NUEVOS PARA FICHA TC
         tc_total_gastado: totalGastadoTC,
         tc_pagado: totalPagadoATC,

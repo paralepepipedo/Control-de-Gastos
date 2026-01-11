@@ -67,6 +67,6 @@ Total ciclo: ${data.total_gastado}
       `.trim();
 
     default:
-      return message;
+      return '';
   }
 }

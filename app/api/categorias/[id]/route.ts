@@ -8,14 +8,14 @@ export async function PUT(
   const { id } = await params;
   try {
     const body = await request.json();
-    
+
     const { data, error } = await supabase
       .from('categorias')
       .update({
         nombre: body.nombre,
         icono: body.icono
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single();
 
@@ -31,13 +31,13 @@ export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  
-
   try {
+    const { id } = await params;
+
     const { error } = await supabase
       .from('categorias')
       .delete()
-      .eq('id', params.id);
+      .eq('id', id);
 
     if (error) throw error;
 
