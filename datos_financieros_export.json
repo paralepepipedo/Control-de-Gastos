@@ -1,0 +1,3817 @@
+{
+  "gastos_fijos": [
+    {
+      "nombre": "Crédito Scotia",
+      "monto_promedio": 677936,
+      "metodo_pago": "efectivo"
+    },
+    {
+      "nombre": "Hipotecario",
+      "monto_promedio": 390000,
+      "metodo_pago": "efectivo"
+    },
+    {
+      "nombre": "Colegio",
+      "monto_promedio": 319000,
+      "metodo_pago": "efectivo"
+    },
+    {
+      "nombre": "Pensión Marti",
+      "monto_promedio": 170000,
+      "metodo_pago": "efectivo"
+    },
+    {
+      "nombre": "TC Itaú",
+      "monto_promedio": 0,
+      "metodo_pago": "efectivo"
+    },
+    {
+      "nombre": "TC Scotia",
+      "monto_promedio": 193169,
+      "metodo_pago": "efectivo"
+    },
+    {
+      "nombre": "TC Chile",
+      "monto_promedio": 90000,
+      "metodo_pago": "efectivo"
+    },
+    {
+      "nombre": "Línea Scotia",
+      "monto_promedio": 30000,
+      "metodo_pago": "efectivo"
+    },
+    {
+      "nombre": "Línea Chile",
+      "monto_promedio": 33578,
+      "metodo_pago": "efectivo"
+    },
+    {
+      "nombre": "Línea BCI",
+      "monto_promedio": 35189,
+      "metodo_pago": "efectivo"
+    },
+    {
+      "nombre": "Línea Itaú",
+      "monto_promedio": 72000,
+      "metodo_pago": "efectivo"
+    },
+    {
+      "nombre": "Bencina",
+      "monto_provision": 120000,
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "nombre": "Comida",
+      "monto_provision": 150000,
+      "metodo_pago": "tarjeta"
+    }
+  ],
+  "provisiones_mensuales": {},
+  "gastos_reales": [
+    {
+      "fecha": "2025-06-20",
+      "categoria": "linea sco",
+      "monto": 31826.0,
+      "detalle": "Liena BCI mas comisiones",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-20",
+      "categoria": "linea chile",
+      "monto": 24289.0,
+      "detalle": "Liena BCI mas comisiones",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-20",
+      "categoria": "linea bci",
+      "monto": 70429.0,
+      "detalle": "Liena BCI mas comisiones",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-20",
+      "categoria": "linea itau",
+      "monto": 5795.0,
+      "detalle": "Liena BCI mas comisiones",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-21",
+      "categoria": "Comida",
+      "monto": 1424.0,
+      "detalle": "Lider pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-04",
+      "categoria": "hipo",
+      "monto": 386852.0,
+      "detalle": "",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-04",
+      "categoria": "colegio",
+      "monto": 310000.0,
+      "detalle": "",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-07",
+      "categoria": "marti",
+      "monto": 170000.0,
+      "detalle": "",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-23",
+      "categoria": "Comida",
+      "monto": 1084.0,
+      "detalle": "sta isabel leche asada, natur",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-23",
+      "categoria": "bencina",
+      "monto": 30000.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-23",
+      "categoria": "Real +",
+      "monto": 138000.0,
+      "detalle": "copec",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2026-06-24",
+      "categoria": "Otros TC",
+      "monto": 29670.0,
+      "detalle": "stevia tio pedro",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2026-06-24",
+      "categoria": "Real +",
+      "monto": 138000.0,
+      "detalle": "stevia tio pedro",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2026-06-24",
+      "categoria": "Otros",
+      "monto": 4000.0,
+      "detalle": "cancha 18-6-25",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2026-06-24",
+      "categoria": "Real +",
+      "monto": 106000.0,
+      "detalle": "cancha 18-6-25",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-24",
+      "categoria": "Comida",
+      "monto": 2400.0,
+      "detalle": "pan patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-24",
+      "categoria": "Real +",
+      "monto": 127170.0,
+      "detalle": "pan patricia",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-24",
+      "categoria": "Otros TC",
+      "monto": -32990.0,
+      "detalle": "pago stevia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-24",
+      "categoria": "Real +",
+      "monto": 150720.0,
+      "detalle": "pago stevia",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-24",
+      "categoria": "Otros TC",
+      "monto": 23383.0,
+      "detalle": "gas patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-24",
+      "categoria": "Otros TC",
+      "monto": -24383.0,
+      "detalle": "gas patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-24",
+      "categoria": "Real +",
+      "monto": 96084.0,
+      "detalle": "gas patricia",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-24",
+      "categoria": "Real +",
+      "monto": 139416.0,
+      "detalle": "interes bci",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-25",
+      "categoria": "Cuentas",
+      "monto": 17872.0,
+      "detalle": "movistar patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-25",
+      "categoria": "Comida",
+      "monto": 2094.0,
+      "detalle": "sta isabel pate postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-25",
+      "categoria": "Comida",
+      "monto": 2630.0,
+      "detalle": "Pan PAtricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-25",
+      "categoria": "Real +",
+      "monto": 96084.0,
+      "detalle": "Pan PAtricia",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-07",
+      "categoria": "TC chile",
+      "monto": 84866.0,
+      "detalle": "TC Chile",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-07",
+      "categoria": "Real +",
+      "monto": 87606.0,
+      "detalle": "TC Chile",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-26",
+      "categoria": "Comida",
+      "monto": 1050.0,
+      "detalle": "Sta isabel postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-26",
+      "categoria": "Real +",
+      "monto": 106446.0,
+      "detalle": "Sta isabel postre",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-26",
+      "categoria": "Comida",
+      "monto": 2680.0,
+      "detalle": "pan patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-26",
+      "categoria": "Cuentas",
+      "monto": 35376.0,
+      "detalle": "GC mayo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-04",
+      "categoria": "Cuentas",
+      "monto": 22900.0,
+      "detalle": "Luz",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-04",
+      "categoria": "Real +",
+      "monto": 87606.0,
+      "detalle": "Luz",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-30",
+      "categoria": "Cuentas",
+      "monto": 52155.0,
+      "detalle": "ruta78",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-30",
+      "categoria": "Real +",
+      "monto": 96084.0,
+      "detalle": "ruta78",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-08",
+      "categoria": "Cuentas",
+      "monto": 15328.0,
+      "detalle": "movistar PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-08",
+      "categoria": "Real +",
+      "monto": 96084.0,
+      "detalle": "movistar PH",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-07",
+      "categoria": "Cuentas",
+      "monto": 9990.0,
+      "detalle": "wom",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-27",
+      "categoria": "Comida",
+      "monto": 3680.0,
+      "detalle": "kfc",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-27",
+      "categoria": "Comida",
+      "monto": 3530.0,
+      "detalle": "pan patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-28",
+      "categoria": "Comida",
+      "monto": 10083.0,
+      "detalle": "FDS patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-28",
+      "categoria": "Comida",
+      "monto": 2980.0,
+      "detalle": "pan patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-29",
+      "categoria": "Otros TC",
+      "monto": 11000.0,
+      "detalle": "youtube",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-29",
+      "categoria": "Comida",
+      "monto": 4090.0,
+      "detalle": "pan patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-30",
+      "categoria": "Comida",
+      "monto": 2222.0,
+      "detalle": "once pan pate",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-01",
+      "categoria": "Comida",
+      "monto": 1670.0,
+      "detalle": "Galletas marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-09",
+      "categoria": "TC scotia",
+      "monto": 1887421.0,
+      "detalle": "facturacion tc scotia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-01",
+      "categoria": "bencina",
+      "monto": 30000.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-01",
+      "categoria": "Otros TC",
+      "monto": 15975.0,
+      "detalle": "parafina patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-01",
+      "categoria": "Comida",
+      "monto": 13500.0,
+      "detalle": "Almuerzo marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-09",
+      "categoria": "TC itau",
+      "monto": 103230.0,
+      "detalle": "TC itau minimo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-02",
+      "categoria": "credito",
+      "monto": 677936.0,
+      "detalle": "cuota credito",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-02",
+      "categoria": "Comida",
+      "monto": 2194.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-06-27",
+      "categoria": "Otros",
+      "monto": 9619.0,
+      "detalle": "seguro oncologico",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-06-24",
+      "categoria": "Otros",
+      "monto": 5092.0,
+      "detalle": "Mantencion plan Bchile",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-03",
+      "categoria": "Otros",
+      "monto": 4000.0,
+      "detalle": "Cancha 02-7-25 semifinal",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-20",
+      "categoria": "Cuentas",
+      "monto": 14993.0,
+      "detalle": "movistar Patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-03",
+      "categoria": "Comida",
+      "monto": 3904.0,
+      "detalle": "almuerzo comida",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-04",
+      "categoria": "Comida",
+      "monto": 2507.0,
+      "detalle": "almuerzo comida",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-05",
+      "categoria": "Comida",
+      "monto": 5764.0,
+      "detalle": "comida fds",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-05",
+      "categoria": "Comida",
+      "monto": 960.0,
+      "detalle": "once fds",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-06",
+      "categoria": "Comida",
+      "monto": 1500.0,
+      "detalle": "once fds",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-06",
+      "categoria": "Comida",
+      "monto": 6850.0,
+      "detalle": "comida fds",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-07",
+      "categoria": "Cuentas",
+      "monto": 1332.0,
+      "detalle": "agua",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-17",
+      "categoria": "Cuentas",
+      "monto": 40554.0,
+      "detalle": "GC junio",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-07",
+      "categoria": "Comida",
+      "monto": 936.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-07",
+      "categoria": "bencina",
+      "monto": 20000.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-07",
+      "categoria": "Comida",
+      "monto": 1310.0,
+      "detalle": "pan patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-07",
+      "categoria": "Comida",
+      "monto": 2100.0,
+      "detalle": "pan patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-08",
+      "categoria": "Comida",
+      "monto": 2189.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-08",
+      "categoria": "Otros",
+      "monto": 2500.0,
+      "detalle": "Cancha Lunes 07-7-25",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-08",
+      "categoria": "Comida",
+      "monto": 2240.0,
+      "detalle": "Almuerzo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-09",
+      "categoria": "Comida",
+      "monto": 1572.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-09",
+      "categoria": "Comida",
+      "monto": 1800.0,
+      "detalle": "redbull final",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-10",
+      "categoria": "Comida",
+      "monto": 1590.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-10",
+      "categoria": "Otros TC",
+      "monto": 8700.0,
+      "detalle": "cervezas german",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-11",
+      "categoria": "Comida",
+      "monto": 1232.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-11",
+      "categoria": "Otros TC",
+      "monto": 2000.0,
+      "detalle": "BIP",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-11",
+      "categoria": "Comida",
+      "monto": 11480.0,
+      "detalle": "Almuerzo marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-12",
+      "categoria": "Otros TC",
+      "monto": 9351.0,
+      "detalle": "FDS patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-12",
+      "categoria": "Comida",
+      "monto": 6950.0,
+      "detalle": "paltas",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-13",
+      "categoria": "Otros TC",
+      "monto": 19970.0,
+      "detalle": "FDS patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-13",
+      "categoria": "Comida",
+      "monto": 2890.0,
+      "detalle": "pan patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-14",
+      "categoria": "Comida",
+      "monto": 3670.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-12",
+      "categoria": "Otros",
+      "monto": 119600.0,
+      "detalle": "frenos",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-14",
+      "categoria": "bencina",
+      "monto": 30000.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-14",
+      "categoria": "Otros TC",
+      "monto": 4000.0,
+      "detalle": "cancha final",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-14",
+      "categoria": "Comida",
+      "monto": 2300.0,
+      "detalle": "pan patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-15",
+      "categoria": "Comida",
+      "monto": 4434.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-15",
+      "categoria": "Comida",
+      "monto": 1000.0,
+      "detalle": "bip",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-15",
+      "categoria": "Comida",
+      "monto": 976.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-15",
+      "categoria": "Otros TC",
+      "monto": -12380.0,
+      "detalle": "Canje puntos",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-15",
+      "categoria": "Comida",
+      "monto": 3650.0,
+      "detalle": "para picar",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-15",
+      "categoria": "Comida",
+      "monto": 1120.0,
+      "detalle": "limones",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-15",
+      "categoria": "Comida",
+      "monto": 642.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-17",
+      "categoria": "bencina",
+      "monto": 10000.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-18",
+      "categoria": "Comida",
+      "monto": 1570.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-19",
+      "categoria": "Comida",
+      "monto": 2120.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-20",
+      "categoria": "Comida",
+      "monto": 5600.0,
+      "detalle": "empanadas",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-20",
+      "categoria": "Comida",
+      "monto": 12830.0,
+      "detalle": "almuerzo fds PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-20",
+      "categoria": "Otros",
+      "monto": 10000.0,
+      "detalle": "Inscripcion campeonato",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-21",
+      "categoria": "Comida",
+      "monto": 985.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-21",
+      "categoria": "Comida",
+      "monto": 12360.0,
+      "detalle": "pan patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-21",
+      "categoria": "Otros",
+      "monto": 20000.0,
+      "detalle": "BENCINA SCOTIA",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-22",
+      "categoria": "Comida",
+      "monto": 1672.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-23",
+      "categoria": "Comida",
+      "monto": 1528.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-23",
+      "categoria": "Comida",
+      "monto": 2450.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-23",
+      "categoria": "Comida",
+      "monto": 5450.0,
+      "detalle": "pilzas ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-24",
+      "categoria": "Comida",
+      "monto": 2500.0,
+      "detalle": "almuerzo empanada",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-24",
+      "categoria": "Comida",
+      "monto": 1333.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-24",
+      "categoria": "Comida",
+      "monto": 3837.0,
+      "detalle": "pilzas ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-22",
+      "categoria": "TC itau",
+      "monto": 500000.0,
+      "detalle": "",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-25",
+      "categoria": "Cuentas",
+      "monto": 33415.0,
+      "detalle": "metrogas",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-30",
+      "categoria": "Cuentas",
+      "monto": 45355.0,
+      "detalle": "Ruta 78",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-05",
+      "categoria": "Cuentas",
+      "monto": 9990.0,
+      "detalle": "wom",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-05",
+      "categoria": "Cuentas",
+      "monto": 21000.0,
+      "detalle": "LUZ",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-07",
+      "categoria": "Cuentas",
+      "monto": 16665.0,
+      "detalle": "movistar PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-07",
+      "categoria": "Real +",
+      "monto": 138000.0,
+      "detalle": "movistar PH",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-04",
+      "categoria": "marti",
+      "monto": 170000.0,
+      "detalle": "Marti",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-04",
+      "categoria": "Real +",
+      "monto": 138000.0,
+      "detalle": "Marti",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-04",
+      "categoria": "hipo",
+      "monto": 385671.0,
+      "detalle": "hipotecario",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-04",
+      "categoria": "colegio",
+      "monto": 319000.0,
+      "detalle": "colegio marti",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-04",
+      "categoria": "Real +",
+      "monto": 127170.0,
+      "detalle": "colegio marti",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-07",
+      "categoria": "TC chile",
+      "monto": 85293.0,
+      "detalle": "TC chile",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-07",
+      "categoria": "Real +",
+      "monto": 150720.0,
+      "detalle": "TC chile",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-26",
+      "categoria": "Otros TC",
+      "monto": 15470.0,
+      "detalle": "asado carlos",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-26",
+      "categoria": "Otros TC",
+      "monto": 18110.0,
+      "detalle": "asado bebidas",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-26",
+      "categoria": "Real +",
+      "monto": 96084.0,
+      "detalle": "asado bebidas",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-27",
+      "categoria": "bencina",
+      "monto": 28706.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-27",
+      "categoria": "Real +",
+      "monto": 139416.0,
+      "detalle": "copec",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-28",
+      "categoria": "Comida",
+      "monto": 4629.0,
+      "detalle": "desayuno y almuerzo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-28",
+      "categoria": "Comida",
+      "monto": 4920.0,
+      "detalle": "pan patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-28",
+      "categoria": "Real +",
+      "monto": 96084.0,
+      "detalle": "pan patricia",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-28",
+      "categoria": "Comida",
+      "monto": 2300.0,
+      "detalle": "colacion marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-28",
+      "categoria": "Real +",
+      "monto": 87606.0,
+      "detalle": "colacion marti",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-28",
+      "categoria": "Otros TC",
+      "monto": 11000.0,
+      "detalle": "youtube",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-28",
+      "categoria": "Real +",
+      "monto": 106446.0,
+      "detalle": "youtube",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-29",
+      "categoria": "Otros",
+      "monto": -19600.0,
+      "detalle": "stevia",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-29",
+      "categoria": "Otros TC",
+      "monto": 29400.0,
+      "detalle": "stevia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-08",
+      "categoria": "TC scotia",
+      "monto": 217091.0,
+      "detalle": "TC scotia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-08",
+      "categoria": "Real +",
+      "monto": 87606.0,
+      "detalle": "TC scotia",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-29",
+      "categoria": "Comida",
+      "monto": 1012.0,
+      "detalle": "once PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-29",
+      "categoria": "Real +",
+      "monto": 96084.0,
+      "detalle": "once PH",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-12",
+      "categoria": "TC itau",
+      "monto": 162654.0,
+      "detalle": "TC Itau",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-12",
+      "categoria": "Real +",
+      "monto": 96084.0,
+      "detalle": "TC Itau",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-30",
+      "categoria": "Comida",
+      "monto": 3990.0,
+      "detalle": "Almuerzo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-30",
+      "categoria": "Comida",
+      "monto": 1465.0,
+      "detalle": "Once PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-25",
+      "categoria": "Comida",
+      "monto": 2000.0,
+      "detalle": "bip",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-25",
+      "categoria": "Comida",
+      "monto": 1290.0,
+      "detalle": "berlines",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-25",
+      "categoria": "Comida",
+      "monto": 4990.0,
+      "detalle": "juan maestro",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-07-25",
+      "categoria": "Comida",
+      "monto": 6490.0,
+      "detalle": "ramen",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-01",
+      "categoria": "linea chile",
+      "monto": 1218.0,
+      "detalle": "Linea Chile",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-01",
+      "categoria": "linea sco",
+      "monto": 423.0,
+      "detalle": "Linea Scotia",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-01",
+      "categoria": "linea bci",
+      "monto": 32064.0,
+      "detalle": "Linea BCI",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-06",
+      "categoria": "linea itau",
+      "monto": 48464.0,
+      "detalle": "Linea Itau",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-07-28",
+      "categoria": "Otros",
+      "monto": 9603.0,
+      "detalle": "Seguro oncologico",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-19",
+      "categoria": "Cuentas",
+      "monto": 2910.0,
+      "detalle": "Costanera",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-01",
+      "categoria": "Otros",
+      "monto": 10800.0,
+      "detalle": "cumple garcia",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-01",
+      "categoria": "Comida",
+      "monto": 2990.0,
+      "detalle": "almuerzo kfc",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-01",
+      "categoria": "Comida",
+      "monto": 1843.0,
+      "detalle": "once PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-01",
+      "categoria": "Otros TC",
+      "monto": 16000.0,
+      "detalle": "colo colo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-03",
+      "categoria": "bencina",
+      "monto": 28698.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-04",
+      "categoria": "Comida",
+      "monto": 7317.0,
+      "detalle": "Once y colacion marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-05",
+      "categoria": "Cuentas",
+      "monto": 1333.0,
+      "detalle": "agua",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-15",
+      "categoria": "Cuentas",
+      "monto": 36450.0,
+      "detalle": "Gasto Comun",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-05",
+      "categoria": "Comida",
+      "monto": 4049.0,
+      "detalle": "once PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-05",
+      "categoria": "Otros",
+      "monto": 4000.0,
+      "detalle": "cancha 1er partido",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-06",
+      "categoria": "Otros TC",
+      "monto": 33594.0,
+      "detalle": "SSD",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-06",
+      "categoria": "Comida",
+      "monto": 2500.0,
+      "detalle": "almuerzo empanada",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-06",
+      "categoria": "Comida",
+      "monto": 1808.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-06",
+      "categoria": "Otros TC",
+      "monto": 3690.0,
+      "detalle": "monster y redbull",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-08",
+      "categoria": "Comida",
+      "monto": 2137.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-07",
+      "categoria": "Comida",
+      "monto": 3640.0,
+      "detalle": "dulces marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-08",
+      "categoria": "Otros TC",
+      "monto": 2000.0,
+      "detalle": "BIP",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-08",
+      "categoria": "Otros TC",
+      "monto": 4470.0,
+      "detalle": "Marti pulseras",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-09",
+      "categoria": "Comida",
+      "monto": 2740.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-10",
+      "categoria": "Otros",
+      "monto": -15000.0,
+      "detalle": "Parafina patricia",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-10",
+      "categoria": "Otros",
+      "monto": -40000.0,
+      "detalle": "Movistar Sandra",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-10",
+      "categoria": "Comida",
+      "monto": 2260.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-10",
+      "categoria": "bencina",
+      "monto": 28704.0,
+      "detalle": "Copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-11",
+      "categoria": "Comida",
+      "monto": 5227.0,
+      "detalle": "Once y colacion marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-11",
+      "categoria": "Otros",
+      "monto": -8439.0,
+      "detalle": "Bekron patricia",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-11",
+      "categoria": "Otros TC",
+      "monto": 8439.0,
+      "detalle": "Bekron patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-12",
+      "categoria": "Comida",
+      "monto": 2470.0,
+      "detalle": "postre y once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-13",
+      "categoria": "Otros",
+      "monto": 10325.0,
+      "detalle": "German junta",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-12",
+      "categoria": "Otros",
+      "monto": 2110.0,
+      "detalle": "cancha 2do partido",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-20",
+      "categoria": "Cuentas",
+      "monto": 13986.0,
+      "detalle": "Movistar Patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-13",
+      "categoria": "Comida",
+      "monto": 6712.0,
+      "detalle": "Comida China",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-15",
+      "categoria": "Comida",
+      "monto": 5445.0,
+      "detalle": "Pollo chuletas huevos/ bolsas confort",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-15",
+      "categoria": "Otros TC",
+      "monto": 1950.0,
+      "detalle": "Pollo chuletas huevos/ bolsas confort",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-17",
+      "categoria": "bencina",
+      "monto": 19136.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-18",
+      "categoria": "Comida",
+      "monto": 2973.0,
+      "detalle": "almuerzo postre ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-18",
+      "categoria": "Comida",
+      "monto": 7334.0,
+      "detalle": "Almuerzo colacion marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-19",
+      "categoria": "Comida",
+      "monto": 2611.0,
+      "detalle": "Postre y once PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-20",
+      "categoria": "Otros",
+      "monto": 4000.0,
+      "detalle": "cancha 13-8-25",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-20",
+      "categoria": "Otros TC",
+      "monto": 2000.0,
+      "detalle": "bip",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-20",
+      "categoria": "Comida",
+      "monto": 3053.0,
+      "detalle": "pan y postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-20",
+      "categoria": "Comida",
+      "monto": 8580.0,
+      "detalle": "",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-21",
+      "categoria": "Otros",
+      "monto": -40075.0,
+      "detalle": "excedentes isapre",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-21",
+      "categoria": "Comida",
+      "monto": 1170.0,
+      "detalle": "once PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-22",
+      "categoria": "Comida",
+      "monto": 1670.0,
+      "detalle": "cocavi",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-22",
+      "categoria": "Comida",
+      "monto": 6990.0,
+      "detalle": "almuerzo marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-22",
+      "categoria": "Comida",
+      "monto": 3860.0,
+      "detalle": "bip",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-22",
+      "categoria": "Otros TC",
+      "monto": 1000.0,
+      "detalle": "bip",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-23",
+      "categoria": "Comida",
+      "monto": 2102.0,
+      "detalle": "Patas de pollo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-24",
+      "categoria": "bencina",
+      "monto": 30000.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-24",
+      "categoria": "Comida",
+      "monto": 3027.0,
+      "detalle": "2 chuletas",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-25",
+      "categoria": "Comida",
+      "monto": 3630.0,
+      "detalle": "Once Patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-25",
+      "categoria": "Comida",
+      "monto": 7855.0,
+      "detalle": "almuerzo marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-25",
+      "categoria": "Otros TC",
+      "monto": 19990.0,
+      "detalle": "colagens",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-22",
+      "categoria": "TC itau",
+      "monto": 500000.0,
+      "detalle": "",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-30",
+      "categoria": "Cuentas",
+      "monto": 51139.0,
+      "detalle": "rutapass 78",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-26",
+      "categoria": "Otros TC",
+      "monto": 1000.0,
+      "detalle": "Bip",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-26",
+      "categoria": "Comida",
+      "monto": 1643.0,
+      "detalle": "Once PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-27",
+      "categoria": "Otros",
+      "monto": 6000.0,
+      "detalle": "Salida pedagocica",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-08-27",
+      "categoria": "Comida",
+      "monto": 3562.0,
+      "detalle": "convivencia once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-28",
+      "categoria": "Comida",
+      "monto": 4712.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-28",
+      "categoria": "Otros TC",
+      "monto": 2750.0,
+      "detalle": "pasta de dientes",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-28",
+      "categoria": "Otros TC",
+      "monto": 8000.0,
+      "detalle": "Canchas27-8-25",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-29",
+      "categoria": "Otros TC",
+      "monto": 1500.0,
+      "detalle": "alfajor marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-29",
+      "categoria": "Comida",
+      "monto": 5278.0,
+      "detalle": "oncePH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-29",
+      "categoria": "Otros TC",
+      "monto": 11000.0,
+      "detalle": "youtube",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-30",
+      "categoria": "Comida",
+      "monto": 7891.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-30",
+      "categoria": "Comida",
+      "monto": 3050.0,
+      "detalle": "oncePH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-30",
+      "categoria": "Comida",
+      "monto": 4200.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-08-30",
+      "categoria": "Comida",
+      "monto": 3320.0,
+      "detalle": "oncePH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-01",
+      "categoria": "credito",
+      "monto": 677936.0,
+      "detalle": "",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-09-01",
+      "categoria": "Otros",
+      "monto": -21119.0,
+      "detalle": "Dev seguro",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-09-01",
+      "categoria": "linea sco",
+      "monto": 438.0,
+      "detalle": "interes scotia",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-09-01",
+      "categoria": "Otros",
+      "monto": 9638.0,
+      "detalle": "Seguro oncologico",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-09-01",
+      "categoria": "linea chile",
+      "monto": 61.0,
+      "detalle": "linea chile",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-09-01",
+      "categoria": "linea bci",
+      "monto": 25265.0,
+      "detalle": "linea itau/bci",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-09-04",
+      "categoria": "Cuentas",
+      "monto": 28600.0,
+      "detalle": "Luz",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-04",
+      "categoria": "linea itau",
+      "monto": 53988.0,
+      "detalle": "Luz",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-09-04",
+      "categoria": "Cuentas",
+      "monto": 3209.0,
+      "detalle": "Autopase",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-04",
+      "categoria": "hipo",
+      "monto": 390000.0,
+      "detalle": "hipotecario",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-09-04",
+      "categoria": "colegio",
+      "monto": 319000.0,
+      "detalle": "colegio",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-09-05",
+      "categoria": "marti",
+      "monto": 170000.0,
+      "detalle": "marti",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-09-07",
+      "categoria": "Cuentas",
+      "monto": 14150.0,
+      "detalle": "movistar PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-08",
+      "categoria": "TC scotia",
+      "monto": 197610.0,
+      "detalle": "TC scotia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-08",
+      "categoria": "TC chile",
+      "monto": 86859.0,
+      "detalle": "TC chile",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-09",
+      "categoria": "Cuentas",
+      "monto": 1552.0,
+      "detalle": "vespucio sur",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-10",
+      "categoria": "TC itau",
+      "monto": 161868.0,
+      "detalle": "TC itau",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-02",
+      "categoria": "Comida",
+      "monto": 1373.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-02",
+      "categoria": "Comida",
+      "monto": 6300.0,
+      "detalle": "almuerzo marti y yo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-02",
+      "categoria": "Comida",
+      "monto": 2980.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-02",
+      "categoria": "bencina",
+      "monto": 30000.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-03",
+      "categoria": "Comida",
+      "monto": 2297.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-06",
+      "categoria": "Cuentas",
+      "monto": 1894.0,
+      "detalle": "avo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-15",
+      "categoria": "Cuentas",
+      "monto": 36561.0,
+      "detalle": "gastos comunes",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-04",
+      "categoria": "Comida",
+      "monto": 5320.0,
+      "detalle": "almuerzo PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-04",
+      "categoria": "Comida",
+      "monto": 3260.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-05",
+      "categoria": "Cuentas",
+      "monto": 9900.0,
+      "detalle": "wom",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-05",
+      "categoria": "Comida",
+      "monto": 909.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-06",
+      "categoria": "Otros TC",
+      "monto": 24154.0,
+      "detalle": "almuerzo patricia juguete marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-06",
+      "categoria": "Comida",
+      "monto": 7980.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-07",
+      "categoria": "Comida",
+      "monto": 8040.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-08",
+      "categoria": "Comida",
+      "monto": 2860.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-09",
+      "categoria": "Comida",
+      "monto": 1030.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-09",
+      "categoria": "bencina",
+      "monto": 30000.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-09",
+      "categoria": "Comida",
+      "monto": 4400.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-09",
+      "categoria": "Comida",
+      "monto": 6658.0,
+      "detalle": "almuerzo marti y yo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-10",
+      "categoria": "Comida",
+      "monto": 3633.0,
+      "detalle": "poste once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-25",
+      "categoria": "Cuentas",
+      "monto": 38868.0,
+      "detalle": "Gas",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-11",
+      "categoria": "Comida",
+      "monto": 2400.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-12",
+      "categoria": "Otros TC",
+      "monto": 6792.0,
+      "detalle": "remedio",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-12",
+      "categoria": "Comida",
+      "monto": 2990.0,
+      "detalle": "almuerzo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-12",
+      "categoria": "Comida",
+      "monto": 971.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-12",
+      "categoria": "Otros TC",
+      "monto": 6990.0,
+      "detalle": "cosos",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-13",
+      "categoria": "Comida",
+      "monto": 27064.0,
+      "detalle": "lasagna",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-13",
+      "categoria": "Comida",
+      "monto": 2680.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-15",
+      "categoria": "Comida",
+      "monto": 4230.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-15",
+      "categoria": "Otros",
+      "monto": 5330.0,
+      "detalle": "crumble kechua",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-09-16",
+      "categoria": "Comida",
+      "monto": 5900.0,
+      "detalle": "almuerzo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-16",
+      "categoria": "Comida",
+      "monto": 3317.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-17",
+      "categoria": "Comida",
+      "monto": 14742.0,
+      "detalle": "huevos queso pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-17",
+      "categoria": "Otros TC",
+      "monto": 9680.0,
+      "detalle": "mayo carbon",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-18",
+      "categoria": "Comida",
+      "monto": 5000.0,
+      "detalle": "postre grido",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-19",
+      "categoria": "Comida",
+      "monto": 6300.0,
+      "detalle": "Once ph y quinta normal",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-19",
+      "categoria": "Otros TC",
+      "monto": 2000.0,
+      "detalle": "churros",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-19",
+      "categoria": "Otros TC",
+      "monto": 5800.0,
+      "detalle": "cocavis parada",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-20",
+      "categoria": "Comida",
+      "monto": 3890.0,
+      "detalle": "Once",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-20",
+      "categoria": "Comida",
+      "monto": 3190.0,
+      "detalle": "Postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-21",
+      "categoria": "Comida",
+      "monto": 4450.0,
+      "detalle": "Once Patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-22",
+      "categoria": "Cuentas",
+      "monto": 13986.0,
+      "detalle": "Movistar Patrici",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-22",
+      "categoria": "Comida",
+      "monto": 3995.0,
+      "detalle": "Almuerzo once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-23",
+      "categoria": "Otros TC",
+      "monto": 5990.0,
+      "detalle": "manga pierna",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-23",
+      "categoria": "bencina",
+      "monto": 30000.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-23",
+      "categoria": "Comida",
+      "monto": 2820.0,
+      "detalle": "Once PAtricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-23",
+      "categoria": "Comida",
+      "monto": 9752.0,
+      "detalle": "almuerzo marti y yo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-24",
+      "categoria": "Otros TC",
+      "monto": 8000.0,
+      "detalle": "canchas campeontao",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-22",
+      "categoria": "TC itau",
+      "monto": 1000000.0,
+      "detalle": "",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-26",
+      "categoria": "Comida",
+      "monto": 2397.0,
+      "detalle": "POSTRE",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-26",
+      "categoria": "Comida",
+      "monto": 2260.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-27",
+      "categoria": "Comida",
+      "monto": 2970.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-28",
+      "categoria": "Comida",
+      "monto": 13258.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-28",
+      "categoria": "Comida",
+      "monto": 5760.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-29",
+      "categoria": "Comida",
+      "monto": 1900.0,
+      "detalle": "postre ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-29",
+      "categoria": "Otros TC",
+      "monto": 4290.0,
+      "detalle": "repelete gatos",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-29",
+      "categoria": "Otros TC",
+      "monto": 11000.0,
+      "detalle": "repelete gatos",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-30",
+      "categoria": "Comida",
+      "monto": 1460.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-30",
+      "categoria": "bencina",
+      "monto": 30000.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-30",
+      "categoria": "Comida",
+      "monto": 2800.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-09-30",
+      "categoria": "Comida",
+      "monto": 7744.0,
+      "detalle": "almuerzo colacion",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-01",
+      "categoria": "Comida",
+      "monto": 1984.0,
+      "detalle": "postre y pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-01",
+      "categoria": "Otros TC",
+      "monto": 6000.0,
+      "detalle": "mote",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-01",
+      "categoria": "linea chile",
+      "monto": 4060.0,
+      "detalle": "lincea bci",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-10-01",
+      "categoria": "linea bci",
+      "monto": 32765.0,
+      "detalle": "lincea bci",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-10-02",
+      "categoria": "credito",
+      "monto": 677936.0,
+      "detalle": "Credito Scotia",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-10-03",
+      "categoria": "Cuentas",
+      "monto": 43166.0,
+      "detalle": "ruta 78",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-03",
+      "categoria": "Otros TC",
+      "monto": 2000.0,
+      "detalle": "bip",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-03",
+      "categoria": "TC itau",
+      "monto": 12880.0,
+      "detalle": "seguro itau linea",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-03",
+      "categoria": "Comida",
+      "monto": 11600.0,
+      "detalle": "almuerzo con marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-04",
+      "categoria": "hipo",
+      "monto": 389119.0,
+      "detalle": "hipotecario",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-10-04",
+      "categoria": "colegio",
+      "monto": 319000.0,
+      "detalle": "Colegio",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-10-05",
+      "categoria": "marti",
+      "monto": 170000.0,
+      "detalle": "pensiion",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-10-06",
+      "categoria": "Cuentas",
+      "monto": 3635.0,
+      "detalle": "wom",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-07",
+      "categoria": "Otros",
+      "monto": 6178.0,
+      "detalle": "TC consorcio",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-10-08",
+      "categoria": "TC chile",
+      "monto": 84239.0,
+      "detalle": "tc chile",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-09",
+      "categoria": "TC itau",
+      "monto": 208719.0,
+      "detalle": "TC ITAU",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-09",
+      "categoria": "TC scotia",
+      "monto": 197248.0,
+      "detalle": "TC sctoia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-15",
+      "categoria": "Cuentas",
+      "monto": 34344.0,
+      "detalle": "GV Ooctubre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-03",
+      "categoria": "Comida",
+      "monto": 1980.0,
+      "detalle": "helados",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-03",
+      "categoria": "Comida",
+      "monto": 2810.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-04",
+      "categoria": "Otros TC",
+      "monto": 18000.0,
+      "detalle": "ropa marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-04",
+      "categoria": "Comida",
+      "monto": 14081.0,
+      "detalle": "almuerzo patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-04",
+      "categoria": "Comida",
+      "monto": 1960.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-05",
+      "categoria": "Comida",
+      "monto": 12117.0,
+      "detalle": "almuerzo patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-05",
+      "categoria": "Comida",
+      "monto": 2830.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-06",
+      "categoria": "Otros",
+      "monto": 9674.0,
+      "detalle": "seguro oncologico",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-10-06",
+      "categoria": "Otros",
+      "monto": 16000.0,
+      "detalle": "paseo marti",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-10-06",
+      "categoria": "Comida",
+      "monto": 4928.0,
+      "detalle": "almuerzo once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-06",
+      "categoria": "Cuentas",
+      "monto": 3635.0,
+      "detalle": "wom",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-06",
+      "categoria": "Comida",
+      "monto": 3330.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-07",
+      "categoria": "Otros TC",
+      "monto": 5000.0,
+      "detalle": "frutos secos",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-07",
+      "categoria": "bencina",
+      "monto": 20000.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-07",
+      "categoria": "Comida",
+      "monto": 1620.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-07",
+      "categoria": "Comida",
+      "monto": 4390.0,
+      "detalle": "almuerzo marti y yo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-08",
+      "categoria": "Cuentas",
+      "monto": 14149.0,
+      "detalle": "Movistar PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-08",
+      "categoria": "Comida",
+      "monto": 3541.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-10",
+      "categoria": "Otros TC",
+      "monto": 1911.0,
+      "detalle": "impuestos",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-10",
+      "categoria": "Comida",
+      "monto": 5500.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-10",
+      "categoria": "Comida",
+      "monto": 2604.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-11",
+      "categoria": "Comida",
+      "monto": 6743.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-12",
+      "categoria": "Comida",
+      "monto": 4990.0,
+      "detalle": "onceph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-14",
+      "categoria": "Comida",
+      "monto": 4596.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-14",
+      "categoria": "Comida",
+      "monto": 2740.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-15",
+      "categoria": "Comida",
+      "monto": 2735.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-16",
+      "categoria": "Comida",
+      "monto": 3394.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-17",
+      "categoria": "Comida",
+      "monto": 908.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-20",
+      "categoria": "Cuentas",
+      "monto": 13986.0,
+      "detalle": "movistarpatricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-21",
+      "categoria": "bencina",
+      "monto": 30000.0,
+      "detalle": "Copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-21",
+      "categoria": "Comida",
+      "monto": 1550.0,
+      "detalle": "Postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-21",
+      "categoria": "Comida",
+      "monto": 7747.0,
+      "detalle": "Almuerzo marti y yo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-21",
+      "categoria": "Otros TC",
+      "monto": 13019.333333333334,
+      "detalle": "aliexpres",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-20",
+      "categoria": "Otros",
+      "monto": 15816.0,
+      "detalle": "Degravamen BCI",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-10-22",
+      "categoria": "Comida",
+      "monto": 2770.0,
+      "detalle": "mcdonlads",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-22",
+      "categoria": "Otros TC",
+      "monto": 6490.0,
+      "detalle": "mcdonlads",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-22",
+      "categoria": "TC itau",
+      "monto": 450000.0,
+      "detalle": "",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-21",
+      "categoria": "Otros TC",
+      "monto": 13019.333333333334,
+      "detalle": "aliexpres",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-24",
+      "categoria": "Comida",
+      "monto": 29370.0,
+      "detalle": "choriillana",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-24",
+      "categoria": "Comida",
+      "monto": 2640.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-25",
+      "categoria": "Otros TC",
+      "monto": 25780.0,
+      "detalle": "Mercaderia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-25",
+      "categoria": "Comida",
+      "monto": 1100.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-25",
+      "categoria": "Comida",
+      "monto": 1800.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-26",
+      "categoria": "Comida",
+      "monto": 3700.0,
+      "detalle": "postre pastel",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-26",
+      "categoria": "Comida",
+      "monto": 1650.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-28",
+      "categoria": "Comida",
+      "monto": 2910.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-28",
+      "categoria": "bencina",
+      "monto": 27423.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-28",
+      "categoria": "Comida",
+      "monto": 1447.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-28",
+      "categoria": "Otros TC",
+      "monto": 20380.0,
+      "detalle": "stevia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-28",
+      "categoria": "Otros TC",
+      "monto": 6000.0,
+      "detalle": "disfraz",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-29",
+      "categoria": "Otros TC",
+      "monto": 11000.0,
+      "detalle": "Youtube",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-30",
+      "categoria": "Cuentas",
+      "monto": 33799.0,
+      "detalle": "Rutapass 78",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-30",
+      "categoria": "Comida",
+      "monto": 1470.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-10-31",
+      "categoria": "Comida",
+      "monto": 6781.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-01",
+      "categoria": "Comida",
+      "monto": 3700.0,
+      "detalle": "paltas",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-01",
+      "categoria": "Comida",
+      "monto": 1640.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-02",
+      "categoria": "Comida",
+      "monto": 7414.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-02",
+      "categoria": "Comida",
+      "monto": 27959.0,
+      "detalle": "almuerzo patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-03",
+      "categoria": "credito",
+      "monto": 677936.0,
+      "detalle": "credito",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-03",
+      "categoria": "Cuentas",
+      "monto": 2990.0,
+      "detalle": "wom",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-03",
+      "categoria": "Otros",
+      "monto": 2920.0,
+      "detalle": "Autopista central",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-03",
+      "categoria": "Otros",
+      "monto": 9825.0,
+      "detalle": "Seguro oncologico",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-04",
+      "categoria": "hipo",
+      "monto": 390000.0,
+      "detalle": "hitecari",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-04",
+      "categoria": "colegio",
+      "monto": 319000.0,
+      "detalle": "colegio",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-04",
+      "categoria": "Comida",
+      "monto": 1419.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-04",
+      "categoria": "linea bci",
+      "monto": 33298.0,
+      "detalle": "linea bci",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-05",
+      "categoria": "marti",
+      "monto": 170000.0,
+      "detalle": "marti",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-05",
+      "categoria": "Otros",
+      "monto": 64369.0,
+      "detalle": "CONSORCIO",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-06",
+      "categoria": "Cuentas",
+      "monto": 57900.0,
+      "detalle": "CGE Luz",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-06",
+      "categoria": "TC chile",
+      "monto": 82156.0,
+      "detalle": "TC Chile",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-07",
+      "categoria": "Cuentas",
+      "monto": 14150.0,
+      "detalle": "Movistar PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-10",
+      "categoria": "TC scotia",
+      "monto": 197124.0,
+      "detalle": "TC Scotia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-11",
+      "categoria": "TC itau",
+      "monto": 170033.0,
+      "detalle": "TC itau",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-15",
+      "categoria": "Cuentas",
+      "monto": 40380.0,
+      "detalle": "GC",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-05",
+      "categoria": "Comida",
+      "monto": 1615.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-05",
+      "categoria": "Otros",
+      "monto": 12404.0,
+      "detalle": "cumple marce",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-07",
+      "categoria": "Comida",
+      "monto": 2584.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-11",
+      "categoria": "Cuentas",
+      "monto": 14167.0,
+      "detalle": "Movistar Patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-08",
+      "categoria": "Comida",
+      "monto": 2520.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-08",
+      "categoria": "Comida",
+      "monto": 5555.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-09",
+      "categoria": "Comida",
+      "monto": 1750.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-09",
+      "categoria": "Comida",
+      "monto": 10951.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-10",
+      "categoria": "bencina",
+      "monto": 27625.0,
+      "detalle": "Copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-10",
+      "categoria": "Otros TC",
+      "monto": 35920.0,
+      "detalle": "Cambio aceite",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-11",
+      "categoria": "Comida",
+      "monto": 1040.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-11",
+      "categoria": "Comida",
+      "monto": 2540.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-11",
+      "categoria": "Comida",
+      "monto": 7953.0,
+      "detalle": "almuerzo marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-12",
+      "categoria": "Comida",
+      "monto": 1680.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-11",
+      "categoria": "linea itau",
+      "monto": 42779.0,
+      "detalle": "Linea itau",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-12",
+      "categoria": "Comida",
+      "monto": 14150.0,
+      "detalle": "Movistar Patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-13",
+      "categoria": "Comida",
+      "monto": 3865.0,
+      "detalle": "Almuerzo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-14",
+      "categoria": "Comida",
+      "monto": 1990.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-14",
+      "categoria": "Comida",
+      "monto": 8681.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-14",
+      "categoria": "Comida",
+      "monto": 1783.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-15",
+      "categoria": "Comida",
+      "monto": 10000.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-17",
+      "categoria": "Comida",
+      "monto": 2250.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-17",
+      "categoria": "Comida",
+      "monto": 5600.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-18",
+      "categoria": "Comida",
+      "monto": 1435.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-18",
+      "categoria": "Otros TC",
+      "monto": 13900.0,
+      "detalle": "cuerdas",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-18",
+      "categoria": "Comida",
+      "monto": 4684.0,
+      "detalle": "almuerzo marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-18",
+      "categoria": "Comida",
+      "monto": 2540.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-18",
+      "categoria": "bencina",
+      "monto": 20000.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-19",
+      "categoria": "Comida",
+      "monto": 2342.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-20",
+      "categoria": "Comida",
+      "monto": 3403.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-21",
+      "categoria": "Comida",
+      "monto": 2850.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-21",
+      "categoria": "Comida",
+      "monto": 1010.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-22",
+      "categoria": "Comida",
+      "monto": 5870.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-23",
+      "categoria": "Comida",
+      "monto": 1870.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-22",
+      "categoria": "TC itau",
+      "monto": 984536.3333333334,
+      "detalle": "",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-25",
+      "categoria": "bencina",
+      "monto": 27642.0,
+      "detalle": "Copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-25",
+      "categoria": "linea sco",
+      "monto": 6220.0,
+      "detalle": "Copec",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-25",
+      "categoria": "linea bci",
+      "monto": 33412.0,
+      "detalle": "Copec",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-25",
+      "categoria": "linea itau",
+      "monto": 67709.0,
+      "detalle": "Copec",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-25",
+      "categoria": "Comida",
+      "monto": 1432.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-25",
+      "categoria": "Comida",
+      "monto": 8093.0,
+      "detalle": "almuerzo marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-25",
+      "categoria": "Comida",
+      "monto": 1350.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-26",
+      "categoria": "Comida",
+      "monto": 1848.0,
+      "detalle": "",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-27",
+      "categoria": "Cuentas",
+      "monto": 75598.0,
+      "detalle": "Metrogas + seguro",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-27",
+      "categoria": "Otros",
+      "monto": 9713.0,
+      "detalle": "Metrogas + seguro",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-11-27",
+      "categoria": "Otros TC",
+      "monto": 13800.0,
+      "detalle": "beer",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-27",
+      "categoria": "Otros TC",
+      "monto": 14410.0,
+      "detalle": "beer",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-27",
+      "categoria": "Comida",
+      "monto": 5235.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-28",
+      "categoria": "Comida",
+      "monto": 18480.0,
+      "detalle": "mcdonalds",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-28",
+      "categoria": "Otros TC",
+      "monto": 200.0,
+      "detalle": "est mcdonald",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-28",
+      "categoria": "Comida",
+      "monto": 4190.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-28",
+      "categoria": "Otros TC",
+      "monto": 16880.0,
+      "detalle": "beer",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-29",
+      "categoria": "Otros TC",
+      "monto": 11000.0,
+      "detalle": "youtube",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-29",
+      "categoria": "Otros TC",
+      "monto": 14100.0,
+      "detalle": "regalo maite",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-29",
+      "categoria": "Otros TC",
+      "monto": 5000.0,
+      "detalle": "petshop",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-30",
+      "categoria": "bencina",
+      "monto": 27642.0,
+      "detalle": "",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-11-30",
+      "categoria": "Comida",
+      "monto": 1110.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-01",
+      "categoria": "Otros TC",
+      "monto": 13019.333333333334,
+      "detalle": "aliexpres",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-01",
+      "categoria": "Cuentas",
+      "monto": 34159.0,
+      "detalle": "Rutapass",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-01",
+      "categoria": "Comida",
+      "monto": 6296.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-02",
+      "categoria": "credito",
+      "monto": 677936.0,
+      "detalle": "",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-12-04",
+      "categoria": "hipo",
+      "monto": 390648.0,
+      "detalle": "",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-12-04",
+      "categoria": "marti",
+      "monto": 170000.0,
+      "detalle": "",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-12-04",
+      "categoria": "colegio",
+      "monto": 319000.0,
+      "detalle": "",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-12-05",
+      "categoria": "Cuentas",
+      "monto": 29500.0,
+      "detalle": "CGE Luz",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-08",
+      "categoria": "Cuentas",
+      "monto": 13678.0,
+      "detalle": "Movistar PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-09",
+      "categoria": "Cuentas",
+      "monto": 2990.0,
+      "detalle": "Wom",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-11",
+      "categoria": "TC itau",
+      "monto": 210000.0,
+      "detalle": "TC itau",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-09",
+      "categoria": "TC chile",
+      "monto": 87462.0,
+      "detalle": "TC chile",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-09",
+      "categoria": "TC scotia",
+      "monto": 197244.0,
+      "detalle": "tcScotia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-04",
+      "categoria": "Otros",
+      "monto": 154476.0,
+      "detalle": "TC Consorcio",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-12-02",
+      "categoria": "Comida",
+      "monto": 1040.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-02",
+      "categoria": "Comida",
+      "monto": 3990.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-02",
+      "categoria": "Comida",
+      "monto": 8982.0,
+      "detalle": "almuerzo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-02",
+      "categoria": "Otros TC",
+      "monto": 1000.0,
+      "detalle": "BIP",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-02",
+      "categoria": "Comida",
+      "monto": 3250.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-15",
+      "categoria": "Cuentas",
+      "monto": 36901.0,
+      "detalle": "GC",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-20",
+      "categoria": "Cuentas",
+      "monto": 13696.0,
+      "detalle": "Movistar Patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-03",
+      "categoria": "Comida",
+      "monto": 2603.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-04",
+      "categoria": "Comida",
+      "monto": 5796.0,
+      "detalle": "almuerzo ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-05",
+      "categoria": "Comida",
+      "monto": 1924.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-05",
+      "categoria": "Comida",
+      "monto": 1200.0,
+      "detalle": "velas",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-05",
+      "categoria": "Otros TC",
+      "monto": 6888.0,
+      "detalle": "album",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-06",
+      "categoria": "Otros TC",
+      "monto": 10326.666666666666,
+      "detalle": "Nico",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-06",
+      "categoria": "Comida",
+      "monto": 17601.0,
+      "detalle": "Almuerzo PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-07",
+      "categoria": "Comida",
+      "monto": 3740.0,
+      "detalle": "Once PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-08",
+      "categoria": "Comida",
+      "monto": 850.0,
+      "detalle": "Almuerzo Ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-08",
+      "categoria": "Comida",
+      "monto": 1990.0,
+      "detalle": "Once PH",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-09",
+      "categoria": "Comida",
+      "monto": 5240.0,
+      "detalle": "colacion marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-09",
+      "categoria": "Comida",
+      "monto": 23170.0,
+      "detalle": "Almuerzo mcdonald",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-09",
+      "categoria": "Otros TC",
+      "monto": 2000.0,
+      "detalle": "bip",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-09",
+      "categoria": "Comida",
+      "monto": 1980.0,
+      "detalle": "Once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-09",
+      "categoria": "bencina",
+      "monto": 19476.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-10",
+      "categoria": "Otros TC",
+      "monto": 17000.0,
+      "detalle": "polera",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-10",
+      "categoria": "Otros TC",
+      "monto": 29000.0,
+      "detalle": "librería",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-10",
+      "categoria": "Comida",
+      "monto": 2835.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-12",
+      "categoria": "Comida",
+      "monto": 1319.0,
+      "detalle": "desayuno",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-12",
+      "categoria": "Comida",
+      "monto": 11600.0,
+      "detalle": "chinos",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-05",
+      "categoria": "Otros",
+      "monto": -30000.0,
+      "detalle": "Sandra",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-12-15",
+      "categoria": "Cuentas",
+      "monto": 3553.0,
+      "detalle": "Costanera norte",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-12",
+      "categoria": "Otros TC",
+      "monto": 1991.0,
+      "detalle": "bip",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-13",
+      "categoria": "Comida",
+      "monto": 2970.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-13",
+      "categoria": "Otros TC",
+      "monto": 2990.0,
+      "detalle": "easy",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-13",
+      "categoria": "Comida",
+      "monto": 13000.0,
+      "detalle": "once ph",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-13",
+      "categoria": "Otros TC",
+      "monto": 5200.0,
+      "detalle": "cumple",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-14",
+      "categoria": "Comida",
+      "monto": 2400.0,
+      "detalle": "once pan",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-14",
+      "categoria": "Comida",
+      "monto": 4150.0,
+      "detalle": "lider patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-15",
+      "categoria": "Comida",
+      "monto": 15770.0,
+      "detalle": "Almuerzo patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-15",
+      "categoria": "Comida",
+      "monto": 8254.0,
+      "detalle": "Almuerzo patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-16",
+      "categoria": "Comida",
+      "monto": 1402.0,
+      "detalle": "desayuno",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-16",
+      "categoria": "bencina",
+      "monto": 20000.0,
+      "detalle": "copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-16",
+      "categoria": "Comida",
+      "monto": 6190.0,
+      "detalle": "once postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-17",
+      "categoria": "Otros TC",
+      "monto": 16980.0,
+      "detalle": "regalos chocolates tottus",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-18",
+      "categoria": "Comida",
+      "monto": 2610.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-19",
+      "categoria": "Comida",
+      "monto": 4000.0,
+      "detalle": "churros",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-19",
+      "categoria": "Comida",
+      "monto": 5000.0,
+      "detalle": "mojitos",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-19",
+      "categoria": "Otros TC",
+      "monto": 2000.0,
+      "detalle": "labubu",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-19",
+      "categoria": "Comida",
+      "monto": 23768.0,
+      "detalle": "Almuerzo patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-19",
+      "categoria": "Otros TC",
+      "monto": 7500.0,
+      "detalle": "ropa marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-19",
+      "categoria": "Comida",
+      "monto": 1930.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-20",
+      "categoria": "Comida",
+      "monto": 6175.0,
+      "detalle": "almuerzo",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-21",
+      "categoria": "Comida",
+      "monto": 4695.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-22",
+      "categoria": "Comida",
+      "monto": 14425.0,
+      "detalle": "Bebidas oncs",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-23",
+      "categoria": "Comida",
+      "monto": 5287.0,
+      "detalle": "Postre y once",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-23",
+      "categoria": "Comida",
+      "monto": 2990.0,
+      "detalle": "Almuerzo marti",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-23",
+      "categoria": "bencina",
+      "monto": 20000.0,
+      "detalle": "Copec",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-23",
+      "categoria": "Otros",
+      "monto": 8000.0,
+      "detalle": "canchas",
+      "metodo_pago": "efectivo"
+    },
+    {
+      "fecha": "2025-12-24",
+      "categoria": "Comida",
+      "monto": 1445.0,
+      "detalle": "postre",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-24",
+      "categoria": "Otros TC",
+      "monto": 1900.0,
+      "detalle": "chinos",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-24",
+      "categoria": "Otros TC",
+      "monto": 1000.0,
+      "detalle": "bip",
+      "metodo_pago": "tarjeta"
+    },
+    {
+      "fecha": "2025-12-24",
+      "categoria": "Comida",
+      "monto": 2360.0,
+      "detalle": "once patricia",
+      "metodo_pago": "tarjeta"
+    }
+  ],
+  "servicios_recurrentes": [
+    {
+      "nombre": "Movistar PH",
+      "categoria": "Servicios",
+      "monto_aprox": 14000
+    },
+    {
+      "nombre": "Movistar Patricia",
+      "categoria": "Servicios",
+      "monto_aprox": 14000
+    },
+    {
+      "nombre": "WOM",
+      "categoria": "Servicios",
+      "monto_aprox": 10000
+    },
+    {
+      "nombre": "Luz CGE",
+      "categoria": "Servicios",
+      "monto_aprox": 25000
+    },
+    {
+      "nombre": "Agua",
+      "categoria": "Servicios",
+      "monto_aprox": 1500
+    },
+    {
+      "nombre": "Gas Metrogas",
+      "categoria": "Servicios",
+      "monto_aprox": 35000
+    },
+    {
+      "nombre": "Gastos Comunes",
+      "categoria": "Servicios",
+      "monto_aprox": 38000
+    },
+    {
+      "nombre": "Rutapass 78",
+      "categoria": "Transporte",
+      "monto_aprox": 40000
+    }
+  ]
+}
