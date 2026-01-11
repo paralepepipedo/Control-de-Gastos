@@ -3,8 +3,9 @@ import { supabase } from '@/lib/supabase';
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const body = await request.json();
     
@@ -28,8 +29,10 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  
+
   try {
     const { error } = await supabase
       .from('categorias')
