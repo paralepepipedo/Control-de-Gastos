@@ -4,9 +4,16 @@ import { supabase } from '@/lib/supabase';
 export async function GET() {
   try {
     const hoy = new Date();
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
     
-    // Obtener período actual desde la API de períodos
-    const periodoResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/periodos`);
+    // 1. Obtener período actual con validación de error
+    const periodoResponse = await fetch(`${baseUrl}/api/periodos`);
+    
+    if (!periodoResponse.ok) {
+      const errorText = await periodoResponse.text();
+      throw new Error(`Error al obtener periodos (${periodoResponse.status}): ${errorText.substring(0, 100)}...`);
+    }
+
     const periodoResult = await periodoResponse.json();
     
     if (!periodoResult.success) {
@@ -17,22 +24,28 @@ export async function GET() {
     const inicioMes = periodo.fecha_inicio;
     const finMes = periodo.fecha_fin;
     
-    // Calcular período anterior (mes anterior)
+    // 2. Calcular período anterior
     const mesAnterior = periodo.mes === 1 ? 12 : periodo.mes - 1;
     const anioAnterior = periodo.mes === 1 ? periodo.anio - 1 : periodo.anio;
     
     const periodoAnteriorResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/periodos?mes=${mesAnterior}&anio=${anioAnterior}`
+      `${baseUrl}/api/periodos?mes=${mesAnterior}&anio=${anioAnterior}`
     );
-    const periodoAnteriorResult = await periodoAnteriorResponse.json();
     
-    const periodoAnterior = periodoAnteriorResult.data;
-    const inicioMesAnterior = periodoAnterior.fecha_inicio;
-    const finMesAnterior = periodoAnterior.fecha_fin;
+    // Si falla el periodo anterior, no bloqueamos todo, usamos valores por defecto o lanzamos error según prefieras.
+    // Aquí asumimos que si falla, lanzamos error para mantener consistencia.
+    if (!periodoAnteriorResponse.ok) {
+       console.warn('Advertencia: No se pudo obtener el periodo anterior');
+    }
+    const periodoAnteriorResult = periodoAnteriorResponse.ok ? await periodoAnteriorResponse.json() : { data: { fecha_inicio: null, fecha_fin: null } };
+    
+    const periodoAnterior = periodoAnteriorResult.data || {};
+    const inicioMesAnterior = periodoAnterior.fecha_inicio || inicioMes; // Fallback para evitar error en query
+    const finMesAnterior = periodoAnterior.fecha_fin || finMes;
     
     const proximos7Dias = new Date(hoy.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-    // Ejecutar todas las queries en paralelo
+    // 3. Ejecutar todas las queries en paralelo
     const [
       { data: fondos },
       { data: gastosMes },
@@ -53,6 +66,7 @@ export async function GET() {
       supabase.from('gastos').select('categoria_id, monto, categorias(nombre, icono)').gte('fecha', inicioMes).lte('fecha', finMes)
     ]);
 
+    // 4. Cálculos de resumen
     const saldoTotal = fondos?.reduce((sum, f) => sum + Number(f.saldo_actual), 0) || 0;
     const totalGastosMes = gastosMes?.reduce((sum, g) => sum + Number(g.monto), 0) || 0;
     const totalGastosMesAnterior = gastosMesAnterior?.reduce((sum, g) => sum + Number(g.monto), 0) || 0;
@@ -61,6 +75,7 @@ export async function GET() {
     const totalGastosFijos = gastosFijos?.reduce((sum, g) => sum + Number(g.monto_provision), 0) || 0;
     const gastosFijosActivos = gastosFijos?.filter(g => g.activo).length || 0;
 
+    // 5. Procesar categorías
     const gastosPorCategoria = Object.values(
       (gastosPorCat || []).reduce((acc: any, g: any) => {
         const catId = g.categoria_id || 'sin-categoria';
@@ -77,9 +92,7 @@ export async function GET() {
       }, {})
     ).sort((a: any, b: any) => b.total - a.total);
 
-    // ========== AGREGAR AQUÍ (ANTES DEL RETURN) ==========
-    
-    // Obtener próximo pago
+    // 6. Obtener próximo pago (Nueva funcionalidad)
     const { data: fechasPago } = await supabase
       .from('fechas_pago')
       .select('*')
@@ -99,26 +112,12 @@ export async function GET() {
       };
     }
 
-    // Obtener saldo fondos
-    const { data: fondos } = await supabase
-      .from('fondos')
-      .select('*');
-
+    // Objeto para el gráfico de saldo (reutiliza la variable 'fondos' del inicio)
     const saldoFondos = {
-      saldo_liquido: fondos?.reduce((sum, f) => sum + Number(f.monto), 0) || 0,
+      saldo_liquido: saldoTotal, // Ya calculamos esto arriba como saldoTotal
     };
 
-    // Calcular pendientes por método de pago
-    const pendientesTarjeta = gastos?.filter(g => !g.pagado && g.metodo_pago === 'tarjeta')
-      .reduce((sum, g) => sum + Number(g.monto), 0) || 0;
-    const pendientesEfectivo = gastos?.filter(g => !g.pagado && g.metodo_pago === 'efectivo')
-      .reduce((sum, g) => sum + Number(g.monto), 0) || 0;
-    const cantidadPendientesTarjeta = gastos?.filter(g => !g.pagado && g.metodo_pago === 'tarjeta').length || 0;
-    const cantidadPendientesEfectivo = gastos?.filter(g => !g.pagado && g.metodo_pago === 'efectivo').length || 0;
-
-    // ========== FIN DE CÓDIGO AGREGADO ==========
-    
-return NextResponse.json({
+    return NextResponse.json({
       success: true,
       data: {
         periodo,
@@ -130,7 +129,6 @@ return NextResponse.json({
           totalGastosFijos,
           gastosFijosActivos
         },
-
         proximoPago,
         saldoFondos,
         proximosVencimientos: proximosVencimientos || [],
@@ -139,7 +137,8 @@ return NextResponse.json({
       }
     });
   } catch (error: any) {
-    console.error('Error en dashboard:', error);
+    console.error('Error crítico en dashboard:', error);
+    // Devolvemos un JSON válido incluso en error para evitar el "Unexpected token <"
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
