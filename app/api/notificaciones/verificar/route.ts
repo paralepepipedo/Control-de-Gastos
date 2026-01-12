@@ -96,22 +96,25 @@ export async function GET() {
         // 🔥 LÓGICA DE VERIFICACIÓN
         // Si es VENCIDO o vence HOY: Enviar siempre (cada hora)
         if (diasRestantes <= 0) {
-          console.log(`🔴 Gasto ${gasto.id} vencido/hoy - Enviar siempre`);
-        } else {
+          console.log(`🔴 Gasto ${gasto.id} (${gasto.descripcion}) vencido/hoy - Enviar siempre`);
+        } else if (diasRestantes >= 1 && diasRestantes <= 3) {
           // Si es FUTURO (1-3 días): Verificar si ya se envió hoy
           const { data: yaEnviado } = await supabaseAdmin
             .from('notificaciones_enviadas')
             .select('id')
             .eq('gasto_id', gasto.id)
-            .eq('tipo_notificacion', 'proximo')
             .gte('fecha_envio', hoyStr + 'T00:00:00Z')
             .maybeSingle();
 
           if (yaEnviado) {
-            console.log(`⏭️ Gasto ${gasto.id} ya notificado hoy - SKIP`);
+            console.log(`⏭️ Gasto ${gasto.id} (${gasto.descripcion}) ya notificado hoy - SKIP`);
             return null; // No enviar
           }
-          console.log(`🟢 Gasto ${gasto.id} futuro - Primera notificación del día`);
+          console.log(`🟢 Gasto ${gasto.id} (${gasto.descripcion}) futuro - Primera notificación del día`);
+        } else {
+          // Gastos fuera de rango (> 3 días)
+          console.log(`⚪ Gasto ${gasto.id} vence en ${diasRestantes} días - Fuera de rango - SKIP`);
+          return null;
         }
 
         // Determinar emoji y urgencia
@@ -141,9 +144,9 @@ export async function GET() {
           `📅 Fecha: ${fechaGasto.toLocaleDateString('es-CL')}\n` +
           `⏰ ${diasRestantes < 0 ? `¡VENCIDO hace ${Math.abs(diasRestantes)} día${Math.abs(diasRestantes) > 1 ? 's' : ''}!` : diasRestantes === 0 ? 'Vence HOY' : `Faltan ${diasRestantes} día${diasRestantes > 1 ? 's' : ''}`}`;
 
-        console.log('📤 Enviando mensaje:', mensaje.substring(0, 50) + '...');
+        console.log('📤 Enviando:', gasto.descripcion);
 
-        // Enviar a Telegram DIRECTAMENTE (sin fetch interno)
+        // Enviar a Telegram DIRECTAMENTE
         if (config.telegram_activo) {
           try {
             const telegramUrl = `https://api.telegram.org/bot${config.telegram_token}/sendMessage`;
@@ -157,16 +160,16 @@ export async function GET() {
               }),
             });
             const result = await telegramResp.json();
-            console.log('📱 Telegram resultado:', result.ok ? '✅' : '❌', result.description || '');
+            console.log('📱 Telegram:', result.ok ? '✅' : '❌', result.description || '');
             
             if (!result.ok) {
-              console.error('❌ Error en Telegram:', result.description);
+              console.error('❌ Error Telegram:', result.description);
             }
           } catch (err) {
-            console.error('❌ Error al llamar Telegram:', err);
+            console.error('❌ Error llamando Telegram:', err);
           }
         } else {
-          console.log('⚠️ Telegram desactivado en config');
+          console.log('⚠️ Telegram desactivado');
         }
 
         // Registrar notificación
@@ -181,9 +184,9 @@ export async function GET() {
           });
 
         if (insertError) {
-          console.error('❌ Error al guardar notificación:', insertError);
+          console.error('❌ Error guardando notificación:', insertError);
         } else {
-          console.log('✅ Notificación registrada en BD');
+          console.log('✅ Notificación registrada');
         }
 
         return { 
@@ -202,7 +205,7 @@ export async function GET() {
       console.log('ℹ️ No hay gastos pendientes');
     }
 
-    console.log('✅ FIN verificación. Notificaciones enviadas:', notificacionesEnviadas.length);
+    console.log('✅ FIN verificación. Notificaciones:', notificacionesEnviadas.length);
 
     return NextResponse.json({
       success: true,
