@@ -28,16 +28,15 @@ export async function GET() {
     const hace7dias = new Date(hoy);
     hace7dias.setDate(hace7dias.getDate() - 7);
 
-    const { error: deleteError, count: deletedCount } = await supabaseAdmin
+    const { error: deleteError } = await supabaseAdmin
       .from('notificaciones_enviadas')
       .delete()
-      .lt('fecha_envio', hace7dias.toISOString())
-      .select('*', { count: 'exact', head: true });
+      .lt('fecha_envio', hace7dias.toISOString());
 
     if (deleteError) {
       console.error('⚠️ Error limpiando notificaciones antiguas:', deleteError);
     } else {
-      console.log(`🧹 Limpieza automática: ${deletedCount || 0} registros > 7 días eliminados`);
+      console.log('🧹 Limpieza automática: registros > 7 días eliminados');
     }
 
     // Obtener configuración
@@ -144,19 +143,24 @@ export async function GET() {
 
         console.log('📤 Enviando mensaje:', mensaje.substring(0, 50) + '...');
 
-        // Enviar a Telegram
+        // Enviar a Telegram DIRECTAMENTE (sin fetch interno)
         if (config.telegram_activo) {
           try {
-            const telegramResp = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/notificaciones/telegram`, {
+            const telegramUrl = `https://api.telegram.org/bot${config.telegram_token}/sendMessage`;
+            const telegramResp = await fetch(telegramUrl, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ mensaje }),
+              body: JSON.stringify({
+                chat_id: config.telegram_chat_id,
+                text: mensaje,
+                parse_mode: 'HTML',
+              }),
             });
             const result = await telegramResp.json();
-            console.log('📱 Telegram resultado:', result.success ? '✅' : '❌', result.error || '');
+            console.log('📱 Telegram resultado:', result.ok ? '✅' : '❌', result.description || '');
             
-            if (!result.success) {
-              console.error('❌ Error en Telegram:', result.error);
+            if (!result.ok) {
+              console.error('❌ Error en Telegram:', result.description);
             }
           } catch (err) {
             console.error('❌ Error al llamar Telegram:', err);
@@ -207,7 +211,6 @@ export async function GET() {
       hora_chile: ahoraChile.toLocaleTimeString('es-CL'),
       fecha_busqueda: `Hasta ${limiteStr}`,
       gastos_encontrados: gastosProximos?.length || 0,
-      registros_eliminados: deletedCount || 0,
     });
 
   } catch (error: any) {
