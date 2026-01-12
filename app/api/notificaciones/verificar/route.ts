@@ -13,12 +13,17 @@ export async function GET() {
     hoy.setHours(0, 0, 0, 0);
     const manana = new Date(hoy);
     manana.setDate(manana.getDate() + 1);
+    
+    // Fecha límite: hoy + 3 días
+    const limite = new Date(hoy);
+    limite.setDate(limite.getDate() + 3);
 
     // Fechas en formato string sin hora
     const hoyStr = hoy.toISOString().split('T')[0];
-    const mananaStr = manana.toISOString().split('T')[0];
+    const limiteStr = limite.toISOString().split('T')[0];
 
     console.log('📅 Fecha hoy:', hoyStr);
+    console.log('📅 Fecha límite (hoy+3):', limiteStr);
     console.log('⏰ Hora Chile:', horaActual);
 
     // Obtener configuración
@@ -49,8 +54,8 @@ export async function GET() {
 
     const notificacionesEnviadas = [];
 
-    // 1. BUSCAR GASTOS QUE VENCEN HOY
-    const { data: gastosHoy, error: errorGastos } = await supabaseAdmin
+    // 1. BUSCAR GASTOS NO PAGADOS (hoy + próximos 3 días)
+    const { data: gastosProximos, error: errorGastos } = await supabaseAdmin
       .from('gastos')
       .select(`
         id,
@@ -62,23 +67,41 @@ export async function GET() {
       `)
       .eq('pagado', false)
       .gte('fecha', hoyStr)
-      .lt('fecha', mananaStr);
+      .lte('fecha', limiteStr)
+      .order('fecha', { ascending: true });
 
-    console.log('🔍 Gastos hoy encontrados:', gastosHoy?.length || 0);
+    console.log('🔍 Gastos próximos encontrados:', gastosProximos?.length || 0);
     if (errorGastos) console.error('❌ Error gastos:', errorGastos);
 
-    if (gastosHoy && gastosHoy.length > 0) {
-      console.log('📋 Gastos:', gastosHoy.map(g => `${g.id}: ${g.descripcion}`));
+    if (gastosProximos && gastosProximos.length > 0) {
+      console.log('📋 Gastos:', gastosProximos.map(g => `${g.id}: ${g.fecha} - ${g.descripcion}`));
       
-      for (const gasto of gastosHoy) {
-        const fechaGasto = new Date(gasto.fecha);
-        const horasRestantes = Math.max(0, Math.floor((fechaGasto.getTime() - ahoraChile.getTime()) / (1000 * 60 * 60)));
+      for (const gasto of gastosProximos) {
+        const fechaGasto = new Date(gasto.fecha + 'T00:00:00');
+        const diasRestantes = Math.ceil((fechaGasto.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
+        
+        let emoji = '🚨';
+        let urgencia = 'URGENTE';
+        
+        if (diasRestantes === 0) {
+          emoji = '🔴';
+          urgencia = 'VENCE HOY';
+        } else if (diasRestantes === 1) {
+          emoji = '🟠';
+          urgencia = 'VENCE MAÑANA';
+        } else if (diasRestantes === 2) {
+          emoji = '🟡';
+          urgencia = 'VENCE EN 2 DÍAS';
+        } else if (diasRestantes === 3) {
+          emoji = '🟢';
+          urgencia = 'VENCE EN 3 DÍAS';
+        }
 
-        const mensaje = `🚨 <b>PAGO URGENTE HOY</b>\n\n` +
+        const mensaje = `${emoji} <b>${urgencia}</b>\n\n` +
           `💳 ${gasto.descripcion}\n` +
           `💰 Monto: $${Number(gasto.monto).toLocaleString('es-CL')}\n` +
-          `📅 Vence: Hoy ${fechaGasto.toLocaleDateString('es-CL')}\n` +
-          `⏰ ${horasRestantes > 0 ? `Quedan ${horasRestantes} horas` : 'VENCE AHORA'}`;
+          `📅 Fecha: ${fechaGasto.toLocaleDateString('es-CL')}\n` +
+          `⏰ ${diasRestantes === 0 ? 'Vence HOY' : `Faltan ${diasRestantes} día${diasRestantes > 1 ? 's' : ''}`}`;
 
         console.log('📤 Enviando mensaje:', mensaje.substring(0, 50) + '...');
 
@@ -104,7 +127,7 @@ export async function GET() {
           .from('notificaciones_enviadas')
           .insert({
             gasto_id: gasto.id,
-            tipo_notificacion: 'hoy',
+            tipo_notificacion: diasRestantes === 0 ? 'hoy' : diasRestantes === 1 ? 'manana' : 'proximo',
             metodo: config.telegram_activo ? 'telegram' : 'pwa',
             mensaje,
           });
@@ -113,61 +136,15 @@ export async function GET() {
           console.error('❌ Error al guardar notificación:', insertError);
         }
 
-        notificacionesEnviadas.push({ tipo: 'hoy', gasto: gasto.descripcion });
+        notificacionesEnviadas.push({ 
+          tipo: urgencia, 
+          gasto: gasto.descripcion,
+          fecha: gasto.fecha,
+          dias_restantes: diasRestantes
+        });
       }
     } else {
-      console.log('ℹ️ No hay gastos para hoy con pagado=false');
-    }
-
-    // 2. GASTOS MAÑANA (solo a las 9am)
-    if (horaActual === 9) {
-      console.log('🌅 Verificando gastos de mañana (9am)');
-      
-      const pasadoManana = new Date(manana);
-      pasadoManana.setDate(pasadoManana.getDate() + 1);
-      const pasadoMananaStr = pasadoManana.toISOString().split('T')[0];
-
-      const { data: gastosManana } = await supabaseAdmin
-        .from('gastos')
-        .select('id, descripcion, monto, fecha, pagado')
-        .eq('pagado', false)
-        .gte('fecha', mananaStr)
-        .lt('fecha', pasadoMananaStr);
-
-      console.log('📅 Gastos mañana:', gastosManana?.length || 0);
-
-      if (gastosManana && gastosManana.length > 0) {
-        for (const gasto of gastosManana) {
-          const fechaGasto = new Date(gasto.fecha);
-          const mensaje = `⚠️ <b>RECORDATORIO DE PAGO</b>\n\n` +
-            `💳 ${gasto.descripcion}\n` +
-            `💰 Monto: $${Number(gasto.monto).toLocaleString('es-CL')}\n` +
-            `📅 Vence: Mañana ${fechaGasto.toLocaleDateString('es-CL')}`;
-
-          if (config.telegram_activo) {
-            try {
-              await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/notificaciones/telegram`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mensaje }),
-              });
-            } catch (err) {
-              console.error('❌ Error Telegram mañana:', err);
-            }
-          }
-
-          await supabaseAdmin
-            .from('notificaciones_enviadas')
-            .insert({
-              gasto_id: gasto.id,
-              tipo_notificacion: 'manana',
-              metodo: config.telegram_activo ? 'telegram' : 'pwa',
-              mensaje,
-            });
-
-          notificacionesEnviadas.push({ tipo: 'manana', gasto: gasto.descripcion });
-        }
-      }
+      console.log('ℹ️ No hay gastos pendientes en los próximos 3 días');
     }
 
     console.log('✅ FIN verificación. Notificaciones:', notificacionesEnviadas.length);
@@ -177,7 +154,8 @@ export async function GET() {
       message: `Verificación completada. Notificaciones enviadas: ${notificacionesEnviadas.length}`,
       notificaciones: notificacionesEnviadas,
       hora_chile: ahoraChile.toLocaleTimeString('es-CL'),
-      fecha_busqueda: hoyStr,
+      fecha_busqueda: `${hoyStr} a ${limiteStr}`,
+      gastos_encontrados: gastosProximos?.length || 0,
     });
 
   } catch (error: any) {
