@@ -5,18 +5,15 @@ export async function GET() {
   try {
     console.log('🚀 INICIO verificación notificaciones');
     
-    // Usar zona horaria de Chile
     const ahoraChile = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Santiago' }));
     const horaActual = ahoraChile.getHours();
     
     const hoy = new Date(ahoraChile);
     hoy.setHours(0, 0, 0, 0);
     
-    // Fecha límite: hoy + 3 días
     const limite = new Date(hoy);
     limite.setDate(limite.getDate() + 3);
 
-    // Fechas en formato string sin hora
     const hoyStr = hoy.toISOString().split('T')[0];
     const limiteStr = limite.toISOString().split('T')[0];
 
@@ -24,7 +21,7 @@ export async function GET() {
     console.log('📅 Fecha límite (hoy+3):', limiteStr);
     console.log('⏰ Hora Chile:', horaActual);
 
-    // 🧹 LIMPIEZA AUTOMÁTICA: Eliminar notificaciones > 7 días
+    // 🧹 LIMPIEZA AUTOMÁTICA
     const hace7dias = new Date(hoy);
     hace7dias.setDate(hace7dias.getDate() - 7);
 
@@ -67,7 +64,7 @@ export async function GET() {
 
     const notificacionesEnviadas = [];
 
-    // 1. BUSCAR GASTOS NO PAGADOS (vencidos + hoy + próximos 3 días)
+    // BUSCAR GASTOS NO PAGADOS
     const { data: gastosProximos, error: errorGastos } = await supabaseAdmin
       .from('gastos')
       .select(`
@@ -88,31 +85,28 @@ export async function GET() {
     if (gastosProximos && gastosProximos.length > 0) {
       console.log('📋 Gastos:', gastosProximos.map(g => `${g.id}: ${g.fecha} - ${g.descripcion}`));
       
-      // Procesar en paralelo para evitar timeout
       const promesas = gastosProximos.map(async (gasto) => {
         const fechaGasto = new Date(gasto.fecha + 'T00:00:00');
         const diasRestantes = Math.ceil((fechaGasto.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
         
-        // 🔥 LÓGICA DE VERIFICACIÓN
-        // Si es VENCIDO o vence HOY: Enviar siempre (cada hora)
+        // LÓGICA DE VERIFICACIÓN
         if (diasRestantes <= 0) {
           console.log(`🔴 Gasto ${gasto.id} (${gasto.descripcion}) vencido/hoy - Enviar siempre`);
         } else if (diasRestantes >= 1 && diasRestantes <= 3) {
-          // Si es FUTURO (1-3 días): Verificar si ya se envió hoy
+          // Verificar si ya se envió hoy (SIN timezone Z)
           const { data: yaEnviado } = await supabaseAdmin
             .from('notificaciones_enviadas')
             .select('id')
             .eq('gasto_id', gasto.id)
-            .gte('fecha_envio', hoyStr + 'T00:00:00Z')
+            .gte('fecha_envio', hoyStr + 'T00:00:00')
             .maybeSingle();
 
           if (yaEnviado) {
             console.log(`⏭️ Gasto ${gasto.id} (${gasto.descripcion}) ya notificado hoy - SKIP`);
-            return null; // No enviar
+            return null;
           }
           console.log(`🟢 Gasto ${gasto.id} (${gasto.descripcion}) futuro - Primera notificación del día`);
         } else {
-          // Gastos fuera de rango (> 3 días)
           console.log(`⚪ Gasto ${gasto.id} vence en ${diasRestantes} días - Fuera de rango - SKIP`);
           return null;
         }
@@ -146,7 +140,7 @@ export async function GET() {
 
         console.log('📤 Enviando:', gasto.descripcion);
 
-        // Enviar a Telegram DIRECTAMENTE
+        // Enviar a Telegram
         if (config.telegram_activo) {
           try {
             const telegramUrl = `https://api.telegram.org/bot${config.telegram_token}/sendMessage`;
@@ -160,7 +154,7 @@ export async function GET() {
               }),
             });
             const result = await telegramResp.json();
-            console.log('📱 Telegram:', result.ok ? '✅' : '❌', result.description || '');
+            console.log('📱 Telegram:', result.ok ? '✅' : '❌');
             
             if (!result.ok) {
               console.error('❌ Error Telegram:', result.description);
@@ -168,8 +162,6 @@ export async function GET() {
           } catch (err) {
             console.error('❌ Error llamando Telegram:', err);
           }
-        } else {
-          console.log('⚠️ Telegram desactivado');
         }
 
         // Registrar notificación
@@ -185,8 +177,6 @@ export async function GET() {
 
         if (insertError) {
           console.error('❌ Error guardando notificación:', insertError);
-        } else {
-          console.log('✅ Notificación registrada');
         }
 
         return { 
@@ -197,7 +187,6 @@ export async function GET() {
         };
       });
 
-      // Esperar que todas se procesen en paralelo
       const resultados = await Promise.all(promesas);
       notificacionesEnviadas.push(...resultados.filter(r => r !== null));
 
