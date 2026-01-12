@@ -24,6 +24,22 @@ export async function GET() {
     console.log('📅 Fecha límite (hoy+3):', limiteStr);
     console.log('⏰ Hora Chile:', horaActual);
 
+    // 🧹 LIMPIEZA AUTOMÁTICA: Eliminar notificaciones > 7 días
+    const hace7dias = new Date(hoy);
+    hace7dias.setDate(hace7dias.getDate() - 7);
+
+    const { error: deleteError, count: deletedCount } = await supabaseAdmin
+      .from('notificaciones_enviadas')
+      .delete()
+      .lt('fecha_envio', hace7dias.toISOString())
+      .select('*', { count: 'exact', head: true });
+
+    if (deleteError) {
+      console.error('⚠️ Error limpiando notificaciones antiguas:', deleteError);
+    } else {
+      console.log(`🧹 Limpieza automática: ${deletedCount || 0} registros > 7 días eliminados`);
+    }
+
     // Obtener configuración
     const { data: config } = await supabaseAdmin
       .from('config_notificaciones')
@@ -73,10 +89,33 @@ export async function GET() {
     if (gastosProximos && gastosProximos.length > 0) {
       console.log('📋 Gastos:', gastosProximos.map(g => `${g.id}: ${g.fecha} - ${g.descripcion}`));
       
-      for (const gasto of gastosProximos) {
+      // Procesar en paralelo para evitar timeout
+      const promesas = gastosProximos.map(async (gasto) => {
         const fechaGasto = new Date(gasto.fecha + 'T00:00:00');
         const diasRestantes = Math.ceil((fechaGasto.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
         
+        // 🔥 LÓGICA DE VERIFICACIÓN
+        // Si es VENCIDO o vence HOY: Enviar siempre (cada hora)
+        if (diasRestantes <= 0) {
+          console.log(`🔴 Gasto ${gasto.id} vencido/hoy - Enviar siempre`);
+        } else {
+          // Si es FUTURO (1-3 días): Verificar si ya se envió hoy
+          const { data: yaEnviado } = await supabaseAdmin
+            .from('notificaciones_enviadas')
+            .select('id')
+            .eq('gasto_id', gasto.id)
+            .eq('tipo_notificacion', 'proximo')
+            .gte('fecha_envio', hoyStr + 'T00:00:00Z')
+            .maybeSingle();
+
+          if (yaEnviado) {
+            console.log(`⏭️ Gasto ${gasto.id} ya notificado hoy - SKIP`);
+            return null; // No enviar
+          }
+          console.log(`🟢 Gasto ${gasto.id} futuro - Primera notificación del día`);
+        }
+
+        // Determinar emoji y urgencia
         let emoji = '🚨';
         let urgencia = 'URGENTE';
         
@@ -114,7 +153,7 @@ export async function GET() {
               body: JSON.stringify({ mensaje }),
             });
             const result = await telegramResp.json();
-            console.log('📱 Telegram resultado:', result);
+            console.log('📱 Telegram resultado:', result.success ? '✅' : '❌', result.error || '');
             
             if (!result.success) {
               console.error('❌ Error en Telegram:', result.error);
@@ -127,11 +166,12 @@ export async function GET() {
         }
 
         // Registrar notificación
+        const tipoNotif = diasRestantes <= 0 ? 'vencido' : 'proximo';
         const { error: insertError } = await supabaseAdmin
           .from('notificaciones_enviadas')
           .insert({
             gasto_id: gasto.id,
-            tipo_notificacion: diasRestantes < 0 ? 'vencido' : diasRestantes === 0 ? 'hoy' : diasRestantes === 1 ? 'manana' : 'proximo',
+            tipo_notificacion: tipoNotif,
             metodo: config.telegram_activo ? 'telegram' : 'pwa',
             mensaje,
           });
@@ -142,13 +182,18 @@ export async function GET() {
           console.log('✅ Notificación registrada en BD');
         }
 
-        notificacionesEnviadas.push({ 
+        return { 
           tipo: urgencia, 
           gasto: gasto.descripcion,
           fecha: gasto.fecha,
           dias_restantes: diasRestantes
-        });
-      }
+        };
+      });
+
+      // Esperar que todas se procesen en paralelo
+      const resultados = await Promise.all(promesas);
+      notificacionesEnviadas.push(...resultados.filter(r => r !== null));
+
     } else {
       console.log('ℹ️ No hay gastos pendientes');
     }
@@ -162,6 +207,7 @@ export async function GET() {
       hora_chile: ahoraChile.toLocaleTimeString('es-CL'),
       fecha_busqueda: `Hasta ${limiteStr}`,
       gastos_encontrados: gastosProximos?.length || 0,
+      registros_eliminados: deletedCount || 0,
     });
 
   } catch (error: any) {
