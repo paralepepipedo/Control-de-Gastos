@@ -11,8 +11,6 @@ export async function GET() {
     
     const hoy = new Date(ahoraChile);
     hoy.setHours(0, 0, 0, 0);
-    const manana = new Date(hoy);
-    manana.setDate(manana.getDate() + 1);
     
     // Fecha límite: hoy + 3 días
     const limite = new Date(hoy);
@@ -54,7 +52,7 @@ export async function GET() {
 
     const notificacionesEnviadas = [];
 
-    // 1. BUSCAR GASTOS NO PAGADOS (hoy + próximos 3 días)
+    // 1. BUSCAR GASTOS NO PAGADOS (vencidos + hoy + próximos 3 días)
     const { data: gastosProximos, error: errorGastos } = await supabaseAdmin
       .from('gastos')
       .select(`
@@ -66,11 +64,10 @@ export async function GET() {
         categorias(nombre, icono)
       `)
       .eq('pagado', false)
-      .gte('fecha', hoyStr)
       .lte('fecha', limiteStr)
       .order('fecha', { ascending: true });
 
-    console.log('🔍 Gastos próximos encontrados:', gastosProximos?.length || 0);
+    console.log('🔍 Gastos encontrados:', gastosProximos?.length || 0);
     if (errorGastos) console.error('❌ Error gastos:', errorGastos);
 
     if (gastosProximos && gastosProximos.length > 0) {
@@ -83,7 +80,10 @@ export async function GET() {
         let emoji = '🚨';
         let urgencia = 'URGENTE';
         
-        if (diasRestantes === 0) {
+        if (diasRestantes < 0) {
+          emoji = '🔴💀';
+          urgencia = `VENCIDO HACE ${Math.abs(diasRestantes)} DÍA${Math.abs(diasRestantes) > 1 ? 'S' : ''}`;
+        } else if (diasRestantes === 0) {
           emoji = '🔴';
           urgencia = 'VENCE HOY';
         } else if (diasRestantes === 1) {
@@ -101,7 +101,7 @@ export async function GET() {
           `💳 ${gasto.descripcion}\n` +
           `💰 Monto: $${Number(gasto.monto).toLocaleString('es-CL')}\n` +
           `📅 Fecha: ${fechaGasto.toLocaleDateString('es-CL')}\n` +
-          `⏰ ${diasRestantes === 0 ? 'Vence HOY' : `Faltan ${diasRestantes} día${diasRestantes > 1 ? 's' : ''}`}`;
+          `⏰ ${diasRestantes < 0 ? `¡VENCIDO hace ${Math.abs(diasRestantes)} día${Math.abs(diasRestantes) > 1 ? 's' : ''}!` : diasRestantes === 0 ? 'Vence HOY' : `Faltan ${diasRestantes} día${diasRestantes > 1 ? 's' : ''}`}`;
 
         console.log('📤 Enviando mensaje:', mensaje.substring(0, 50) + '...');
 
@@ -115,8 +115,12 @@ export async function GET() {
             });
             const result = await telegramResp.json();
             console.log('📱 Telegram resultado:', result);
+            
+            if (!result.success) {
+              console.error('❌ Error en Telegram:', result.error);
+            }
           } catch (err) {
-            console.error('❌ Error Telegram:', err);
+            console.error('❌ Error al llamar Telegram:', err);
           }
         } else {
           console.log('⚠️ Telegram desactivado en config');
@@ -127,13 +131,15 @@ export async function GET() {
           .from('notificaciones_enviadas')
           .insert({
             gasto_id: gasto.id,
-            tipo_notificacion: diasRestantes === 0 ? 'hoy' : diasRestantes === 1 ? 'manana' : 'proximo',
+            tipo_notificacion: diasRestantes < 0 ? 'vencido' : diasRestantes === 0 ? 'hoy' : diasRestantes === 1 ? 'manana' : 'proximo',
             metodo: config.telegram_activo ? 'telegram' : 'pwa',
             mensaje,
           });
 
         if (insertError) {
           console.error('❌ Error al guardar notificación:', insertError);
+        } else {
+          console.log('✅ Notificación registrada en BD');
         }
 
         notificacionesEnviadas.push({ 
@@ -144,17 +150,17 @@ export async function GET() {
         });
       }
     } else {
-      console.log('ℹ️ No hay gastos pendientes en los próximos 3 días');
+      console.log('ℹ️ No hay gastos pendientes');
     }
 
-    console.log('✅ FIN verificación. Notificaciones:', notificacionesEnviadas.length);
+    console.log('✅ FIN verificación. Notificaciones enviadas:', notificacionesEnviadas.length);
 
     return NextResponse.json({
       success: true,
       message: `Verificación completada. Notificaciones enviadas: ${notificacionesEnviadas.length}`,
       notificaciones: notificacionesEnviadas,
       hora_chile: ahoraChile.toLocaleTimeString('es-CL'),
-      fecha_busqueda: `${hoyStr} a ${limiteStr}`,
+      fecha_busqueda: `Hasta ${limiteStr}`,
       gastos_encontrados: gastosProximos?.length || 0,
     });
 
