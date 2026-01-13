@@ -2,10 +2,12 @@
 
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import FormGasto from "@/components/gastos/FormGasto";
 
 export default function BotonFlotante() {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <>
@@ -22,9 +24,11 @@ export default function BotonFlotante() {
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           onSuccess={() => {
-            setIsOpen(false);
-            window.location.reload();
-          }}
+  setIsOpen(false);
+  setTimeout(() => {
+    window.location.href = '/gastos';
+  }, 500);
+}}
         />
       )}
     </>
