@@ -62,11 +62,12 @@ export default function GastosPage() {
   };
 
   const cargarGastos = async () => {
-    setLoading(true);
-    try {
-      let url = "/api/gastos";
+  setLoading(true);
+  try {
+    let url = "/api/gastos";
 
-      if (periodos.length > 0) {
+    if (periodos.length > 0 && periodoSeleccionado !== "todos") {
+
         let periodoActivo;
 
         if (periodoSeleccionado === "actual") {
@@ -566,12 +567,14 @@ export default function GastosPage() {
             <div>
               <label className="block text-sm font-medium mb-1">Período</label>
               <select
-                value={periodoSeleccionado}
-                onChange={(e) => setPeriodoSeleccionado(e.target.value)}
-                className="w-full border rounded px-3 py-2"
-              >
-                <option value="actual">📅 Período Actual</option>
-                {periodos.length > 1 && (
+  value={periodoSeleccionado}
+  onChange={(e) => setPeriodoSeleccionado(e.target.value)}
+  className="w-full border rounded px-3 py-2"
+>
+  <option value="todos">📊 Todos los Gastos</option>
+  <option value="actual">📅 Período Actual</option>
+  {periodos.length > 1 && (
+
                   <optgroup label="Períodos Anteriores">
                     {periodos.slice(1).map((periodo) => (
                       <option
