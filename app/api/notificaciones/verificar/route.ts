@@ -159,14 +159,15 @@ export async function GET() {
         }
 
         const mensaje = `${emoji} ${urgencia}\n\n` +
-          `💳 ${gasto.descripcion}\n` +
-          `💰 Monto: $${Number(gasto.monto).toLocaleString('es-CL')}\n` +
-          `📅 Fecha: ${fechaGasto.toLocaleDateString('es-CL')}\n` +
-          `⏰ ${diasRestantes < 0 
-            ? `¡VENCIDO hace ${Math.abs(diasRestantes)} día${Math.abs(diasRestantes) > 1 ? 's' : ''}!` 
-            : diasRestantes === 0 
-              ? 'Vence HOY' 
-              : `Faltan ${diasRestantes} día${diasRestantes > 1 ? 's' : ''}`}`;
+  `💳 <b>${gasto.descripcion}</b>\n\n` +
+  `💰 Monto: $${Number(gasto.monto).toLocaleString('es-CL')}\n` +
+  `📅 Fecha: ${fechaGasto.toLocaleDateString('es-CL')}\n` +
+  `⏰ ${diasRestantes < 0 
+    ? `¡VENCIDO hace ${Math.abs(diasRestantes)} día${Math.abs(diasRestantes) > 1 ? 's' : ''}!` 
+    : diasRestantes === 0 
+      ? 'Vence HOY' 
+      : `Faltan ${diasRestantes} día${diasRestantes > 1 ? 's' : ''}`}`;
+
 
         console.log('📤 Enviando:', gasto.descripcion);
 
