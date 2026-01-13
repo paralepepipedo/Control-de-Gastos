@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import { formatCurrency } from "@/lib/utils";
 
 interface FormGastoProps {
   isOpen: boolean;
@@ -19,29 +20,20 @@ export default function FormGasto({ isOpen, onClose, onSuccess }: FormGastoProps
     categoria_id: '',
     metodo_pago: 'efectivo',
     descripcion: '',
-    estado: 'pagado',
-    fecha_vencimiento: ''
+    pagado: false,
+    cuotas: 1
   });
 
   // Cargar categorías al abrir
   useEffect(() => {
     if (isOpen) {
-      fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/categorias`, {
-        headers: {
-          'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
-          'Content-Type': 'application/json'
-        }
-      })
+      fetch('/api/categorias')
         .then(res => res.json())
-        .then(data => {
-          // Solo mostrar categorías para gastos variables diarios
-          const categoriasPermitidas = ['Comida', 'Bencina', 'Transporte', 'Autopistas', 'Entretenimiento', 'Salud', 'Otros'];
-          const categoriasVariables = data.filter((cat: any) =>
-            categoriasPermitidas.includes(cat.nombre)
-          );
-          setCategorias(categoriasVariables);
+        .then(result => {
+          if (result.success) {
+            setCategorias(result.data);
+          }
         })
-
         .catch(err => console.error('Error cargando categorías:', err));
     }
   }, [isOpen]);
@@ -57,27 +49,26 @@ export default function FormGasto({ isOpen, onClose, onSuccess }: FormGastoProps
         body: JSON.stringify({
           ...formData,
           monto: parseFloat(formData.monto),
-          categoria_id: parseInt(formData.categoria_id),
-          fecha_vencimiento: formData.estado === 'pendiente' ? formData.fecha_vencimiento : null
+          categoria_id: formData.categoria_id || null,
         })
       });
 
       const result = await response.json();
 
       if (result.success) {
-        alert('¡Gasto guardado exitosamente! ✅');
+        alert('✅ Gasto agregado');
         setFormData({
           fecha: new Date().toISOString().split('T')[0],
           monto: '',
           categoria_id: '',
           metodo_pago: 'efectivo',
           descripcion: '',
-          estado: 'pagado',
-          fecha_vencimiento: ''
+          pagado: false,
+          cuotas: 1
         });
         onSuccess();
       } else {
-        alert('Error: ' + result.error);
+        alert(`❌ Error: ${result.error}`);
       }
     } catch (error) {
       alert('Error al guardar el gasto');
@@ -92,11 +83,11 @@ export default function FormGasto({ isOpen, onClose, onSuccess }: FormGastoProps
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4">Agregar Gasto</h2>
+        <h2 className="text-2xl font-bold mb-4">+ Nuevo Gasto</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Fecha</label>
+            <label className="block text-sm font-medium mb-1">Fecha *</label>
             <Input
               type="date"
               required
@@ -106,26 +97,74 @@ export default function FormGasto({ isOpen, onClose, onSuccess }: FormGastoProps
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Monto (CLP)</label>
+            <label className="block text-sm font-medium mb-1">Descripción *</label>
+            <Input
+              type="text"
+              required
+              value={formData.descripcion}
+              onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
+              placeholder="Ej: Supermercado, Combustible, etc."
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Monto *</label>
             <Input
               type="number"
-              placeholder="0"
               required
               value={formData.monto}
               onChange={(e) => setFormData({ ...formData, monto: e.target.value })}
+              placeholder="0"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Cuotas</label>
+            <select
+              value={formData.cuotas}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  cuotas: parseInt(e.target.value),
+                })
+              }
+              className="w-full border rounded px-3 py-2"
+            >
+              <option value={1}>Sin cuotas (pago único)</option>
+              <option value={2}>2 cuotas</option>
+              <option value={3}>3 cuotas</option>
+              <option value={4}>4 cuotas</option>
+              <option value={5}>5 cuotas</option>
+              <option value={6}>6 cuotas</option>
+              <option value={7}>7 cuotas</option>
+              <option value={8}>8 cuotas</option>
+              <option value={9}>9 cuotas</option>
+              <option value={10}>10 cuotas</option>
+              <option value={11}>11 cuotas</option>
+              <option value={12}>12 cuotas</option>
+              <option value={18}>18 cuotas</option>
+              <option value={24}>24 cuotas</option>
+            </select>
+            {formData.cuotas > 1 && (
+              <p className="text-xs text-gray-600 mt-1">
+                Se crearán {formData.cuotas} cuotas de{" "}
+                {formatCurrency(
+                  parseFloat(formData.monto || "0") / formData.cuotas
+                )}{" "}
+                cada una
+              </p>
+            )}
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1">Categoría</label>
             <select
-              required
               value={formData.categoria_id}
               onChange={(e) => setFormData({ ...formData, categoria_id: e.target.value })}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              className="w-full border rounded px-3 py-2"
             >
-              <option value="">Seleccionar...</option>
-              {categorias.map(cat => (
+              <option value="">Sin categoría</option>
+              {categorias.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.icono} {cat.nombre}
                 </option>
@@ -134,84 +173,31 @@ export default function FormGasto({ isOpen, onClose, onSuccess }: FormGastoProps
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Método de Pago</label>
-            <div className="flex gap-4">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="metodo_pago"
-                  value="efectivo"
-                  checked={formData.metodo_pago === 'efectivo'}
-                  onChange={(e) => setFormData({ ...formData, metodo_pago: e.target.value })}
-                  className="mr-2"
-                />
-                Efectivo
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="metodo_pago"
-                  value="tarjeta"
-                  checked={formData.metodo_pago === 'tarjeta'}
-                  onChange={(e) => setFormData({ ...formData, metodo_pago: e.target.value })}
-                  className="mr-2"
-                />
-                Tarjeta
-              </label>
-            </div>
+            <label className="block text-sm font-medium mb-1">Método de Pago *</label>
+            <select
+              value={formData.metodo_pago}
+              onChange={(e) => setFormData({ ...formData, metodo_pago: e.target.value })}
+              className="w-full border rounded px-3 py-2"
+              required
+            >
+              <option value="efectivo">Efectivo</option>
+              <option value="tarjeta">Tarjeta</option>
+            </select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Estado</label>
-            <div className="flex gap-4">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="estado"
-                  value="pagado"
-                  checked={formData.estado === 'pagado'}
-                  onChange={(e) => setFormData({ ...formData, estado: e.target.value })}
-                  className="mr-2"
-                />
-                Pagado
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="estado"
-                  value="pendiente"
-                  checked={formData.estado === 'pendiente'}
-                  onChange={(e) => setFormData({ ...formData, estado: e.target.value })}
-                  className="mr-2"
-                />
-                Pendiente
-              </label>
-            </div>
-          </div>
-
-          {formData.estado === 'pendiente' && (
-            <div>
-              <label className="block text-sm font-medium mb-1">Fecha Vencimiento</label>
-              <Input
-                type="date"
-                required
-                value={formData.fecha_vencimiento}
-                onChange={(e) => setFormData({ ...formData, fecha_vencimiento: e.target.value })}
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={formData.pagado}
+                onChange={(e) => setFormData({ ...formData, pagado: e.target.checked })}
+                className="w-4 h-4"
               />
-            </div>
-          )}
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Descripción</label>
-            <Input
-              type="text"
-              placeholder="Ej: Almuerzo con Marti"
-              value={formData.descripcion}
-              onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
-            />
+              <span className="text-sm font-medium">Marcar como pagado</span>
+            </label>
           </div>
 
-          <div className="flex gap-2 mt-6">
+          <div className="flex gap-2 pt-4">
             <Button
               type="button"
               variant="outline"
