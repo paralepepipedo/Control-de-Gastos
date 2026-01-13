@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 export async function GET() {
   try {
     console.log('🚀 INICIO verificación notificaciones');
-    
+
     const ahoraChile = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Santiago' }));
     const horaActual = ahoraChile.getHours();
     
@@ -13,7 +13,7 @@ export async function GET() {
     
     const limite = new Date(hoy);
     limite.setDate(limite.getDate() + 3);
-
+    
     const hoyStr = hoy.toISOString().split('T')[0];
     const limiteStr = limite.toISOString().split('T')[0];
 
@@ -24,7 +24,7 @@ export async function GET() {
     // 🧹 LIMPIEZA AUTOMÁTICA
     const hace7dias = new Date(hoy);
     hace7dias.setDate(hace7dias.getDate() - 7);
-
+    
     const { error: deleteError } = await supabaseAdmin
       .from('notificaciones_enviadas')
       .delete()
@@ -64,7 +64,7 @@ export async function GET() {
 
     const notificacionesEnviadas = [];
 
-    // BUSCAR GASTOS NO PAGADOS
+    // BUSCAR GASTOS NO PAGADOS dentro del rango
     const { data: gastosProximos, error: errorGastos } = await supabaseAdmin
       .from('gastos')
       .select(`
@@ -80,38 +80,64 @@ export async function GET() {
       .order('fecha', { ascending: true });
 
     console.log('🔍 Gastos encontrados:', gastosProximos?.length || 0);
+    
     if (errorGastos) console.error('❌ Error gastos:', errorGastos);
 
     if (gastosProximos && gastosProximos.length > 0) {
       console.log('📋 Gastos:', gastosProximos.map(g => `${g.id}: ${g.fecha} - ${g.descripcion}`));
-      
+
       const promesas = gastosProximos.map(async (gasto) => {
         const fechaGasto = new Date(gasto.fecha + 'T00:00:00');
         const diasRestantes = Math.ceil((fechaGasto.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
-        
-        // LÓGICA DE VERIFICACIÓN
+
+        console.log(`\n🔍 Gasto ${gasto.id}: "${gasto.descripcion}" - Días: ${diasRestantes}`);
+
+        // ========================================
+        // LÓGICA SIMPLIFICADA
+        // ========================================
+
+        let debeEnviar = false;
+
+        // 1️⃣ VENCIDOS/HOY (≤0 días): ENVIAR SIEMPRE
         if (diasRestantes <= 0) {
-          console.log(`🔴 Gasto ${gasto.id} (${gasto.descripcion}) vencido/hoy - Enviar siempre`);
-        } else if (diasRestantes >= 1 && diasRestantes <= 3) {
-          // Verificar si ya se envió hoy (SIN timezone Z)
-          const { data: yaEnviado } = await supabaseAdmin
+          console.log(`🔴 VENCIDO/HOY - Enviar SIEMPRE`);
+          debeEnviar = true;
+        }
+        
+        // 2️⃣ PRÓXIMOS (1-3 días): Enviar solo si NO se envió hoy
+        else if (diasRestantes >= 1 && diasRestantes <= 3) {
+          console.log(`🟡 Vence en ${diasRestantes} día(s) - Verificando...`);
+          
+          const { data: yaEnviadoHoy } = await supabaseAdmin
             .from('notificaciones_enviadas')
             .select('id')
             .eq('gasto_id', gasto.id)
             .gte('fecha_envio', hoyStr + 'T00:00:00')
             .maybeSingle();
 
-          if (yaEnviado) {
-            console.log(`⏭️ Gasto ${gasto.id} (${gasto.descripcion}) ya notificado hoy - SKIP`);
+          if (yaEnviadoHoy) {
+            console.log(`⏭️ SKIP - Ya notificado hoy`);
             return null;
           }
-          console.log(`🟢 Gasto ${gasto.id} (${gasto.descripcion}) futuro - Primera notificación del día`);
-        } else {
-          console.log(`⚪ Gasto ${gasto.id} vence en ${diasRestantes} días - Fuera de rango - SKIP`);
+          
+          console.log(`✅ OK - Primera vez hoy`);
+          debeEnviar = true;
+        }
+        
+        // 3️⃣ FUERA DE RANGO (>3 días)
+        else {
+          console.log(`⚪ SKIP - Fuera de rango (${diasRestantes} días)`);
           return null;
         }
 
-        // Determinar emoji y urgencia
+        if (!debeEnviar) {
+          return null;
+        }
+
+        // ========================================
+        // CONSTRUIR MENSAJE
+        // ========================================
+
         let emoji = '🚨';
         let urgencia = 'URGENTE';
         
@@ -132,11 +158,15 @@ export async function GET() {
           urgencia = 'VENCE EN 3 DÍAS';
         }
 
-        const mensaje = `${emoji} <b>${urgencia}</b>\n\n` +
+        const mensaje = `${emoji} ${urgencia}\n\n` +
           `💳 ${gasto.descripcion}\n` +
           `💰 Monto: $${Number(gasto.monto).toLocaleString('es-CL')}\n` +
           `📅 Fecha: ${fechaGasto.toLocaleDateString('es-CL')}\n` +
-          `⏰ ${diasRestantes < 0 ? `¡VENCIDO hace ${Math.abs(diasRestantes)} día${Math.abs(diasRestantes) > 1 ? 's' : ''}!` : diasRestantes === 0 ? 'Vence HOY' : `Faltan ${diasRestantes} día${diasRestantes > 1 ? 's' : ''}`}`;
+          `⏰ ${diasRestantes < 0 
+            ? `¡VENCIDO hace ${Math.abs(diasRestantes)} día${Math.abs(diasRestantes) > 1 ? 's' : ''}!` 
+            : diasRestantes === 0 
+              ? 'Vence HOY' 
+              : `Faltan ${diasRestantes} día${diasRestantes > 1 ? 's' : ''}`}`;
 
         console.log('📤 Enviando:', gasto.descripcion);
 
@@ -153,14 +183,11 @@ export async function GET() {
                 parse_mode: 'HTML',
               }),
             });
+
             const result = await telegramResp.json();
-            console.log('📱 Telegram:', result.ok ? '✅' : '❌');
-            
-            if (!result.ok) {
-              console.error('❌ Error Telegram:', result.description);
-            }
+            console.log('📱 Telegram:', result.ok ? '✅' : '❌', result.description || '');
           } catch (err) {
-            console.error('❌ Error llamando Telegram:', err);
+            console.error('❌ Error Telegram:', err);
           }
         }
 
@@ -176,11 +203,11 @@ export async function GET() {
           });
 
         if (insertError) {
-          console.error('❌ Error guardando notificación:', insertError);
+          console.error('❌ Error guardando:', insertError);
         }
 
-        return { 
-          tipo: urgencia, 
+        return {
+          tipo: urgencia,
           gasto: gasto.descripcion,
           fecha: gasto.fecha,
           dias_restantes: diasRestantes
@@ -189,12 +216,11 @@ export async function GET() {
 
       const resultados = await Promise.all(promesas);
       notificacionesEnviadas.push(...resultados.filter(r => r !== null));
-
     } else {
       console.log('ℹ️ No hay gastos pendientes');
     }
 
-    console.log('✅ FIN verificación. Notificaciones:', notificacionesEnviadas.length);
+    console.log('✅ FIN. Notificaciones:', notificacionesEnviadas.length);
 
     return NextResponse.json({
       success: true,
@@ -206,11 +232,10 @@ export async function GET() {
     });
 
   } catch (error: any) {
-    console.error('💥 ERROR FATAL:', error);
+    console.error('💥 ERROR:', error);
     return NextResponse.json({
       success: false,
       error: error.message,
-      stack: error.stack,
     }, { status: 500 });
   }
 }
