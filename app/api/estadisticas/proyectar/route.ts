@@ -106,12 +106,23 @@ export async function GET(request: Request) {
       totalGastosEfectivoActual = gastosEfectivoActual.reduce((sum, g) => sum + g.monto, 0);
     }
 
+    // 7.5. OBTENER CONFIGURACIÓN BASE DE PROYECCIÓN
+    const { data: configBase, error: errorConfigBase } = await supabase
+      .from('proyeccion_base')
+      .select('*')
+      .order('tabla', { ascending: true });
+
+    if (errorConfigBase) throw errorConfigBase;
+
+    const baseTabla1 = configBase?.find((c: any) => c.tabla === 1);
+    const baseTabla2 = configBase?.find((c: any) => c.tabla === 2);
+
     // 8. PROYECTAR MES POR MES
     const proyeccion = [];
 
-    // VARIABLES SEPARADAS PARA CADA TABLA
-    let saldoAcumuladoTabla1 = 1434841; // Para Tabla 1 (Gastos Fijos)
-    let saldoAcumuladoTabla2 = 1434841; // Para Tabla 2 (Gastos Efectivo)
+    // VARIABLES SEPARADAS PARA CADA TABLA (desde BD o valores por defecto)
+    let saldoAcumuladoTabla1 = baseTabla1?.saldo_inicial || 1434841; // Para Tabla 1 (Gastos Fijos)
+    let saldoAcumuladoTabla2 = baseTabla2?.saldo_inicial || 1434841; // Para Tabla 2 (Gastos Efectivo)
 
     for (let i = 0; i < meses; i++) {
       const mesFecha = addMonths(fechaBase, i);
@@ -122,9 +133,6 @@ export async function GET(request: Request) {
       const esPasado = (anio < anioActual) || (anio === anioActual && mesNumero < mesActual);
       const esActual = (anio === anioActual && mesNumero === mesActual);
       const esFuturo = (anio > anioActual) || (anio === anioActual && mesNumero > mesActual);
-
-      // DICIEMBRE 2025 - DATOS FIJOS
-      const esDiciembre2025 = (anio === 2025 && mesNumero === 12);
 
       // ==============================================
       // TABLA 2 - GASTOS EFECTIVO (INDEPENDIENTE)
@@ -137,88 +145,75 @@ export async function GET(request: Request) {
       let gastosEfectivoDetalle: any[];
       let saldoFinalTabla2: number;
 
-      if (esDiciembre2025) {
-        // DATOS FIJOS PARA DICIEMBRE 2025 - TABLA 2
-        saldoInicialTabla2 = 1434841;
-        ingresosMesTabla2 = 2602957;
-        sueldoTieneOverrideTabla2 = false;
-        totalGastosEfectivo = 2602957;
-        gastosEfectivoDetalle = [];
-        saldoFinalTabla2 = 1244717;
+      // Saldo inicial = Saldo final del mes anterior (TABLA 2)
+      saldoInicialTabla2 = saldoAcumuladoTabla2;
 
-      } else {
-        // MESES NORMALES - TABLA 2
+      // Ingresos (con override)
+      const overrideSueldoTabla2 = overridesSueldo.find(
+        o => o.anio === anio && o.mes === mesNumero
+      );
+      ingresosMesTabla2 = overrideSueldoTabla2 ? Number(overrideSueldoTabla2.monto_override) : (baseTabla2?.ingresos_mes || sueldoMinimo);
+      sueldoTieneOverrideTabla2 = !!overrideSueldoTabla2;
 
-        // Saldo inicial = Saldo final del mes anterior (TABLA 2)
-        saldoInicialTabla2 = saldoAcumuladoTabla2;
+      // Gastos en Efectivo
+      gastosEfectivoDetalle = [];
 
-        // Ingresos (con override)
-        const overrideSueldo = overridesSueldo.find(
-          o => o.anio === anio && o.mes === mesNumero
-        );
-        ingresosMesTabla2 = overrideSueldo ? Number(overrideSueldo.monto_override) : sueldoMinimo;
-        sueldoTieneOverrideTabla2 = !!overrideSueldo;
+      if (esPasado || esActual) {
+        const fechaInicio = new Date(anio, mesNumero - 1, 1);
+        const fechaFin = new Date(anio, mesNumero, 0, 23, 59, 59);
 
-        // Gastos en Efectivo
-        gastosEfectivoDetalle = [];
+        const { data: gastosMes } = await supabase
+          .from('gastos')
+          .select('id, monto, categoria_id')
+          .eq('metodo_pago', 'efectivo')
+          .gte('fecha', fechaInicio.toISOString())
+          .lte('fecha', fechaFin.toISOString());
 
-        if (esPasado || esActual) {
-          const fechaInicio = new Date(anio, mesNumero - 1, 1);
-          const fechaFin = new Date(anio, mesNumero, 0, 23, 59, 59);
+        const gastosPorCategoria: { [key: number]: number } = {};
+        gastosMes?.forEach(gasto => {
+          if (gasto.categoria_id) {
+            gastosPorCategoria[gasto.categoria_id] =
+              (gastosPorCategoria[gasto.categoria_id] || 0) + Number(gasto.monto);
+          }
+        });
 
-          const { data: gastosMes } = await supabase
-            .from('gastos')
-            .select('id, monto, categoria_id')
-            .eq('metodo_pago', 'efectivo')
-            .gte('fecha', fechaInicio.toISOString())
-            .lte('fecha', fechaFin.toISOString());
+        gastosEfectivoDetalle = categorias?.map(cat => {
+          const override = overridesGastosEfectivo.find(
+            o => o.referencia_id === cat.id && o.anio === anio && o.mes === mesNumero
+          );
 
-          const gastosPorCategoria: { [key: number]: number } = {};
-          gastosMes?.forEach(gasto => {
-            if (gasto.categoria_id) {
-              gastosPorCategoria[gasto.categoria_id] =
-                (gastosPorCategoria[gasto.categoria_id] || 0) + Number(gasto.monto);
-            }
-          });
+          const montoBase = gastosPorCategoria[cat.id] || 0;
+          const montoFinal = override ? Number(override.monto_override) : montoBase;
 
-          gastosEfectivoDetalle = categorias?.map(cat => {
-            const override = overridesGastosEfectivo.find(
-              o => o.referencia_id === cat.id && o.anio === anio && o.mes === mesNumero
-            );
+          return {
+            categoria_id: cat.id,
+            categoria_nombre: cat.nombre,
+            categoria_icono: cat.icono || '💰',
+            monto: montoFinal,
+            monto_original: montoBase,
+            tiene_override: !!override,
+          };
+        }).filter(g => g.monto > 0) || [];
 
-            const montoBase = gastosPorCategoria[cat.id] || 0;
-            const montoFinal = override ? Number(override.monto_override) : montoBase;
+      } else if (esFuturo) {
+        gastosEfectivoDetalle = gastosEfectivoActual.map(g => {
+          const override = overridesGastosEfectivo.find(
+            o => o.referencia_id === g.categoria_id && o.anio === anio && o.mes === mesNumero
+          );
 
-            return {
-              categoria_id: cat.id,
-              categoria_nombre: cat.nombre,
-              categoria_icono: cat.icono || '💰',
-              monto: montoFinal,
-              monto_original: montoBase,
-              tiene_override: !!override,
-            };
-          }).filter(g => g.monto > 0) || [];
+          const montoFinal = override ? Number(override.monto_override) : g.monto;
 
-        } else if (esFuturo) {
-          gastosEfectivoDetalle = gastosEfectivoActual.map(g => {
-            const override = overridesGastosEfectivo.find(
-              o => o.referencia_id === g.categoria_id && o.anio === anio && o.mes === mesNumero
-            );
-
-            const montoFinal = override ? Number(override.monto_override) : g.monto;
-
-            return {
-              ...g,
-              monto: montoFinal,
-              monto_original: g.monto,
-              tiene_override: !!override,
-            };
-          });
-        }
-
-        totalGastosEfectivo = gastosEfectivoDetalle.reduce((sum, g) => sum + g.monto, 0);
-        saldoFinalTabla2 = saldoInicialTabla2 + ingresosMesTabla2 - totalGastosEfectivo;
+          return {
+            ...g,
+            monto: montoFinal,
+            monto_original: g.monto,
+            tiene_override: !!override,
+          };
+        });
       }
+
+      totalGastosEfectivo = gastosEfectivoDetalle.reduce((sum, g) => sum + g.monto, 0);
+      saldoFinalTabla2 = saldoInicialTabla2 + ingresosMesTabla2 - totalGastosEfectivo;
 
       // ACTUALIZAR SALDO ACUMULADO TABLA 2
       saldoAcumuladoTabla2 = saldoFinalTabla2;
@@ -234,49 +229,36 @@ export async function GET(request: Request) {
       let gastosDetalle: any[];
       let saldoFinalTabla1: number;
 
-      if (esDiciembre2025) {
-        // DATOS FIJOS PARA DICIEMBRE 2025 - TABLA 1
-        saldoInicialTabla1 = 1434841;
-        ingresosMesTabla1 = 2602957;
-        sueldoTieneOverrideTabla1 = false;
-        totalGastosFijos = 2602957;
-        gastosDetalle = [];
-        saldoFinalTabla1 = 1434841;
+      // Saldo inicial = Saldo final del mes anterior (TABLA 1)
+      saldoInicialTabla1 = saldoAcumuladoTabla1;
 
-      } else {
-        // MESES NORMALES - TABLA 1
+      // Ingresos (con override) - MISMO QUE TABLA 2
+      const overrideSueldoTabla1 = overridesSueldo.find(
+        o => o.anio === anio && o.mes === mesNumero
+      );
+      ingresosMesTabla1 = overrideSueldoTabla1 ? Number(overrideSueldoTabla1.monto_override) : (baseTabla1?.ingresos_mes || sueldoMinimo);
+      sueldoTieneOverrideTabla1 = !!overrideSueldoTabla1;
 
-        // Saldo inicial = Saldo final del mes anterior (TABLA 1)
-        saldoInicialTabla1 = saldoAcumuladoTabla1;
-
-        // Ingresos (con override) - MISMO QUE TABLA 2
-        const overrideSueldo = overridesSueldo.find(
-          o => o.anio === anio && o.mes === mesNumero
+      // Gastos Fijos
+      gastosDetalle = gastosFijos?.map(gf => {
+        const override = overridesGastosFijos.find(
+          o => o.referencia_id === gf.id && o.anio === anio && o.mes === mesNumero
         );
-        ingresosMesTabla1 = overrideSueldo ? Number(overrideSueldo.monto_override) : sueldoMinimo;
-        sueldoTieneOverrideTabla1 = !!overrideSueldo;
+        const montoFinal = override ? Number(override.monto_override) : Number(gf.monto_provision);
 
-        // Gastos Fijos
-        gastosDetalle = gastosFijos?.map(gf => {
-          const override = overridesGastosFijos.find(
-            o => o.referencia_id === gf.id && o.anio === anio && o.mes === mesNumero
-          );
-          const montoFinal = override ? Number(override.monto_override) : Number(gf.monto_provision);
+        return {
+          id: gf.id,
+          nombre: gf.nombre,
+          monto: montoFinal,
+          monto_original: Number(gf.monto_provision),
+          tiene_override: !!override,
+          categoria: (gf.categorias as any)?.[0]?.nombre || 'Sin categoría',
+          dia_vencimiento: gf.dia_vencimiento,
+        };
+      }) || [];
 
-          return {
-            id: gf.id,
-            nombre: gf.nombre,
-            monto: montoFinal,
-            monto_original: Number(gf.monto_provision),
-            tiene_override: !!override,
-            categoria: (gf.categorias as any)?.[0]?.nombre || 'Sin categoría',
-            dia_vencimiento: gf.dia_vencimiento,
-          };
-        }) || [];
-
-        totalGastosFijos = gastosDetalle.reduce((sum, g) => sum + g.monto, 0);
-        saldoFinalTabla1 = saldoInicialTabla1 + ingresosMesTabla1 - totalGastosFijos;
-      }
+      totalGastosFijos = gastosDetalle.reduce((sum, g) => sum + g.monto, 0);
+      saldoFinalTabla1 = saldoInicialTabla1 + ingresosMesTabla1 - totalGastosFijos;
 
       // ACTUALIZAR SALDO ACUMULADO TABLA 1
       saldoAcumuladoTabla1 = saldoFinalTabla1;
@@ -329,7 +311,6 @@ export async function GET(request: Request) {
         estado,
         es_periodo_actual: esActual,
         es_futuro: esFuturo,
-        es_diciembre_2025: esDiciembre2025,
       });
     }
 
@@ -343,6 +324,8 @@ export async function GET(request: Request) {
         sueldo_minimo: sueldoMinimo,
         meses_proyeccion: meses,
         periodo_actual: periodoActual,
+        base_tabla1: baseTabla1,
+        base_tabla2: baseTabla2,
       },
       debug: {
         total_gastos_fijos: gastosFijos?.length || 0,
@@ -364,5 +347,3 @@ export async function GET(request: Request) {
     );
   }
 }
-
-
