@@ -6,7 +6,7 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
 export default function ConfigPage() {
-    const [seccionActiva, setSeccionActiva] = useState<'periodos' | 'importar' | 'exportar' | 'backup' | 'sueldo' | 'fechas' | 'notificaciones'>('periodos');
+    const [seccionActiva, setSeccionActiva] = useState<'periodos' | 'importar' | 'exportar' | 'backup' | 'sueldo' | 'fechas' | 'notificaciones' | 'proyeccion'>('periodos');
 
   
   return (
@@ -58,6 +58,18 @@ export default function ConfigPage() {
               🔔 Notificaciones
             </button>
 
+<button
+  onClick={() => setSeccionActiva('proyeccion')}
+  className={`px-6 py-3 font-medium transition-colors ${
+    seccionActiva === 'proyeccion'
+      ? 'border-b-2 border-blue-600 text-blue-600'
+      : 'text-gray-600 hover:text-gray-900'
+  }`}
+>
+  📊 Proyección Base
+</button>
+
+
             <button
               onClick={() => setSeccionActiva('importar')}
               className={`px-6 py-3 font-medium transition-colors ${
@@ -99,6 +111,8 @@ export default function ConfigPage() {
           {seccionActiva === 'exportar' && <SeccionExportar />}
           {seccionActiva === 'backup' && <SeccionBackup />}
           {seccionActiva === 'notificaciones' && <SeccionNotificaciones />}
+{seccionActiva === 'proyeccion' && <SeccionProyeccionBase />}
+
 
         </div>
       </div>
@@ -856,6 +870,181 @@ function SeccionBackup() {
     </div>
   );
 }
+// ============ SECCIÓN PROYECCIÓN BASE (NUEVA) ============
+function SeccionProyeccionBase() {
+  const [configTabla1, setConfigTabla1] = useState<any>(null);
+  const [configTabla2, setConfigTabla2] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    cargarConfig();
+  }, []);
+
+  const cargarConfig = async () => {
+    try {
+      const res = await fetch('/api/proyeccion-base');
+      const data = await res.json();
+      if (data.success) {
+        const tabla1 = data.data.find((t: any) => t.tabla === 1);
+        const tabla2 = data.data.find((t: any) => t.tabla === 2);
+        setConfigTabla1(tabla1 || { tabla: 1, saldo_inicial: 0, ingresos_mes: 0 });
+        setConfigTabla2(tabla2 || { tabla: 2, saldo_inicial: 0, ingresos_mes: 0 });
+      }
+    } catch (error) {
+      console.error('Error cargando proyección base:', error);
+    }
+  };
+
+  const guardarTabla = async (tabla: number) => {
+    setLoading(true);
+    try {
+      const config = tabla === 1 ? configTabla1 : configTabla2;
+      const res = await fetch('/api/proyeccion-base', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tabla,
+          saldo_inicial: Number(config.saldo_inicial),
+          ingresos_mes: Number(config.ingresos_mes)
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert(data.mensaje);
+        cargarConfig();
+      } else {
+        alert('❌ Error: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Error guardando:', error);
+      alert('❌ Error de conexión');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!configTabla1 || !configTabla2) {
+    return <div className="text-center py-8 text-gray-500">Cargando...</div>;
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-xl font-bold">📊 Configuración de Proyección Base</h2>
+        <p className="text-sm text-gray-600 mt-1">
+          Define los valores iniciales para comenzar las proyecciones de cada tabla
+        </p>
+      </div>
+
+      <div className="bg-blue-50 border border-blue-200 rounded p-4">
+        <p className="text-sm text-blue-800 font-medium">💡 ¿Para qué sirve?</p>
+        <ul className="text-xs text-blue-700 mt-2 space-y-1 list-disc list-inside">
+          <li>Tabla 1: Proyección de Gastos Fijos</li>
+          <li>Tabla 2: Proyección de Gastos en Efectivo</li>
+          <li>Estos valores son la base desde donde comienza cada proyección</li>
+          <li>Los gastos se calculan automáticamente desde tus datos reales</li>
+        </ul>
+      </div>
+
+      {/* TABLA 1 */}
+      <div className="border-2 border-green-300 rounded-lg p-5 bg-green-50">
+        <h3 className="text-lg font-bold text-green-900 mb-4">📊 Tabla 1: Gastos Fijos</h3>
+        
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Saldo Inicial</label>
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">$</span>
+              <input
+                type="text"
+                value={configTabla1.saldo_inicial.toLocaleString('es-CL')}
+                onChange={(e) => setConfigTabla1({
+                  ...configTabla1,
+                  saldo_inicial: Number(e.target.value.replace(/\./g, ''))
+                })}
+                className="w-full pl-8 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg font-semibold"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Ingresos del Mes</label>
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">$</span>
+              <input
+                type="text"
+                value={configTabla1.ingresos_mes.toLocaleString('es-CL')}
+                onChange={(e) => setConfigTabla1({
+                  ...configTabla1,
+                  ingresos_mes: Number(e.target.value.replace(/\./g, ''))
+                })}
+                className="w-full pl-8 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg font-semibold"
+              />
+            </div>
+          </div>
+
+          <Button 
+            onClick={() => guardarTabla(1)} 
+            disabled={loading}
+            className="w-full"
+          >
+            {loading ? '⏳ Guardando...' : '💾 Guardar Tabla 1'}
+          </Button>
+        </div>
+      </div>
+
+      {/* TABLA 2 */}
+      <div className="border-2 border-purple-300 rounded-lg p-5 bg-purple-50">
+        <h3 className="text-lg font-bold text-purple-900 mb-4">💰 Tabla 2: Gastos Efectivo</h3>
+        
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Saldo Inicial</label>
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">$</span>
+              <input
+                type="text"
+                value={configTabla2.saldo_inicial.toLocaleString('es-CL')}
+                onChange={(e) => setConfigTabla2({
+                  ...configTabla2,
+                  saldo_inicial: Number(e.target.value.replace(/\./g, ''))
+                })}
+                className="w-full pl-8 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg font-semibold"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Ingresos del Mes</label>
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">$</span>
+              <input
+                type="text"
+                value={configTabla2.ingresos_mes.toLocaleString('es-CL')}
+                onChange={(e) => setConfigTabla2({
+                  ...configTabla2,
+                  ingresos_mes: Number(e.target.value.replace(/\./g, ''))
+                })}
+                className="w-full pl-8 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg font-semibold"
+              />
+            </div>
+          </div>
+
+          <Button 
+            onClick={() => guardarTabla(2)} 
+            disabled={loading}
+            className="w-full"
+          >
+            {loading ? '⏳ Guardando...' : '💾 Guardar Tabla 2'}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 // ============ SECCIÓN NOTIFICACIONES (NUEVA) ============
 function SeccionNotificaciones() {
   const [config, setConfig] = useState<any>(null);
