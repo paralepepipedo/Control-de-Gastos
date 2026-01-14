@@ -144,7 +144,7 @@ export async function GET(request: Request) {
         sueldoTieneOverrideTabla2 = false;
         totalGastosEfectivo = 2602957;
         gastosEfectivoDetalle = [];
-        saldoFinalTabla2 = 1434841;
+        saldoFinalTabla2 = 1244717;
 
       } else {
         // MESES NORMALES - TABLA 2
@@ -364,4 +364,5 @@ export async function GET(request: Request) {
     );
   }
 }
+
 
