@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 export async function GET() {
   try {
     const hoy = new Date();
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://control-de-gastos-iota.vercel.app/';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
     
     // 1. Obtener período actual con validación de error
     const periodoResponse = await fetch(`${baseUrl}/api/periodos`);
@@ -142,4 +142,3 @@ export async function GET() {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
-

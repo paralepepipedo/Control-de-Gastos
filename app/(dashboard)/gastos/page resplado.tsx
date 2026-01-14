@@ -14,7 +14,6 @@ export default function GastosPage() {
   const [provisionTotal, setProvisionTotal] = useState<number>(0);
   const [resumenProvisiones, setResumenProvisiones] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [proximoPago, setProximoPago] = useState<any>(null);
   const [modalAgregar, setModalAgregar] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [gastoEditar, setGastoEditar] = useState<any>(null);
@@ -35,7 +34,6 @@ export default function GastosPage() {
   useEffect(() => {
     cargarPeriodos();
     cargarCategorias();
-    cargarProximoPago();
   }, []);
 
   useEffect(() => {
@@ -62,12 +60,11 @@ export default function GastosPage() {
   };
 
   const cargarGastos = async () => {
-  setLoading(true);
-  try {
-    let url = "/api/gastos";
+    setLoading(true);
+    try {
+      let url = "/api/gastos";
 
-    if (periodos.length > 0 && periodoSeleccionado !== "todos") {
-
+      if (periodos.length > 0) {
         let periodoActivo;
 
         if (periodoSeleccionado === "actual") {
@@ -137,34 +134,6 @@ export default function GastosPage() {
       }
     } catch (error) {
       console.error("Error cargando provisión:", error);
-    }
-  };
-  const cargarProximoPago = async () => {
-    try {
-      const res = await fetch('/api/fechas-pago');
-      const data = await res.json();
-      if (data.success && data.data.length > 0) {
-        const hoy = new Date();
-        hoy.setHours(0, 0, 0, 0);
-        
-        const proxima = data.data
-          .map((fp: any) => ({
-            ...fp,
-            fechaDate: new Date(fp.fecha_pago + 'T00:00:00'),
-          }))
-          .filter((fp: any) => fp.fechaDate >= hoy)
-          .sort((a: any, b: any) => a.fechaDate.getTime() - b.fechaDate.getTime())[0];
-
-        if (proxima) {
-          const dias = Math.ceil((proxima.fechaDate.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
-          setProximoPago({
-            fecha: proxima.fechaDate.toLocaleDateString('es-CL', { day: 'numeric', month: 'long' }),
-            dias: dias,
-          });
-        }
-      }
-    } catch (error) {
-      console.error('Error cargando próximo pago:', error);
     }
   };
 
@@ -357,18 +326,9 @@ export default function GastosPage() {
         <div>
           <h1 className="text-3xl font-bold">💳 Gastos</h1>
           {periodoActivo && (
-                          <div className="flex items-center gap-3 flex-wrap mt-1">
-                <p className="text-sm text-gray-600">
-                  {formatNombrePeriodo(periodoActivo.mes, periodoActivo.anio)}
-                </p>
-                {proximoPago && (
-                  <span className="text-xs bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full font-semibold border border-yellow-300">
-                    📅 Próximo sueldo: {proximoPago.fecha}
-                    {proximoPago.dias === 0 ? ' (hoy)' : ` (faltan ${proximoPago.dias} día${proximoPago.dias > 1 ? 's' : ''})`}
-                  </span>
-                )}
-              </div>
-
+            <p className="text-sm text-gray-600 mt-1">
+              {formatNombrePeriodo(periodoActivo.mes, periodoActivo.anio)}
+            </p>
           )}
         </div>
         <Button onClick={() => setModalAgregar(true)}>+ Nuevo Gasto</Button>
@@ -567,14 +527,12 @@ export default function GastosPage() {
             <div>
               <label className="block text-sm font-medium mb-1">Período</label>
               <select
-  value={periodoSeleccionado}
-  onChange={(e) => setPeriodoSeleccionado(e.target.value)}
-  className="w-full border rounded px-3 py-2"
->
-  <option value="todos">📊 Todos los Gastos</option>
-  <option value="actual">📅 Período Actual</option>
-  {periodos.length > 1 && (
-
+                value={periodoSeleccionado}
+                onChange={(e) => setPeriodoSeleccionado(e.target.value)}
+                className="w-full border rounded px-3 py-2"
+              >
+                <option value="actual">📅 Período Actual</option>
+                {periodos.length > 1 && (
                   <optgroup label="Períodos Anteriores">
                     {periodos.slice(1).map((periodo) => (
                       <option
