@@ -107,7 +107,7 @@ export default function DashboardPage() {
           valor={resumen.provisionesActivas}
           icono={<DollarSign className="w-6 h-6" />}
           color="bg-gradient-to-br from-yellow-500 to-yellow-600"
-          detalle={`${resumen.provisionesTotales || 0} totales`}
+          detalle="0 totales"
         />
         
         <CardResumen
@@ -124,20 +124,20 @@ export default function DashboardPage() {
         <div className="bg-white rounded-lg shadow p-4 border-l-4 border-blue-500">
           <p className="text-sm text-gray-600 mb-1">💳 Pendientes Tarjeta</p>
           <p className="text-2xl font-bold text-blue-600">
-            {formatCurrency(resumen.pendientesTarjeta || 0)}
+            {formatCurrency(resumen.pendientesTarjeta?.total || 0)}
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            {resumen.cantidadPendientesTarjeta || 0} pago(s) sin pagar
+            {resumen.pendientesTarjeta?.cantidad || 0} pago(s) sin pagar
           </p>
         </div>
 
         <div className="bg-white rounded-lg shadow p-4 border-l-4 border-green-500">
           <p className="text-sm text-gray-600 mb-1">💵 Pendientes Efectivo</p>
           <p className="text-2xl font-bold text-green-600">
-            {formatCurrency(resumen.pendientesEfectivo || 0)}
+            {formatCurrency(resumen.pendientesEfectivo?.total || 0)}
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            {resumen.cantidadPendientesEfectivo || 0} pago(s) sin pagar
+            {resumen.pendientesEfectivo?.cantidad || 0} pago(s) sin pagar
           </p>
         </div>
 
