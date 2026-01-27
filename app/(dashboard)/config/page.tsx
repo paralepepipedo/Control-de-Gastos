@@ -6,9 +6,9 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
 export default function ConfigPage() {
-    const [seccionActiva, setSeccionActiva] = useState<'periodos' | 'importar' | 'exportar' | 'backup' | 'sueldo' | 'fechas' | 'notificaciones' | 'proyeccion'>('periodos');
+  const [seccionActiva, setSeccionActiva] = useState<'periodos' | 'importar' | 'exportar' | 'backup' | 'sueldo' | 'fechas' | 'notificaciones' | 'proyeccion'>('periodos');
 
-  
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">⚙️ Configuración</h1>
@@ -19,84 +19,76 @@ export default function ConfigPage() {
           <div className="flex flex-wrap">
             <button
               onClick={() => setSeccionActiva('periodos')}
-              className={`px-6 py-3 font-medium transition-colors ${
-                seccionActiva === 'periodos'
-                  ? 'border-b-2 border-blue-600 text-blue-600'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`px-6 py-3 font-medium transition-colors ${seccionActiva === 'periodos'
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
             >
               📅 Períodos
             </button>
             <button
               onClick={() => setSeccionActiva('sueldo')}
-              className={`px-6 py-3 font-medium transition-colors ${
-                seccionActiva === 'sueldo'
-                  ? 'border-b-2 border-blue-600 text-blue-600'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`px-6 py-3 font-medium transition-colors ${seccionActiva === 'sueldo'
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
             >
               💰 Sueldo Base
             </button>
             <button
               onClick={() => setSeccionActiva('fechas')}
-              className={`px-6 py-3 font-medium transition-colors ${
-                seccionActiva === 'fechas'
-                  ? 'border-b-2 border-blue-600 text-blue-600'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`px-6 py-3 font-medium transition-colors ${seccionActiva === 'fechas'
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
             >
               📅 Fechas de Pago
             </button>
             <button
               onClick={() => setSeccionActiva('notificaciones')}
-              className={`px-6 py-3 font-medium transition-colors ${
-                seccionActiva === 'notificaciones'
-                  ? 'border-b-2 border-blue-600 text-blue-600'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`px-6 py-3 font-medium transition-colors ${seccionActiva === 'notificaciones'
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
             >
               🔔 Notificaciones
             </button>
 
-<button
-  onClick={() => setSeccionActiva('proyeccion')}
-  className={`px-6 py-3 font-medium transition-colors ${
-    seccionActiva === 'proyeccion'
-      ? 'border-b-2 border-blue-600 text-blue-600'
-      : 'text-gray-600 hover:text-gray-900'
-  }`}
->
-  📊 Proyección Base
-</button>
+            <button
+              onClick={() => setSeccionActiva('proyeccion')}
+              className={`px-6 py-3 font-medium transition-colors ${seccionActiva === 'proyeccion'
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
+            >
+              📊 Proyección Base
+            </button>
 
 
             <button
               onClick={() => setSeccionActiva('importar')}
-              className={`px-6 py-3 font-medium transition-colors ${
-                seccionActiva === 'importar'
-                  ? 'border-b-2 border-blue-600 text-blue-600'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`px-6 py-3 font-medium transition-colors ${seccionActiva === 'importar'
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
             >
               📥 Importar
             </button>
             <button
               onClick={() => setSeccionActiva('exportar')}
-              className={`px-6 py-3 font-medium transition-colors ${
-                seccionActiva === 'exportar'
-                  ? 'border-b-2 border-blue-600 text-blue-600'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`px-6 py-3 font-medium transition-colors ${seccionActiva === 'exportar'
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
             >
               📤 Exportar
             </button>
             <button
               onClick={() => setSeccionActiva('backup')}
-              className={`px-6 py-3 font-medium transition-colors ${
-                seccionActiva === 'backup'
-                  ? 'border-b-2 border-blue-600 text-blue-600'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className={`px-6 py-3 font-medium transition-colors ${seccionActiva === 'backup'
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-gray-600 hover:text-gray-900'
+                }`}
             >
               💾 Respaldo
             </button>
@@ -111,7 +103,7 @@ export default function ConfigPage() {
           {seccionActiva === 'exportar' && <SeccionExportar />}
           {seccionActiva === 'backup' && <SeccionBackup />}
           {seccionActiva === 'notificaciones' && <SeccionNotificaciones />}
-{seccionActiva === 'proyeccion' && <SeccionProyeccionBase />}
+          {seccionActiva === 'proyeccion' && <SeccionProyeccionBase />}
 
 
         </div>
@@ -145,6 +137,75 @@ function SeccionPeriodos() {
       setLoading(false);
     }
   };
+  const crearPeriodoSiguiente = async () => {
+    setGenerando(true);
+    try {
+      // Obtener el último periodo
+      const ultimoPeriodo = periodos[0]; // El primero es el más reciente
+
+      if (!ultimoPeriodo) {
+        alert("No hay periodos registrados. Usa 'Generar Históricos' primero.");
+        setGenerando(false);
+        return;
+      }
+
+      // Calcular siguiente mes
+      let siguienteMes = ultimoPeriodo.mes + 1;
+      let siguienteAnio = ultimoPeriodo.anio;
+
+      if (siguienteMes > 12) {
+        siguienteMes = 1;
+        siguienteAnio++;
+      }
+
+      // Calcular fechas (del 24 al 23 del siguiente mes)
+      const fechaInicio = new Date(siguienteAnio, siguienteMes - 1, 24);
+      const fechaFin = new Date(siguienteAnio, siguienteMes, 23);
+
+      // Nombre del mes
+      const nombreMes = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'][siguienteMes - 1];
+
+      // Mensaje de confirmación
+      const mensaje = `¿Crear periodo de ${nombreMes} ${siguienteAnio}?\n\n` +
+        `📅 Desde: ${fechaInicio.toLocaleDateString('es-CL')}\n` +
+        `📅 Hasta: ${fechaFin.toLocaleDateString('es-CL')}\n\n` +
+        `⚠️ Estas son fechas genéricas (24 al 23).\n` +
+        `Podrás ajustarlas después con el botón "Editar".`;
+
+      if (!confirm(mensaje)) {
+        setGenerando(false);
+        return;
+      }
+
+      const response = await fetch('/api/periodos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mes: siguienteMes,
+          anio: siguienteAnio,
+          fecha_inicio: fechaInicio.toISOString().split('T')[0],
+          fecha_fin: fechaFin.toISOString().split('T')[0],
+          es_provisional: false,
+          fecha_factura: new Date().toISOString().split('T')[0],
+          notas: 'Periodo creado automáticamente'
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`✅ Periodo ${nombreMes} ${siguienteAnio} creado correctamente`);
+        cargarPeriodos();
+      } else {
+        alert(`Error: ${result.error}`);
+      }
+    } catch (error: any) {
+      alert(`Error: ${error.message}`);
+    } finally {
+      setGenerando(false);
+    }
+  };
+
 
   const generarPeriodosHistoricos = async () => {
     if (!confirm('¿Generar períodos automáticamente para todos los meses con gastos registrados?')) {
@@ -180,7 +241,7 @@ function SeccionPeriodos() {
 
   const guardarPeriodo = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       const response = await fetch('/api/periodos', {
         method: 'POST',
@@ -197,7 +258,7 @@ function SeccionPeriodos() {
       });
 
       const result = await response.json();
-      
+
       if (result.success) {
         alert('✅ Período actualizado');
         setModalEditar(false);
@@ -223,14 +284,17 @@ function SeccionPeriodos() {
             Ajusta las fechas reales según tu estado de cuenta de Itaú
           </p>
         </div>
-        <Button
-          onClick={generarPeriodosHistoricos}
-          disabled={generando}
-          size="sm"
-        >
-          {generando ? '⏳ Generando...' : '🔄 Generar Períodos Históricos'}
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={crearPeriodoSiguiente} disabled={generando} size="sm">
+
+            {generando ? "Creando..." : "➕ Crear Periodo Siguiente"}
+          </Button>
+          <Button onClick={generarPeriodosHistoricos} disabled={generando} size="sm" variant="outline">
+            {generando ? "Generando..." : "🔄 Generar Históricos"}
+          </Button>
+        </div>
       </div>
+
 
       {periodos.length === 0 && (
         <div className="bg-blue-50 border border-blue-200 rounded p-4">
@@ -245,11 +309,10 @@ function SeccionPeriodos() {
         {periodos.map((periodo) => (
           <div
             key={`${periodo.mes}-${periodo.anio}`}
-            className={`p-4 rounded-lg border-l-4 ${
-              periodo.es_provisional
-                ? 'border-orange-400 bg-orange-50'
-                : 'border-green-500 bg-green-50'
-            }`}
+            className={`p-4 rounded-lg border-l-4 ${periodo.es_provisional
+              ? 'border-orange-400 bg-orange-50'
+              : 'border-green-500 bg-green-50'
+              }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex-1">
@@ -258,11 +321,10 @@ function SeccionPeriodos() {
                     {formatNombrePeriodo(periodo.mes, periodo.anio)}
                   </h3>
                   <span
-                    className={`text-xs px-2 py-0.5 rounded ${
-                      periodo.es_provisional
-                        ? 'bg-orange-200 text-orange-800'
-                        : 'bg-green-200 text-green-800'
-                    }`}
+                    className={`text-xs px-2 py-0.5 rounded ${periodo.es_provisional
+                      ? 'bg-orange-200 text-orange-800'
+                      : 'bg-green-200 text-green-800'
+                      }`}
                   >
                     {periodo.es_provisional ? '⚠️ Provisional' : '✅ Confirmado'}
                   </span>
@@ -298,7 +360,7 @@ function SeccionPeriodos() {
             <h2 className="text-xl font-bold mb-4">
               📅 Ajustar Período - {formatNombrePeriodo(periodoEditar.mes, periodoEditar.anio)}
             </h2>
-            
+
             <form onSubmit={guardarPeriodo} className="space-y-4">
               <div className="bg-blue-50 border border-blue-200 rounded p-3 text-sm text-blue-800">
                 <p className="font-medium mb-1">💡 Ajusta con la factura real de Itaú</p>
@@ -311,7 +373,7 @@ function SeccionPeriodos() {
                   type="date"
                   required
                   value={periodoEditar.fecha_inicio}
-                  onChange={(e) => setPeriodoEditar({...periodoEditar, fecha_inicio: e.target.value})}
+                  onChange={(e) => setPeriodoEditar({ ...periodoEditar, fecha_inicio: e.target.value })}
                 />
               </div>
 
@@ -321,7 +383,7 @@ function SeccionPeriodos() {
                   type="date"
                   required
                   value={periodoEditar.fecha_fin}
-                  onChange={(e) => setPeriodoEditar({...periodoEditar, fecha_fin: e.target.value})}
+                  onChange={(e) => setPeriodoEditar({ ...periodoEditar, fecha_fin: e.target.value })}
                 />
               </div>
 
@@ -329,7 +391,7 @@ function SeccionPeriodos() {
                 <label className="block text-sm font-medium mb-1">Notas</label>
                 <textarea
                   value={periodoEditar.notas || ''}
-                  onChange={(e) => setPeriodoEditar({...periodoEditar, notas: e.target.value})}
+                  onChange={(e) => setPeriodoEditar({ ...periodoEditar, notas: e.target.value })}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   rows={3}
                   placeholder="Ej: Ajustado según factura del 25/01/2026"
@@ -390,7 +452,7 @@ function SeccionSueldoBase() {
           descripcion: 'Sueldo base para meses futuros',
         }),
       });
-      
+
       if (res.ok) {
         alert('✅ Sueldo base actualizado correctamente');
       } else {
@@ -509,7 +571,7 @@ function SeccionFechasPago() {
     setLoading(true);
     try {
       const res = await fetch(`/api/fechas-pago?id=${id}`, { method: 'DELETE' });
-      
+
       if (res.ok) {
         alert('✅ Fecha eliminada correctamente');
         cargarFechasPago();
@@ -525,8 +587,8 @@ function SeccionFechasPago() {
   };
 
   const getNombreMes = (mes: number) => {
-    const meses = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
-                   'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    const meses = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     return meses[mes] || '';
   };
 
@@ -588,18 +650,18 @@ function SeccionFechasPago() {
         <div className="grid grid-cols-3 gap-2">
           <select
             value={nuevaFecha.mes}
-            onChange={(e) => setNuevaFecha({...nuevaFecha, mes: Number(e.target.value)})}
+            onChange={(e) => setNuevaFecha({ ...nuevaFecha, mes: Number(e.target.value) })}
             className="px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
           >
             <option value={0}>Seleccionar mes</option>
-            {[1,2,3,4,5,6,7,8,9,10,11,12].map(m => (
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(m => (
               <option key={m} value={m}>{getNombreMes(m)}</option>
             ))}
           </select>
           <input
             type="number"
             value={nuevaFecha.anio}
-            onChange={(e) => setNuevaFecha({...nuevaFecha, anio: Number(e.target.value)})}
+            onChange={(e) => setNuevaFecha({ ...nuevaFecha, anio: Number(e.target.value) })}
             className="px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
             placeholder="2026"
             min="2020"
@@ -608,7 +670,7 @@ function SeccionFechasPago() {
           <input
             type="date"
             value={nuevaFecha.fecha}
-            onChange={(e) => setNuevaFecha({...nuevaFecha, fecha: e.target.value})}
+            onChange={(e) => setNuevaFecha({ ...nuevaFecha, fecha: e.target.value })}
             className="px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
           />
         </div>
@@ -732,7 +794,7 @@ function SeccionExportar() {
     try {
       const response = await fetch(`/api/config/exportar?tipo=${tipoExport}`);
       const blob = await response.blob();
-      
+
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -762,11 +824,10 @@ function SeccionExportar() {
       <div className="space-y-3">
         <button
           onClick={() => setTipoExport('mes')}
-          className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
-            tipoExport === 'mes'
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-200 hover:border-gray-300'
-          }`}
+          className={`w-full p-4 rounded-lg border-2 text-left transition-all ${tipoExport === 'mes'
+            ? 'border-blue-500 bg-blue-50'
+            : 'border-gray-200 hover:border-gray-300'
+            }`}
         >
           <div className="flex items-center gap-3">
             <div className="text-3xl">📊</div>
@@ -779,11 +840,10 @@ function SeccionExportar() {
 
         <button
           onClick={() => setTipoExport('historico')}
-          className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
-            tipoExport === 'historico'
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-200 hover:border-gray-300'
-          }`}
+          className={`w-full p-4 rounded-lg border-2 text-left transition-all ${tipoExport === 'historico'
+            ? 'border-blue-500 bg-blue-50'
+            : 'border-gray-200 hover:border-gray-300'
+            }`}
         >
           <div className="flex items-center gap-3">
             <div className="text-3xl">📚</div>
@@ -816,7 +876,7 @@ function SeccionBackup() {
     try {
       const response = await fetch('/api/config/backup');
       const blob = await response.blob();
-      
+
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -950,7 +1010,7 @@ function SeccionProyeccionBase() {
       {/* TABLA 1 */}
       <div className="border-2 border-green-300 rounded-lg p-5 bg-green-50">
         <h3 className="text-lg font-bold text-green-900 mb-4">📊 Tabla 1: Gastos Fijos</h3>
-        
+
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-2">Saldo Inicial</label>
@@ -984,8 +1044,8 @@ function SeccionProyeccionBase() {
             </div>
           </div>
 
-          <Button 
-            onClick={() => guardarTabla(1)} 
+          <Button
+            onClick={() => guardarTabla(1)}
             disabled={loading}
             className="w-full"
           >
@@ -997,7 +1057,7 @@ function SeccionProyeccionBase() {
       {/* TABLA 2 */}
       <div className="border-2 border-purple-300 rounded-lg p-5 bg-purple-50">
         <h3 className="text-lg font-bold text-purple-900 mb-4">💰 Tabla 2: Gastos Efectivo</h3>
-        
+
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-2">Saldo Inicial</label>
@@ -1031,8 +1091,8 @@ function SeccionProyeccionBase() {
             </div>
           </div>
 
-          <Button 
-            onClick={() => guardarTabla(2)} 
+          <Button
+            onClick={() => guardarTabla(2)}
             disabled={loading}
             className="w-full"
           >
@@ -1111,7 +1171,7 @@ function SeccionNotificaciones() {
       });
 
       const data = await res.json();
-      
+
       if (data.success) {
         alert('✅ Notificación de prueba enviada a Telegram. Revisa tu chat.');
       } else {
@@ -1141,7 +1201,7 @@ function SeccionNotificaciones() {
           <li>Envía el comando <code className="bg-blue-200 px-1 rounded">/newbot</code></li>
           <li>Sigue las instrucciones y guarda el <strong>TOKEN</strong></li>
           <li>Inicia conversación con tu bot y envía <code className="bg-blue-200 px-1 rounded">/start</code></li>
-                    <li>Abre: <code className="bg-blue-200 px-1 rounded text-xs">https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code></li>
+          <li>Abre: <code className="bg-blue-200 px-1 rounded text-xs">https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code></li>
           <li>Busca tu <strong>CHAT_ID</strong> en el JSON (número en &quot;chat&quot;: &#123;&quot;id&quot;:...&#125;)</li>
 
         </ol>
