@@ -31,6 +31,10 @@ export default function GastosPage() {
     pagado: false,
     cuotas: 1,
   });
+  const [modalDuplicados, setModalDuplicados] = useState(false);
+  const [duplicados, setDuplicados] = useState<{[key: string]: any[]}>({});
+  const [gruposExpandidos, setGruposExpandidos] = useState<{[key: string]: boolean}>({});
+  const [editandoGasto, setEditandoGasto] = useState<{[key: number]: {fecha: string, monto: string, descripcion: string}}>({});
 
   useEffect(() => {
     cargarPeriodos();
@@ -139,6 +143,7 @@ export default function GastosPage() {
       console.error("Error cargando provisión:", error);
     }
   };
+  
   const cargarProximoPago = async () => {
     try {
       const res = await fetch('/api/fechas-pago');
@@ -307,6 +312,114 @@ export default function GastosPage() {
     }
   };
 
+  const detectarDuplicados = () => {
+    if (!periodos.length || periodoSeleccionado === "todos") {
+      alert("⚠️ Selecciona un período específico para detectar duplicados");
+      return;
+    }
+
+    const gastosDelPeriodo = gastos;
+    const grupos: {[key: string]: any[]} = {};
+
+    gastosDelPeriodo.forEach(gasto => {
+      const descripcionNormalizada = (gasto.descripcion || "").toLowerCase().trim();
+      if (!grupos[descripcionNormalizada]) {
+        grupos[descripcionNormalizada] = [];
+      }
+      grupos[descripcionNormalizada].push(gasto);
+    });
+
+    const soloConDuplicados = Object.fromEntries(
+      Object.entries(grupos).filter(([_, items]) => items.length > 1)
+    );
+
+    if (Object.keys(soloConDuplicados).length === 0) {
+      alert("✅ No se encontraron duplicados en este período");
+      return;
+    }
+
+    setDuplicados(soloConDuplicados);
+    setModalDuplicados(true);
+  };
+
+  const toggleGrupo = (descripcion: string) => {
+    setGruposExpandidos(prev => ({
+      ...prev,
+      [descripcion]: !prev[descripcion]
+    }));
+  };
+
+  const iniciarEdicion = (gastoId: number, gasto: any) => {
+    setEditandoGasto(prev => ({
+      ...prev,
+      [gastoId]: {
+        fecha: gasto.fecha.split('T')[0],
+        monto: gasto.monto.toString(),
+        descripcion: gasto.descripcion
+      }
+    }));
+  };
+
+  const cancelarEdicion = (gastoId: number) => {
+    setEditandoGasto(prev => {
+      const nuevo = {...prev};
+      delete nuevo[gastoId];
+      return nuevo;
+    });
+  };
+
+  const guardarEdicionInline = async (gastoId: number) => {
+    const datos = editandoGasto[gastoId];
+    if (!datos) return;
+
+    try {
+      const response = await fetch(`/api/gastos/${gastoId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fecha: datos.fecha,
+          descripcion: datos.descripcion,
+          monto: parseFloat(datos.monto),
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("✅ Gasto actualizado");
+        cancelarEdicion(gastoId);
+        cargarGastos();
+        detectarDuplicados();
+      } else {
+        alert(`❌ Error: ${result.error}`);
+      }
+    } catch (error) {
+      alert("Error al actualizar gasto");
+    }
+  };
+
+  const eliminarGastoInline = async (id: number, descripcion: string) => {
+    if (!confirm(`¿Eliminar "${descripcion}"?`)) return;
+
+    try {
+      const response = await fetch(`/api/gastos/${id}`, {
+        method: "DELETE",
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("✅ Gasto eliminado");
+        cargarGastos();
+        detectarDuplicados();
+      } else {
+        alert(`❌ Error: ${result.error}`);
+      }
+    } catch (error) {
+      alert("Error al eliminar gasto");
+    }
+  };
+
   const gastosFiltrados = gastos
     .filter((gasto) => {
       if (filtroCategoria && gasto.categoria_id !== parseInt(filtroCategoria))
@@ -371,7 +484,12 @@ export default function GastosPage() {
 
           )}
         </div>
-        <Button onClick={() => setModalAgregar(true)}>+ Nuevo Gasto</Button>
+        <div className="flex gap-2">
+          <Button onClick={detectarDuplicados} variant="outline">
+            🔍 Detectar Duplicados
+          </Button>
+          <Button onClick={() => setModalAgregar(true)}>+ Nuevo Gasto</Button>
+        </div>
       </div>
 
       {/* Resumen en Fichas */}
@@ -1264,6 +1382,168 @@ export default function GastosPage() {
                 </Button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Duplicados */}
+      {modalDuplicados && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">🔍 Gastos Duplicados</h2>
+              <button
+                onClick={() => setModalDuplicados(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+
+            {Object.keys(duplicados).length === 0 ? (
+              <p className="text-center text-gray-500 py-8">
+                No hay duplicados en este período
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {Object.entries(duplicados).map(([descripcion, items]) => (
+                  <div key={descripcion} className="border rounded-lg">
+                    {/* Cabecera del grupo */}
+                    <button
+                      onClick={() => toggleGrupo(descripcion)}
+                      className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg">
+                          {gruposExpandidos[descripcion] ? "▼" : "▶"}
+                        </span>
+                        <div className="text-left">
+                          <p className="font-semibold">{items[0].descripcion}</p>
+                          <p className="text-xs text-gray-600">
+                            {items.length} coincidencias • Total: {formatCurrency(items.reduce((sum, g) => sum + Number(g.monto), 0))}
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Filas expandidas */}
+                    {gruposExpandidos[descripcion] && (
+                      <div className="p-3 space-y-2">
+                        {items.map((gasto) => {
+                          const estaEditando = !!editandoGasto[gasto.id];
+                          const datosEdicion = editandoGasto[gasto.id];
+
+                          return (
+                            <div
+                              key={gasto.id}
+                              className="bg-white border rounded p-3 space-y-2"
+                            >
+                              {estaEditando ? (
+                                /* Modo edición */
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                  <div>
+                                    <label className="text-xs text-gray-600">Fecha</label>
+                                    <input
+                                      type="date"
+                                      value={datosEdicion.fecha}
+                                      onChange={(e) => setEditandoGasto(prev => ({
+                                        ...prev,
+                                        [gasto.id]: { ...prev[gasto.id], fecha: e.target.value }
+                                      }))}
+                                      className="w-full border rounded px-2 py-1 text-sm"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="text-xs text-gray-600">Monto</label>
+                                    <input
+                                      type="number"
+                                      value={datosEdicion.monto}
+                                      onChange={(e) => setEditandoGasto(prev => ({
+                                        ...prev,
+                                        [gasto.id]: { ...prev[gasto.id], monto: e.target.value }
+                                      }))}
+                                      className="w-full border rounded px-2 py-1 text-sm"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="text-xs text-gray-600">Descripción</label>
+                                    <input
+                                      type="text"
+                                      value={datosEdicion.descripcion}
+                                      onChange={(e) => setEditandoGasto(prev => ({
+                                        ...prev,
+                                        [gasto.id]: { ...prev[gasto.id], descripcion: e.target.value }
+                                      }))}
+                                      className="w-full border rounded px-2 py-1 text-sm"
+                                    />
+                                  </div>
+                                  <div className="md:col-span-3 flex gap-2 justify-end">
+                                    <button
+                                      onClick={() => guardarEdicionInline(gasto.id)}
+                                      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm"
+                                    >
+                                      💾 Guardar
+                                    </button>
+                                    <button
+                                      onClick={() => cancelarEdicion(gasto.id)}
+                                      className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-3 py-1 rounded text-sm"
+                                    >
+                                      Cancelar
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                                /* Modo vista */
+                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                                  <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                                    <div>
+                                      <span className="text-gray-600 text-xs">Fecha: </span>
+                                      <span className="font-medium">
+                                        {new Date(gasto.fecha).toLocaleDateString('es-CL')}
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <span className="text-gray-600 text-xs">Monto: </span>
+                                      <span className="font-bold text-red-600">
+                                        {formatCurrency(gasto.monto)}
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <span className="text-gray-600 text-xs">Método: </span>
+                                      <span className={`px-2 py-0.5 rounded text-xs ${
+                                        gasto.metodo_pago === "tarjeta"
+                                          ? "bg-purple-100 text-purple-700"
+                                          : "bg-green-100 text-green-700"
+                                      }`}>
+                                        {gasto.metodo_pago}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div className="flex gap-1">
+                                    <button
+                                      onClick={() => iniciarEdicion(gasto.id, gasto)}
+                                      className="bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-medium"
+                                    >
+                                      ✏️
+                                    </button>
+                                    <button
+                                      onClick={() => eliminarGastoInline(gasto.id, gasto.descripcion)}
+                                      className="bg-red-50 hover:bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-medium"
+                                    >
+                                      🗑️
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
