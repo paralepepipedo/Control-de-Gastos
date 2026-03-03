@@ -14,7 +14,9 @@ export async function GET() {
     const limite = new Date(hoy);
     limite.setDate(limite.getDate() + 3);
     
-    const hoyStr = hoy.toISOString().split('T')[0];
+    const hoyStr = ahoraChile.getFullYear() + '-' +
+  String(ahoraChile.getMonth() + 1).padStart(2, '0') + '-' +
+  String(ahoraChile.getDate()).padStart(2, '0');
     const limiteStr = limite.toISOString().split('T')[0];
 
     console.log('📅 Fecha hoy:', hoyStr);
@@ -240,3 +242,4 @@ export async function GET() {
     }, { status: 500 });
   }
 }
+
