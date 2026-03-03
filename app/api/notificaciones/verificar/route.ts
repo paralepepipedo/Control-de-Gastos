@@ -6,18 +6,21 @@ export async function GET() {
     console.log('🚀 INICIO verificación notificaciones');
 
     const ahoraChile = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Santiago' }));
-    const horaActual = ahoraChile.getHours();
-    
-    const hoy = new Date(ahoraChile);
-    hoy.setHours(0, 0, 0, 0);
-    
-    const limite = new Date(hoy);
-    limite.setDate(limite.getDate() + 3);
-    
-    const hoyStr = ahoraChile.getFullYear() + '-' +
+const horaActual = ahoraChile.getHours();
+
+// Construir fecha de hoy en Chile sin pasar por UTC
+const hoyStr = ahoraChile.getFullYear() + '-' +
   String(ahoraChile.getMonth() + 1).padStart(2, '0') + '-' +
   String(ahoraChile.getDate()).padStart(2, '0');
-    const limiteStr = limite.toISOString().split('T')[0];
+
+const limiteDate = new Date(ahoraChile);
+limiteDate.setDate(limiteDate.getDate() + 3);
+const limiteStr = limiteDate.getFullYear() + '-' +
+  String(limiteDate.getMonth() + 1).padStart(2, '0') + '-' +
+  String(limiteDate.getDate()).padStart(2, '0');
+
+// hoy como objeto Date para calcular diasRestantes — construido desde hoyStr, no desde UTC
+const hoy = new Date(hoyStr + 'T00:00:00');
 
     console.log('📅 Fecha hoy:', hoyStr);
     console.log('📅 Fecha límite (hoy+3):', limiteStr);
@@ -242,4 +245,5 @@ export async function GET() {
     }, { status: 500 });
   }
 }
+
 
