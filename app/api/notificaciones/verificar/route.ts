@@ -114,13 +114,13 @@ const hoy = new Date(hoyStr + 'T00:00:00');
           console.log(`🟡 Vence en ${diasRestantes} día(s) - Verificando...`);
           
           const { data: yaEnviadoHoy } = await supabaseAdmin
-            .from('notificaciones_enviadas')
-            .select('id')
-            .eq('gasto_id', gasto.id)
-            .gte('fecha_envio', hoyStr + 'T00:00:00')
-            .maybeSingle();
+  .from('notificaciones_enviadas')
+  .select('id')
+  .eq('gasto_id', gasto.id)
+  .gte('fecha_envio', hoyStr + 'T00:00:00')
+  .limit(1);
 
-          if (yaEnviadoHoy) {
+if (yaEnviadoHoy && yaEnviadoHoy.length > 0) {
             console.log(`⏭️ SKIP - Ya notificado hoy`);
             return null;
           }
@@ -245,5 +245,6 @@ const hoy = new Date(hoyStr + 'T00:00:00');
     }, { status: 500 });
   }
 }
+
 
 
