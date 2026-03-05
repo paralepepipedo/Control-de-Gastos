@@ -111,6 +111,7 @@ export default function OpcionDosPage() {
 
         if (tipo === 'sueldo') {
           tipoAPI = 'ingreso_sueldo';
+          referenciaId = 0;
           [anio, mes] = identificador.split('-').map(Number);
         } else if (tipo === 'efectivo') {
           tipoAPI = 'gasto_efectivo';
@@ -125,7 +126,7 @@ export default function OpcionDosPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             tipo: tipoAPI,
-            referencia_id: referenciaId || null,
+            referencia_id: referenciaId,
             anio,
             mes,
             monto_override: monto,
