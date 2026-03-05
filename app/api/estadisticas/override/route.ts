@@ -5,7 +5,7 @@ export async function POST(request: Request) {
   try {
     const { tipo, referencia_id, anio, mes, monto_override, descripcion } = await request.json();
 
-    if (!tipo || !referencia_id || !anio || !mes || monto_override === undefined) {
+    if (!tipo || referencia_id === undefined || referencia_id === null || !anio || !mes || monto_override === undefined) {
       return NextResponse.json(
         { error: 'Parámetros requeridos faltando' },
         { status: 400 }
