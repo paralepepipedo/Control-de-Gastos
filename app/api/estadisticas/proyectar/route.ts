@@ -21,16 +21,15 @@ export async function GET(request: Request) {
     const fechaBaseStr = configData?.find(c => c.clave === 'fecha_base_proyeccion')?.valor_text || '2026-01-01';
     const fechaBase = new Date(fechaBaseStr);
 
-    // 2. OBTENER PERÍODO ACTUAL DESDE TABLA PERIODOS
-    const { data: periodos, error: errorPeriodos } = await supabase
+    // 2. OBTENER TODOS LOS PERÍODOS (no solo el actual)
+    const { data: todosPeriodos, error: errorPeriodos } = await supabase
       .from('periodos')
       .select('*')
-      .order('fecha_inicio', { ascending: false })
-      .limit(1);
+      .order('fecha_inicio', { ascending: false });
 
     if (errorPeriodos) throw errorPeriodos;
 
-    const periodoActual = periodos && periodos.length > 0 ? periodos[0] : null;
+    const periodoActual = todosPeriodos && todosPeriodos.length > 0 ? todosPeriodos[0] : null;
     const mesActual = periodoActual?.mes || new Date().getMonth() + 1;
     const anioActual = periodoActual?.anio || new Date().getFullYear();
 
@@ -121,8 +120,8 @@ export async function GET(request: Request) {
     const proyeccion = [];
 
     // VARIABLES SEPARADAS PARA CADA TABLA (desde BD o valores por defecto)
-    let saldoAcumuladoTabla1 = baseTabla1?.saldo_inicial || 1434841; // Para Tabla 1 (Gastos Fijos)
-    let saldoAcumuladoTabla2 = baseTabla2?.saldo_inicial || 1434841; // Para Tabla 2 (Gastos Efectivo)
+    let saldoAcumuladoTabla1 = baseTabla1?.saldo_inicial || 1434841;
+    let saldoAcumuladoTabla2 = baseTabla2?.saldo_inicial || 1434841;
 
     for (let i = 0; i < meses; i++) {
       const mesFecha = addMonths(fechaBase, i);
@@ -133,6 +132,9 @@ export async function GET(request: Request) {
       const esPasado = (anio < anioActual) || (anio === anioActual && mesNumero < mesActual);
       const esActual = (anio === anioActual && mesNumero === mesActual);
       const esFuturo = (anio > anioActual) || (anio === anioActual && mesNumero > mesActual);
+
+      // Buscar el período real correspondiente a este mes/año
+      const periodoDelMes = todosPeriodos?.find(p => p.mes === mesNumero && p.anio === anio);
 
       // ==============================================
       // TABLA 2 - GASTOS EFECTIVO (INDEPENDIENTE)
@@ -145,29 +147,31 @@ export async function GET(request: Request) {
       let gastosEfectivoDetalle: any[];
       let saldoFinalTabla2: number;
 
-      // Saldo inicial = Saldo final del mes anterior (TABLA 2)
       saldoInicialTabla2 = saldoAcumuladoTabla2;
 
-      // Ingresos (con override)
       const overrideSueldoTabla2 = overridesSueldo.find(
         o => o.anio === anio && o.mes === mesNumero
       );
       ingresosMesTabla2 = overrideSueldoTabla2 ? Number(overrideSueldoTabla2.monto_override) : (baseTabla2?.ingresos_mes || sueldoMinimo);
       sueldoTieneOverrideTabla2 = !!overrideSueldoTabla2;
 
-      // Gastos en Efectivo
       gastosEfectivoDetalle = [];
 
       if (esPasado || esActual) {
-        const fechaInicio = new Date(anio, mesNumero - 1, 1);
-        const fechaFin = new Date(anio, mesNumero, 0, 23, 59, 59);
+        // CAMBIO CLAVE: usar rangos reales del período si existe, si no fallback a mes calendario
+        const fechaInicioStr = periodoDelMes
+          ? periodoDelMes.fecha_inicio
+          : `${anio}-${String(mesNumero).padStart(2, '0')}-01`;
+        const fechaFinStr = periodoDelMes
+          ? periodoDelMes.fecha_fin
+          : `${anio}-${String(mesNumero).padStart(2, '0')}-${new Date(anio, mesNumero, 0).getDate()}`;
 
         const { data: gastosMes } = await supabase
           .from('gastos')
           .select('id, monto, categoria_id')
           .eq('metodo_pago', 'efectivo')
-          .gte('fecha', fechaInicio.toISOString())
-          .lte('fecha', fechaFin.toISOString());
+          .gte('fecha', fechaInicioStr)
+          .lte('fecha', fechaFinStr);
 
         const gastosPorCategoria: { [key: number]: number } = {};
         gastosMes?.forEach(gasto => {
@@ -177,21 +181,17 @@ export async function GET(request: Request) {
           }
         });
 
+        // Pasado y actual: siempre valores reales, ignorar overrides de gasto_efectivo
         gastosEfectivoDetalle = categorias?.map(cat => {
-          const override = overridesGastosEfectivo.find(
-            o => o.referencia_id === cat.id && o.anio === anio && o.mes === mesNumero
-          );
-
           const montoBase = gastosPorCategoria[cat.id] || 0;
-          const montoFinal = override ? Number(override.monto_override) : montoBase;
 
           return {
             categoria_id: cat.id,
             categoria_nombre: cat.nombre,
             categoria_icono: cat.icono || '💰',
-            monto: montoFinal,
+            monto: montoBase,
             monto_original: montoBase,
-            tiene_override: !!override,
+            tiene_override: false,
           };
         }).filter(g => g.monto > 0) || [];
 
@@ -215,7 +215,6 @@ export async function GET(request: Request) {
       totalGastosEfectivo = gastosEfectivoDetalle.reduce((sum, g) => sum + g.monto, 0);
       saldoFinalTabla2 = saldoInicialTabla2 + ingresosMesTabla2 - totalGastosEfectivo;
 
-      // ACTUALIZAR SALDO ACUMULADO TABLA 2
       saldoAcumuladoTabla2 = saldoFinalTabla2;
 
       // ==============================================
@@ -229,17 +228,14 @@ export async function GET(request: Request) {
       let gastosDetalle: any[];
       let saldoFinalTabla1: number;
 
-      // Saldo inicial = Saldo final del mes anterior (TABLA 1)
       saldoInicialTabla1 = saldoAcumuladoTabla1;
 
-      // Ingresos (con override) - MISMO QUE TABLA 2
       const overrideSueldoTabla1 = overridesSueldo.find(
         o => o.anio === anio && o.mes === mesNumero
       );
       ingresosMesTabla1 = overrideSueldoTabla1 ? Number(overrideSueldoTabla1.monto_override) : (baseTabla1?.ingresos_mes || sueldoMinimo);
       sueldoTieneOverrideTabla1 = !!overrideSueldoTabla1;
 
-      // Gastos Fijos
       gastosDetalle = gastosFijos?.map(gf => {
         const override = overridesGastosFijos.find(
           o => o.referencia_id === gf.id && o.anio === anio && o.mes === mesNumero
@@ -260,7 +256,6 @@ export async function GET(request: Request) {
       totalGastosFijos = gastosDetalle.reduce((sum, g) => sum + g.monto, 0);
       saldoFinalTabla1 = saldoInicialTabla1 + ingresosMesTabla1 - totalGastosFijos;
 
-      // ACTUALIZAR SALDO ACUMULADO TABLA 1
       saldoAcumuladoTabla1 = saldoFinalTabla1;
 
       // ==============================================
@@ -278,10 +273,6 @@ export async function GET(request: Request) {
       } else {
         estado = 'deficit';
       }
-
-      // ==============================================
-      // GUARDAR PROYECCIÓN CON DATOS SEPARADOS
-      // ==============================================
 
       proyeccion.push({
         mes: mesFecha.toISOString(),
@@ -302,7 +293,7 @@ export async function GET(request: Request) {
         gastos_efectivo_detalle: gastosEfectivoDetalle,
 
         // DATOS COMPARTIDOS
-        ingresos: ingresosMesTabla1, // Mismo para ambas tablas
+        ingresos: ingresosMesTabla1,
         ingresos_tiene_override: sueldoTieneOverrideTabla1,
 
         // MÉTRICAS
@@ -311,6 +302,10 @@ export async function GET(request: Request) {
         estado,
         es_periodo_actual: esActual,
         es_futuro: esFuturo,
+
+        // INFO DEL PERÍODO USADO
+        periodo_fecha_inicio: periodoDelMes?.fecha_inicio || null,
+        periodo_fecha_fin: periodoDelMes?.fecha_fin || null,
       });
     }
 
