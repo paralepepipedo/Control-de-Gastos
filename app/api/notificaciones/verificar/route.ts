@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET() {
@@ -245,6 +245,7 @@ if (yaEnviadoHoy && yaEnviadoHoy.length > 0) {
     }, { status: 500 });
   }
 }
+
 
 
 

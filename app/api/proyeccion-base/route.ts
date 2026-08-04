@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
 // GET - Obtener configuración de ambas tablas
@@ -75,3 +75,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

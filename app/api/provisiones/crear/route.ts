@@ -1,12 +1,11 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+﻿import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     
-    const { data, error } = await supabase
-      .from('provisiones')
+    const { data, error } = await supabaseAdmin.from('provisiones')
       .insert({
         gasto_fijo_id: body.gasto_fijo_id,
         mes: body.mes,
@@ -25,3 +24,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+

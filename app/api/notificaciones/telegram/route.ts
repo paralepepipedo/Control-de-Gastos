@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST(request: Request) {
@@ -51,3 +51,4 @@ export async function POST(request: Request) {
     }, { status: 500 });
   }
 }
+

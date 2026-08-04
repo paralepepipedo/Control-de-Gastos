@@ -1,11 +1,10 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+﻿import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
 
 // GET: Listar categorías
 export async function GET() {
   try {
-    const { data, error } = await supabase
-      .from('categorias')
+    const { data, error } = await supabaseAdmin.from('categorias')
       .select('*')
       .order('nombre');
 
@@ -32,8 +31,7 @@ export async function POST(request: Request) {
       }, { status: 400 });
     }
 
-    const { data, error } = await supabase
-      .from('categorias')
+    const { data, error } = await supabaseAdmin.from('categorias')
       .insert([{ 
         nombre, 
         icono,
@@ -62,8 +60,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ success: false, error: 'ID requerido' }, { status: 400 });
     }
 
-    const { error } = await supabase
-      .from('categorias')
+    const { error } = await supabaseAdmin.from('categorias')
       .delete()
       .eq('id', id);
 
@@ -82,8 +79,7 @@ export async function PUT(request: Request) {
 
     if (!id) return NextResponse.json({ success: false, error: 'ID requerido' }, { status: 400 });
 
-    const { data, error } = await supabase
-      .from('categorias')
+    const { data, error } = await supabaseAdmin.from('categorias')
       .update({ nombre, icono, tipo })
       .eq('id', id)
       .select()
@@ -96,4 +92,5 @@ export async function PUT(request: Request) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+
 

@@ -1,12 +1,11 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+﻿import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
 
 // GET: Obtener fondos y calcular saldo líquido
 export async function GET(request: Request) {
   try {
     // 1. Obtener todos los fondos ordenados por fecha de pago
-    const { data: fondos, error: errorFondos } = await supabase
-      .from('fondos')
+    const { data: fondos, error: errorFondos } = await supabaseAdmin.from('fondos')
       .select('*')
       .order('fecha_pago', { ascending: false });
 
@@ -69,8 +68,7 @@ export async function GET(request: Request) {
     );
 
     // 5. Obtener gastos PAGADOS en EFECTIVO desde fechaInicioCiclo en adelante
-    const { data: gastosEfectivo, error: errorGastos } = await supabase
-      .from('gastos')
+    const { data: gastosEfectivo, error: errorGastos } = await supabaseAdmin.from('gastos')
       .select('monto, fecha')
       .eq('metodo_pago', 'efectivo')
       .eq('pagado', true)
@@ -108,8 +106,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { fecha_pago, mes_que_cubre, tipo, monto, descripcion } = body;
 
-    const { data, error } = await supabase
-      .from('fondos')
+    const { data, error } = await supabaseAdmin.from('fondos')
       .insert([{ fecha_pago, mes_que_cubre, tipo, monto, descripcion }])
       .select()
       .single();
@@ -124,3 +121,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

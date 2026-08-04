@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+﻿import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET(request: Request) {
   try {
@@ -15,8 +15,7 @@ export async function GET(request: Request) {
     const anioNum = parseInt(anio);
 
     // 1. Obtener período
-    const { data: periodo } = await supabase
-      .from('periodos')
+    const { data: periodo } = await supabaseAdmin.from('periodos')
       .select('fecha_inicio, fecha_fin')
       .eq('mes', mesNum)
       .eq('anio', anioNum)
@@ -25,8 +24,7 @@ export async function GET(request: Request) {
     if (!periodo) throw new Error('Período no encontrado');
 
     // 2. Obtener Provisiones con gastos_fijos
-    const { data: provisiones } = await supabase
-      .from('provisiones')
+    const { data: provisiones } = await supabaseAdmin.from('provisiones')
       .select(`
         monto_provision,
         gasto_fijo_id,
@@ -44,8 +42,7 @@ export async function GET(request: Request) {
     console.log('📦 Provisiones raw:', JSON.stringify(provisiones, null, 2));
 
     // 3. Obtener TODOS los gastos del período
-    const { data: todosLosGastos } = await supabase
-      .from('gastos')
+    const { data: todosLosGastos } = await supabaseAdmin.from('gastos')
       .select('monto, metodo_pago, pagado, categoria_id, descripcion')
       .gte('fecha', periodo.fecha_inicio)
       .lte('fecha', periodo.fecha_fin);
@@ -126,3 +123,4 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+

@@ -1,10 +1,9 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+﻿import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET() {
   try {
-    const { data, error } = await supabase
-      .from('periodos')
+    const { data, error } = await supabaseAdmin.from('periodos')
       .select('*')
       .order('anio', { ascending: false })
       .order('mes', { ascending: false })
@@ -18,3 +17,4 @@ export async function GET() {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+

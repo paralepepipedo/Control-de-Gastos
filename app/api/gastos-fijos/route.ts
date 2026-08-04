@@ -1,11 +1,10 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+﻿import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
 
 // LISTAR gastos fijos
 export async function GET() {
   try {
-    const { data, error } = await supabase
-      .from('gastos_fijos')
+    const { data, error } = await supabaseAdmin.from('gastos_fijos')
       .select(`
         *,
         categorias (
@@ -40,8 +39,7 @@ export async function POST(request: Request) {
       }, { status: 400 });
     }
 
-    const { data, error } = await supabase
-      .from('gastos_fijos')
+    const { data, error } = await supabaseAdmin.from('gastos_fijos')
       .insert([{
         nombre,
         dia_vencimiento,
@@ -76,8 +74,7 @@ export async function PUT(request: Request) {
       }, { status: 400 });
     }
 
-    const { data, error } = await supabase
-      .from('gastos_fijos')
+    const { data, error } = await supabaseAdmin.from('gastos_fijos')
       .update({
         ...fields,
         categoria_id: fields.categoria_id || null
@@ -108,8 +105,7 @@ export async function DELETE(request: Request) {
       }, { status: 400 });
     }
 
-    const { error } = await supabase
-      .from('gastos_fijos')
+    const { error } = await supabaseAdmin.from('gastos_fijos')
       .update({ activo: false })
       .eq('id', Number(id));
 
@@ -121,3 +117,4 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+

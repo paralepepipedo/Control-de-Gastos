@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST(request: Request) {
@@ -14,21 +14,27 @@ export async function POST(request: Request) {
 
     const supabase = supabaseAdmin;
 
-    // Insertar o actualizar override
-    const { data, error } = await supabase
-      .from('proyeccion_overrides')
-      .upsert(
-        {
-          tipo,
-          referencia_id,
-          anio,
-          mes,
-          monto_override: Number(monto_override),
-          descripcion,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'tipo,referencia_id,anio,mes' }
-      )
+    // 1. ELIMINAMOS TODOS los registros duplicados o viejos que existan para esta celda
+    await supabaseAdmin.from('proyeccion_overrides')
+      .delete()
+      .match({
+        tipo: tipo,
+        referencia_id: referencia_id,
+        anio: anio,
+        mes: mes
+      });
+
+    // 2. INSERTAMOS el nuevo valor como el ÚNICO registro válido
+    const { data, error } = await supabaseAdmin.from('proyeccion_overrides')
+      .insert({
+        tipo,
+        referencia_id,
+        anio,
+        mes,
+        monto_override: Number(monto_override),
+        descripcion,
+        updated_at: new Date().toISOString(),
+      })
       .select();
 
     if (error) throw error;
@@ -55,8 +61,7 @@ export async function DELETE(request: Request) {
 
     const supabase = supabaseAdmin;
 
-    const { error } = await supabase
-      .from('proyeccion_overrides')
+    const { error } = await supabaseAdmin.from('proyeccion_overrides')
       .delete()
       .match({ tipo, referencia_id, anio: Number(anio), mes: Number(mes) });
 
@@ -72,3 +77,4 @@ export async function DELETE(request: Request) {
     );
   }
 }
+

@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+﻿import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST(request: Request) {
   try {
@@ -22,15 +22,13 @@ export async function POST(request: Request) {
 
     // Crear categorías que no existen
     for (const nombreCat of categoriasUnicas) {
-      const { data: existe } = await supabase
-        .from('categorias')
+      const { data: existe } = await supabaseAdmin.from('categorias')
         .select('id')
         .ilike('nombre', nombreCat)
         .single();
 
       if (!existe) {
-        const { error } = await supabase
-          .from('categorias')
+        const { error } = await supabaseAdmin.from('categorias')
           .insert({
             nombre: nombreCat.charAt(0).toUpperCase() + nombreCat.slice(1),
             icono: '📦',
@@ -45,15 +43,13 @@ export async function POST(request: Request) {
     if (datos.gastos_fijos && Array.isArray(datos.gastos_fijos)) {
       for (const gf of datos.gastos_fijos) {
         try {
-          const { data: existe } = await supabase
-            .from('gastos_fijos')
+          const { data: existe } = await supabaseAdmin.from('gastos_fijos')
             .select('id')
             .ilike('nombre', gf.nombre)
             .single();
 
           if (!existe) {
-            const { error } = await supabase
-              .from('gastos_fijos')
+            const { error } = await supabaseAdmin.from('gastos_fijos')
               .insert({
                 nombre: gf.nombre,
                 descripcion: gf.descripcion || '',
@@ -75,8 +71,7 @@ export async function POST(request: Request) {
     // 3. Importar gastos_reales
     if (datos.gastos_reales && Array.isArray(datos.gastos_reales)) {
       // Obtener mapa de categorías
-      const { data: categorias } = await supabase
-        .from('categorias')
+      const { data: categorias } = await supabaseAdmin.from('categorias')
         .select('id, nombre');
 
       const mapaCategorias = new Map(
@@ -93,8 +88,7 @@ export async function POST(request: Request) {
           }
 
           // Verificar duplicado
-          const { data: existe } = await supabase
-            .from('gastos')
+          const { data: existe } = await supabaseAdmin.from('gastos')
             .select('id')
             .eq('fecha', gasto.fecha)
             .eq('descripcion', gasto.detalle || gasto.descripcion || 'Sin detalle')
@@ -104,8 +98,7 @@ export async function POST(request: Request) {
           if (!existe && gasto.monto > 0) {
             const categoriaId = mapaCategorias.get(gasto.categoria?.toLowerCase()) || null;
 
-            const { error } = await supabase
-              .from('gastos')
+            const { error } = await supabaseAdmin.from('gastos')
               .insert({
                 fecha: gasto.fecha,
                 descripcion: gasto.detalle || gasto.descripcion || 'Sin detalle',
@@ -152,3 +145,4 @@ ${errores.length > 0 ? `\n⚠️ Errores: ${errores.length} (ver consola)` : ''}
     }, { status: 500 });
   }
 }
+

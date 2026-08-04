@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+﻿import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET(request: Request) {
   try {
@@ -7,9 +7,7 @@ export async function GET(request: Request) {
     const fecha_inicio = searchParams.get('fecha_inicio');
     const fecha_fin = searchParams.get('fecha_fin');
 
-    console.log('📅 Parámetros:', { fecha_inicio, fecha_fin });
-
-    let query = supabase
+    let query = supabaseAdmin
       .from('gastos')
       .select(`
         *,
@@ -39,8 +37,6 @@ export async function GET(request: Request) {
       }, { status: 500 });
     }
 
-    console.log('✅ Gastos cargados:', data?.length || 0);
-
     return NextResponse.json({
       success: true,
       data: data || []
@@ -55,22 +51,20 @@ export async function GET(request: Request) {
   }
 }
 
-
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    
+
     // Si es un gasto con cuotas
     if (body.cuotas && body.cuotas > 1) {
       const cuotasTotales = body.cuotas;
       const montoCuota = body.monto / cuotasTotales;
-      const gastoCuotaId = crypto.randomUUID(); // ID único para agrupar todas las cuotas
+      const gastoCuotaId = crypto.randomUUID();
 
       const fechaBase = new Date(body.fecha);
       const cuotasInsert = [];
 
       for (let i = 1; i <= cuotasTotales; i++) {
-        // Calcular fecha para cada cuota (mismo día del mes, pero en el período siguiente)
         const fechaCuota = new Date(fechaBase);
         fechaCuota.setMonth(fechaCuota.getMonth() + (i - 1));
 
@@ -80,15 +74,16 @@ export async function POST(request: Request) {
           monto: Math.round(montoCuota),
           categoria_id: body.categoria_id || null,
           metodo_pago: body.metodo_pago || 'efectivo',
-          pagado: i === 1 ? (body.pagado || false) : false, // Solo primera cuota puede venir pagada
+          pagado: i === 1 ? (body.pagado || false) : false,
           es_cuota: true,
           cuota_numero: i,
           cuotas_totales: cuotasTotales,
-          gasto_cuota_id: gastoCuotaId
+          gasto_cuota_id: gastoCuotaId,
+          usuario_id: '56e61383-7f6b-482a-a9b2-e9761c4b3039'
         });
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await supabaseAdmin
         .from('gastos')
         .insert(cuotasInsert)
         .select();
@@ -103,7 +98,7 @@ export async function POST(request: Request) {
     }
 
     // Gasto normal (sin cuotas)
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('gastos')
       .insert([{
         fecha: body.fecha,
@@ -112,7 +107,8 @@ export async function POST(request: Request) {
         categoria_id: body.categoria_id || null,
         metodo_pago: body.metodo_pago || 'efectivo',
         pagado: body.pagado || false,
-        es_cuota: false
+        es_cuota: false,
+        usuario_id: '56e61383-7f6b-482a-a9b2-e9761c4b3039'
       }])
       .select();
 
@@ -132,13 +128,12 @@ export async function POST(request: Request) {
   }
 }
 
-
 export async function PUT(request: Request) {
   try {
     const body = await request.json();
     const { id, ...updateData } = body;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('gastos')
       .update(updateData)
       .eq('id', id)
@@ -165,7 +160,7 @@ export async function PATCH(request: Request) {
     const body = await request.json();
     const { id, ...updateData } = body;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('gastos')
       .update(updateData)
       .eq('id', id)
@@ -199,7 +194,7 @@ export async function DELETE(request: Request) {
       }, { status: 400 });
     }
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('gastos')
       .delete()
       .eq('id', id);

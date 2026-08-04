@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+﻿import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST(request: Request) {
   try {
@@ -11,8 +11,7 @@ export async function POST(request: Request) {
     }
 
     // 1. Verificar si ya existen provisiones para ese mes/año
-    const { data: provisionesExistentes, error: errorExistentes } = await supabase
-      .from('provisiones')
+    const { data: provisionesExistentes, error: errorExistentes } = await supabaseAdmin.from('provisiones')
       .select('id, gasto_fijo_id')
       .eq('mes', mes)
       .eq('anio', anio);
@@ -31,8 +30,7 @@ export async function POST(request: Request) {
     }
 
     // 2. Obtener gastos fijos activos
-    const { data: gastosFijos, error: errorFijos } = await supabase
-      .from('gastos_fijos')
+    const { data: gastosFijos, error: errorFijos } = await supabaseAdmin.from('gastos_fijos')
       .select('*')
       .eq('activo', true);
 
@@ -43,8 +41,7 @@ export async function POST(request: Request) {
 
     // 3. Si modo = 'regenerar', borramos provisiones del mes/año
     if (yaExisten && modo === 'regenerar') {
-      const { error: errorDeleteProv } = await supabase
-        .from('provisiones')
+      const { error: errorDeleteProv } = await supabaseAdmin.from('provisiones')
         .delete()
         .eq('mes', mes)
         .eq('anio', anio);
@@ -67,8 +64,7 @@ export async function POST(request: Request) {
     const finMesDate = new Date(anio, mes, 0);
     const finMes = `${anio}-${mes.toString().padStart(2, '0')}-${finMesDate.getDate().toString().padStart(2, '0')}`;
 
-    const { data: gastosExistentes, error: errorGastosExistentes } = await supabase
-      .from('gastos')
+    const { data: gastosExistentes, error: errorGastosExistentes } = await supabaseAdmin.from('gastos')
       .select('id, descripcion, fecha');
 
     if (errorGastosExistentes) throw errorGastosExistentes;
@@ -117,13 +113,13 @@ export async function POST(request: Request) {
 
     // 6. Insertar provisiones nuevas (si hay)
     if (provisionesInsert.length > 0) {
-      const { error: errorProv } = await supabase.from('provisiones').insert(provisionesInsert);
+      const { error: errorProv } = await supabaseAdmin.from('provisiones').insert(provisionesInsert);
       if (errorProv) throw errorProv;
     }
 
     // 7. Insertar gastos faltantes (si hay)
     if (gastosInsert.length > 0) {
-      const { error: errorGastos } = await supabase.from('gastos').insert(gastosInsert);
+      const { error: errorGastos } = await supabaseAdmin.from('gastos').insert(gastosInsert);
       if (errorGastos) throw errorGastos;
     }
 
@@ -141,3 +137,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: error.message || 'Error interno' }, { status: 500 });
   }
 }
+

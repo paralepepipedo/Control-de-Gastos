@@ -1,12 +1,11 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+﻿import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
 import { calcularPeriodoProvisional } from '@/lib/utils';
 
 export async function POST() {
   try {
     // Obtener fecha del gasto más antiguo y más reciente
-    const { data: gastos } = await supabase
-      .from('gastos')
+    const { data: gastos } = await supabaseAdmin.from('gastos')
       .select('fecha')
       .order('fecha', { ascending: true });
 
@@ -51,16 +50,14 @@ export async function POST() {
     // Insertar períodos (ignorar duplicados)
     let periodosCreados = 0;
     for (const periodo of periodosACrear) {
-      const { data: existe } = await supabase
-        .from('periodos')
+      const { data: existe } = await supabaseAdmin.from('periodos')
         .select('id')
         .eq('mes', periodo.mes)
         .eq('anio', periodo.anio)
         .single();
 
       if (!existe) {
-        const { error } = await supabase
-          .from('periodos')
+        const { error } = await supabaseAdmin.from('periodos')
           .insert(periodo);
 
         if (!error) periodosCreados++;
@@ -82,3 +79,4 @@ export async function POST() {
     }, { status: 500 });
   }
 }
+

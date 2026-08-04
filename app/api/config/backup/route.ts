@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+﻿import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET() {
   try {
@@ -12,12 +12,12 @@ export async function GET() {
       { data: fondos },
       { data: periodos }
     ] = await Promise.all([
-      supabase.from('gastos').select('*').order('fecha', { ascending: false }),
-      supabase.from('gastos_fijos').select('*'),
-      supabase.from('provisiones').select('*'),
-      supabase.from('categorias').select('*'),
-      supabase.from('fondos').select('*'),
-      supabase.from('periodos').select('*')
+      supabaseAdmin.from('gastos').select('*').order('fecha', { ascending: false }),
+      supabaseAdmin.from('gastos_fijos').select('*'),
+      supabaseAdmin.from('provisiones').select('*'),
+      supabaseAdmin.from('categorias').select('*'),
+      supabaseAdmin.from('fondos').select('*'),
+      supabaseAdmin.from('periodos').select('*')
     ]);
 
     const backup = {
@@ -57,3 +57,4 @@ export async function GET() {
     }, { status: 500 });
   }
 }
+

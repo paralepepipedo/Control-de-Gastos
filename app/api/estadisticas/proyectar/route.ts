@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { addMonths, format } from 'date-fns';
 
@@ -10,8 +10,7 @@ export async function GET(request: Request) {
     const supabase = supabaseAdmin;
 
     // 1. OBTENER CONFIGURACIÓN BASE
-    const { data: configData, error: errorConfig } = await supabase
-      .from('app_config')
+    const { data: configData, error: errorConfig } = await supabaseAdmin.from('app_config')
       .select('*')
       .in('clave', ['saldo_inicial_2026_01', 'fecha_base_proyeccion']);
 
@@ -22,8 +21,7 @@ export async function GET(request: Request) {
     const fechaBase = new Date(fechaBaseStr);
 
     // 2. OBTENER TODOS LOS PERÍODOS (no solo el actual)
-    const { data: todosPeriodos, error: errorPeriodos } = await supabase
-      .from('periodos')
+    const { data: todosPeriodos, error: errorPeriodos } = await supabaseAdmin.from('periodos')
       .select('*')
       .order('fecha_inicio', { ascending: false });
 
@@ -33,40 +31,42 @@ export async function GET(request: Request) {
     const mesActual = periodoActual?.mes || new Date().getMonth() + 1;
     const anioActual = periodoActual?.anio || new Date().getFullYear();
 
-    // 3. OBTENER SUELDO MÍNIMO
-    const { data: fondos, error: errorFondos } = await supabase
-      .from('fondos')
+    // 3. OBTENER FONDOS (SUELDO E INGRESOS EXTRAS)
+    const { data: fondos, error: errorFondos } = await supabaseAdmin.from('fondos')
       .select('*')
-      .eq('tipo', 'sueldo')
+      .in('tipo', ['sueldo', 'ingreso_extra'])
       .order('mes_que_cubre', { ascending: true });
 
     if (errorFondos) throw errorFondos;
 
+    const fondosSueldo = fondos?.filter(f => f.tipo === 'sueldo') || [];
+    const fondosExtra = fondos?.filter(f => f.tipo === 'ingreso_extra') || [];
+
     let sueldoMinimo = 0;
-    if (fondos && fondos.length > 0) {
-      sueldoMinimo = Math.min(...fondos.map(f => Number(f.monto)));
+    if (fondosSueldo.length > 0) {
+      sueldoMinimo = Math.min(...fondosSueldo.map(f => Number(f.monto)));
     }
 
-    // 4. OBTENER GASTOS FIJOS ACTIVOS
-    const { data: gastosFijos, error: errorGastosFijos } = await supabase
-      .from('gastos_fijos')
+    // 4. OBTENER GASTOS FIJOS ACTIVOS (Excluyendo los pagados en efectivo)
+    const { data: gastosFijos, error: errorGastosFijos } = await supabaseAdmin.from('gastos_fijos')
       .select('id, nombre, monto_provision, categoria_id, categorias!inner(nombre), dia_vencimiento')
       .eq('activo', true)
+      .or('metodo_pago.neq.efectivo,metodo_pago.is.null') // <-- ESTE ES EL FILTRO SALVADOR
       .order('nombre', { ascending: true });
 
     if (errorGastosFijos) throw errorGastosFijos;
 
+    if (errorGastosFijos) throw errorGastosFijos;
+
     // 5. OBTENER CATEGORÍAS
-    const { data: categorias, error: errorCategorias } = await supabase
-      .from('categorias')
+    const { data: categorias, error: errorCategorias } = await supabaseAdmin.from('categorias')
       .select('id, nombre, icono')
       .order('nombre', { ascending: true });
 
     if (errorCategorias) throw errorCategorias;
 
     // 6. OBTENER TODOS LOS OVERRIDES
-    const { data: overrides, error: errorOverrides } = await supabase
-      .from('proyeccion_overrides')
+    const { data: overrides, error: errorOverrides } = await supabaseAdmin.from('proyeccion_overrides')
       .select('*');
 
     if (errorOverrides) throw errorOverrides;
@@ -80,8 +80,7 @@ export async function GET(request: Request) {
     let totalGastosEfectivoActual = 0;
 
     if (periodoActual) {
-      const { data: gastosActual } = await supabase
-        .from('gastos')
+      const { data: gastosActual } = await supabaseAdmin.from('gastos')
         .select('id, monto, categoria_id')
         .eq('metodo_pago', 'efectivo')
         .gte('fecha', periodoActual.fecha_inicio)
@@ -106,8 +105,7 @@ export async function GET(request: Request) {
     }
 
     // 7.5. OBTENER CONFIGURACIÓN BASE DE PROYECCIÓN
-    const { data: configBase, error: errorConfigBase } = await supabase
-      .from('proyeccion_base')
+    const { data: configBase, error: errorConfigBase } = await supabaseAdmin.from('proyeccion_base')
       .select('*')
       .order('tabla', { ascending: true });
 
@@ -149,10 +147,19 @@ export async function GET(request: Request) {
 
       saldoInicialTabla2 = saldoAcumuladoTabla2;
 
+      // Calcular ingresos extra del mes correspondiente
+      const ingresosExtrasMes = fondosExtra
+        .filter(f => {
+          const [fAnio, fMes] = f.mes_que_cubre.split('-');
+          return Number(fMes) === mesNumero && Number(fAnio) === anio;
+        })
+        .reduce((sum, f) => sum + Number(f.monto), 0);
+
       const overrideSueldoTabla2 = overridesSueldo.find(
         o => o.anio === anio && o.mes === mesNumero
       );
-      ingresosMesTabla2 = overrideSueldoTabla2 ? Number(overrideSueldoTabla2.monto_override) : (baseTabla2?.ingresos_mes || sueldoMinimo);
+      // Sumar ingresos extras de forma invisible al total del mes
+      ingresosMesTabla2 = (overrideSueldoTabla2 ? Number(overrideSueldoTabla2.monto_override) : (baseTabla2?.ingresos_mes || sueldoMinimo)) + ingresosExtrasMes;
       sueldoTieneOverrideTabla2 = !!overrideSueldoTabla2;
 
       gastosEfectivoDetalle = [];
@@ -166,8 +173,7 @@ export async function GET(request: Request) {
           ? periodoDelMes.fecha_fin
           : `${anio}-${String(mesNumero).padStart(2, '0')}-${new Date(anio, mesNumero, 0).getDate()}`;
 
-        const { data: gastosMes } = await supabase
-          .from('gastos')
+        const { data: gastosMes } = await supabaseAdmin.from('gastos')
           .select('id, monto, categoria_id')
           .eq('metodo_pago', 'efectivo')
           .gte('fecha', fechaInicioStr)
@@ -233,7 +239,8 @@ export async function GET(request: Request) {
       const overrideSueldoTabla1 = overridesSueldo.find(
         o => o.anio === anio && o.mes === mesNumero
       );
-      ingresosMesTabla1 = overrideSueldoTabla1 ? Number(overrideSueldoTabla1.monto_override) : (baseTabla1?.ingresos_mes || sueldoMinimo);
+      // Sumar los mismos ingresos extras para mantener la consistencia
+      ingresosMesTabla1 = (overrideSueldoTabla1 ? Number(overrideSueldoTabla1.monto_override) : (baseTabla1?.ingresos_mes || sueldoMinimo)) + ingresosExtrasMes;
       sueldoTieneOverrideTabla1 = !!overrideSueldoTabla1;
 
       gastosDetalle = gastosFijos?.map(gf => {
@@ -342,3 +349,4 @@ export async function GET(request: Request) {
     );
   }
 }
+

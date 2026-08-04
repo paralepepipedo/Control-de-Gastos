@@ -1,10 +1,9 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+﻿import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET() {
   try {
-    const { data, error } = await supabase
-      .from('provisiones')
+    const { data, error } = await supabaseAdmin.from('provisiones')
       .select('monto_provision');
 
     if (error) {
@@ -29,3 +28,4 @@ export async function GET() {
     }, { status: 500 });
   }
 }
+

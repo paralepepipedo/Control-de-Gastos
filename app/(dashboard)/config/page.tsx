@@ -235,7 +235,21 @@ function SeccionPeriodos() {
   };
 
   const abrirModalEditar = (periodo: any) => {
-    setPeriodoEditar({ ...periodo });
+    // Función que extrae el día exacto que estás viendo en la web (transforma UTC a local)
+    const formatearAFechaLocal = (fechaString: string) => {
+      if (!fechaString) return '';
+      const date = new Date(fechaString);
+      const anio = date.getFullYear();
+      const mes = String(date.getMonth() + 1).padStart(2, '0');
+      const dia = String(date.getDate()).padStart(2, '0');
+      return `${anio}-${mes}-${dia}`;
+    };
+
+    setPeriodoEditar({
+      ...periodo,
+      fecha_inicio: formatearAFechaLocal(periodo.fecha_inicio),
+      fecha_fin: formatearAFechaLocal(periodo.fecha_fin)
+    });
     setModalEditar(true);
   };
 
