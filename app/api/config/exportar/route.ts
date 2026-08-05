@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 import * as XLSX from 'xlsx';
 
 export async function GET(request: Request) {
@@ -15,7 +15,7 @@ export async function GET(request: Request) {
       const periodoResult = await periodoResponse.json();
       const periodo = periodoResult.data;
 
-      const { data } = await supabaseAdmin.from('gastos')
+      const { data } = await supabase.from('gastos')
         .select(`
           id,
           fecha,
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
       gastosData = data || [];
     } else {
       // Histórico completo
-      const { data } = await supabaseAdmin.from('gastos')
+      const { data } = await supabase.from('gastos')
         .select(`
           id,
           fecha,

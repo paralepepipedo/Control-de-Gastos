@@ -1,12 +1,12 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const mes = searchParams.get('mes') || new Date().toISOString().slice(0, 7) + '-01';
 
-    const { data, error } = await supabaseAdmin.from('tarjeta_credito_itau')
+    const { data, error } = await supabase.from('tarjeta_credito_itau')
       .select('*')
       .eq('mes', mes)
       .single();
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
       const fechaDesde = data.fecha_inicio_real || data.fecha_inicio_estimada;
       const fechaHasta = data.fecha_fin_real || data.fecha_fin_estimada;
 
-      const { data: gastos } = await supabaseAdmin.from('gastos')
+      const { data: gastos } = await supabase.from('gastos')
         .select('monto')
         .eq('metodo_pago', 'tarjeta')
         .eq('estado', 'pagado')
@@ -27,7 +27,7 @@ export async function GET(request: Request) {
 
       const totalGastado = gastos?.reduce((sum, g) => sum + Number(g.monto), 0) || 0;
 
-      await supabaseAdmin.from('tarjeta_credito_itau')
+      await supabase.from('tarjeta_credito_itau')
         .update({ total_gastado: totalGastado })
         .eq('id', data.id);
 
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     
     // Registrar factura
-    const { data, error } = await supabaseAdmin.from('tarjeta_credito_itau')
+    const { data, error } = await supabase.from('tarjeta_credito_itau')
       .update({
         fecha_inicio_real: body.fecha_inicio_real,
         fecha_fin_real: body.fecha_fin_real,
@@ -63,9 +63,9 @@ export async function POST(request: Request) {
     if (error) throw error;
 
     // Crear gastos pendientes
-    const categoriaTC = await supabaseAdmin.from('categorias').select('id').eq('nombre', 'TC Itaú').single();
+    const categoriaTC = await supabase.from('categorias').select('id').eq('nombre', 'TC Itaú').single();
     
-    await supabaseAdmin.from('gastos')
+    await supabase.from('gastos')
       .insert({
         fecha: body.fecha_vencimiento,
         monto: body.monto_minimo,
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
         fecha_vencimiento: body.fecha_vencimiento
       });
 
-    await supabaseAdmin.from('gastos')
+    await supabase.from('gastos')
       .insert({
         fecha: body.fecha_pago_resto || data.fecha_pago_resto,
         monto: body.total_gastado - body.monto_minimo,
@@ -97,7 +97,7 @@ export async function PATCH(request: Request) {
   try {
     const body = await request.json();
     
-    const { data, error } = await supabaseAdmin.from('tarjeta_credito_itau')
+    const { data, error } = await supabase.from('tarjeta_credito_itau')
       .update({
         fecha_inicio_estimada: body.fecha_inicio_estimada,
         fecha_fin_estimada: body.fecha_fin_estimada,

@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 export async function GET(request: Request) {
   try {
@@ -7,7 +7,7 @@ export async function GET(request: Request) {
     const mes = searchParams.get('mes');
     const anio = searchParams.get('anio');
 
-    let query = supabaseAdmin.from('provisiones')
+    let query = supabase.from('provisiones')
       .select(`
         *,
         gastos_fijos (

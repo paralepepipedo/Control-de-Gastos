@@ -1,11 +1,11 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     
-    const { data, error } = await supabaseAdmin.from('provisiones')
+    const { data, error } = await supabase.from('provisiones')
       .insert({
         gasto_fijo_id: body.gasto_fijo_id,
         mes: body.mes,

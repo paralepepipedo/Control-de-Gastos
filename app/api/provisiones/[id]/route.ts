@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 export async function PATCH(
   request: Request,
@@ -24,7 +24,7 @@ export async function PATCH(
       }
     });
 
-    const { data, error } = await supabaseAdmin.from('provisiones')
+    const { data, error } = await supabase.from('provisiones')
       .update(updateData)
       .eq('id', id)
       .select()
@@ -62,7 +62,7 @@ export async function DELETE(
       );
     }
 
-    const { error } = await supabaseAdmin.from('provisiones')
+    const { error } = await supabase.from('provisiones')
       .delete()
       .eq('id', provisionId);
 

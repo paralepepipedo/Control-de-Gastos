@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 export async function GET() {
   try {
@@ -27,49 +27,49 @@ export async function GET() {
       { data: fechasPago }
     ] = await Promise.all([
       // Periodo actual
-      supabaseAdmin.from('periodos').select('*').eq('mes', mesActual).eq('anio', anioActual).single(),
+      supabase.from('periodos').select('*').eq('mes', mesActual).eq('anio', anioActual).single(),
       
       // Periodo anterior
-      supabaseAdmin.from('periodos').select('fecha_inicio, fecha_fin').eq('mes', mesActual === 1 ? 12 : mesActual - 1).eq('anio', mesActual === 1 ? anioActual - 1 : anioActual).single(),
+      supabase.from('periodos').select('fecha_inicio, fecha_fin').eq('mes', mesActual === 1 ? 12 : mesActual - 1).eq('anio', mesActual === 1 ? anioActual - 1 : anioActual).single(),
       
       // Fondos
-      supabaseAdmin.from('fondos').select('*').order('fecha_pago', { ascending: false }),
+      supabase.from('fondos').select('*').order('fecha_pago', { ascending: false }),
       
       // Gastos efectivo pagados (para saldo líquido)
-      supabaseAdmin.from('gastos').select('monto, fecha').eq('metodo_pago', 'efectivo').eq('pagado', true),
+      supabase.from('gastos').select('monto, fecha').eq('metodo_pago', 'efectivo').eq('pagado', true),
       
       // Gastos PAGADOS (se filtrará por periodo después)
-      supabaseAdmin.from('gastos').select('monto, fecha').eq('pagado', true),
+      supabase.from('gastos').select('monto, fecha').eq('pagado', true),
       
       // Gastos PENDIENTES (se filtrará por periodo después)
-      supabaseAdmin.from('gastos').select('monto, fecha').eq('pagado', false),
+      supabase.from('gastos').select('monto, fecha').eq('pagado', false),
       
       // Gastos mes anterior (se filtrará después)
-      supabaseAdmin.from('gastos').select('monto, fecha'),
+      supabase.from('gastos').select('monto, fecha'),
       
       // Provisiones activas
-      supabaseAdmin.from('provisiones').select('monto_provision').eq('estado', 'pendiente'),
+      supabase.from('provisiones').select('monto_provision').eq('estado', 'pendiente'),
       
       // Gastos fijos
-      supabaseAdmin.from('gastos_fijos').select('monto_provision, activo'),
+      supabase.from('gastos_fijos').select('monto_provision, activo'),
       
       // Gastos próximos 7 días
-      supabaseAdmin.from('gastos').select('id, fecha, descripcion, monto, metodo_pago, pagado, fecha_vencimiento, es_cuota, categorias!inner(nombre, tipo)').eq('pagado', false).gte('fecha_vencimiento', hoy.toISOString().split('T')[0]).lte('fecha_vencimiento', proximos7Dias).eq('es_cuota', false).neq('categorias.tipo', 'presupuesto').order('fecha_vencimiento', { ascending: true }).limit(5),
+      supabase.from('gastos').select('id, fecha, descripcion, monto, metodo_pago, pagado, fecha_vencimiento, es_cuota, categorias!inner(nombre, tipo)').eq('pagado', false).gte('fecha_vencimiento', hoy.toISOString().split('T')[0]).lte('fecha_vencimiento', proximos7Dias).eq('es_cuota', false).neq('categorias.tipo', 'presupuesto').order('fecha_vencimiento', { ascending: true }).limit(5),
       
       // Últimos gastos (se filtrará después)
-      supabaseAdmin.from('gastos').select('id, fecha, descripcion, monto, metodo_pago, pagado, es_cuota, categorias(nombre, icono)').eq('es_cuota', false).order('fecha', { ascending: false }).limit(10),
+      supabase.from('gastos').select('id, fecha, descripcion, monto, metodo_pago, pagado, es_cuota, categorias(nombre, icono)').eq('es_cuota', false).order('fecha', { ascending: false }).limit(10),
       
       // Pendientes tarjeta (se filtrará después)
-      supabaseAdmin.from('gastos').select('monto, fecha').eq('pagado', false).eq('metodo_pago', 'tarjeta'),
+      supabase.from('gastos').select('monto, fecha').eq('pagado', false).eq('metodo_pago', 'tarjeta'),
       
       // Pendientes efectivo (se filtrará después)
-      supabaseAdmin.from('gastos').select('monto, fecha').eq('pagado', false).eq('metodo_pago', 'efectivo'),
+      supabase.from('gastos').select('monto, fecha').eq('pagado', false).eq('metodo_pago', 'efectivo'),
       
       // Gastos por categoría (se filtrará después)
-      supabaseAdmin.from('gastos').select('categoria_id, monto, fecha, categorias(nombre, icono)').eq('pagado', true),
+      supabase.from('gastos').select('categoria_id, monto, fecha, categorias(nombre, icono)').eq('pagado', true),
       
       // Próximo pago
-      supabaseAdmin.from('fechas_pago').select('*').gte('fecha_pago', hoy.toISOString().split('T')[0]).order('fecha_pago', { ascending: true }).limit(1)
+      supabase.from('fechas_pago').select('*').gte('fecha_pago', hoy.toISOString().split('T')[0]).order('fecha_pago', { ascending: true }).limit(1)
     ]);
 
     if (!periodoData) throw new Error('No se pudo obtener el período actual');

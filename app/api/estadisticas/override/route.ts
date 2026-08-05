@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 export async function POST(request: Request) {
   try {
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     const supabase = supabaseAdmin;
 
     // 1. ELIMINAMOS TODOS los registros duplicados o viejos que existan para esta celda
-    await supabaseAdmin.from('proyeccion_overrides')
+    await supabase.from('proyeccion_overrides')
       .delete()
       .match({
         tipo: tipo,
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
       });
 
     // 2. INSERTAMOS el nuevo valor como el ÚNICO registro válido
-    const { data, error } = await supabaseAdmin.from('proyeccion_overrides')
+    const { data, error } = await supabase.from('proyeccion_overrides')
       .insert({
         tipo,
         referencia_id,
@@ -61,7 +61,7 @@ export async function DELETE(request: Request) {
 
     const supabase = supabaseAdmin;
 
-    const { error } = await supabaseAdmin.from('proyeccion_overrides')
+    const { error } = await supabase.from('proyeccion_overrides')
       .delete()
       .match({ tipo, referencia_id, anio: Number(anio), mes: Number(mes) });
 

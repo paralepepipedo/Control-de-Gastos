@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 // GET: Leer configuración por clave
 export async function GET(request: Request) {
@@ -11,7 +11,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ success: false, error: 'Clave requerida' }, { status: 400 });
     }
 
-    const { data, error } = await supabaseAdmin.from('app_config')
+    const { data, error } = await supabase.from('app_config')
       .select('*')
       .eq('clave', clave)
       .single();
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: 'Clave requerida' }, { status: 400 });
     }
 
-    const { data, error } = await supabaseAdmin.from('app_config')
+    const { data, error } = await supabase.from('app_config')
       .upsert(
         { 
           clave, 

@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 import { calcularPeriodoProvisional } from '@/lib/utils';
 
 // GET: Obtener período actual o de un mes específico
@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     
     if (mes && anio) {
       // Buscar período específico
-      const { data, error } = await supabaseAdmin.from('periodos')
+      const { data, error } = await supabase.from('periodos')
         .select('*')
         .eq('mes', parseInt(mes))
         .eq('anio', parseInt(anio))
@@ -38,7 +38,7 @@ export async function GET(request: Request) {
       const hoy = new Date();
       const periodoProvisional = calcularPeriodoProvisional(hoy);
       
-      const { data, error } = await supabaseAdmin.from('periodos')
+      const { data, error } = await supabase.from('periodos')
         .select('*')
         .eq('mes', periodoProvisional.mes)
         .eq('anio', periodoProvisional.anio)
@@ -48,7 +48,7 @@ export async function GET(request: Request) {
       
       if (!data) {
         // Crear período provisional automáticamente
-        const { data: nuevoPeriodo, error: errorInsert } = await supabaseAdmin.from('periodos')
+        const { data: nuevoPeriodo, error: errorInsert } = await supabase.from('periodos')
           .insert({
             mes: periodoProvisional.mes,
             anio: periodoProvisional.anio,
@@ -77,7 +77,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     
-    const { data, error } = await supabaseAdmin.from('periodos')
+    const { data, error } = await supabase.from('periodos')
       .upsert({
         mes: body.mes,
         anio: body.anio,

@@ -1,9 +1,9 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 export async function GET() {
   try {
-    const { data, error } = await supabaseAdmin.from('provisiones')
+    const { data, error } = await supabase.from('provisiones')
       .select('monto_provision');
 
     if (error) {
