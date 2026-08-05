@@ -1,7 +1,8 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 
 export async function GET() {
+    const supabase = await createClient();
   try {
     console.log('🚀 INICIO verificación notificaciones');
 
@@ -30,7 +31,7 @@ const hoy = new Date(hoyStr + 'T00:00:00');
     const hace7dias = new Date(hoy);
     hace7dias.setDate(hace7dias.getDate() - 7);
     
-    const { error: deleteError } = await supabaseAdmin
+    const { error: deleteError } = await supabase
       .from('notificaciones_enviadas')
       .delete()
       .lt('fecha_envio', hace7dias.toISOString());
@@ -42,7 +43,7 @@ const hoy = new Date(hoyStr + 'T00:00:00');
     }
 
     // Obtener configuración
-    const { data: config } = await supabaseAdmin
+    const { data: config } = await supabase
       .from('config_notificaciones')
       .select('*')
       .single();
@@ -70,7 +71,7 @@ const hoy = new Date(hoyStr + 'T00:00:00');
     const notificacionesEnviadas = [];
 
     // BUSCAR GASTOS NO PAGADOS dentro del rango
-    const { data: gastosProximos, error: errorGastos } = await supabaseAdmin
+    const { data: gastosProximos, error: errorGastos } = await supabase
       .from('gastos')
       .select(`
         id,
@@ -113,7 +114,7 @@ const hoy = new Date(hoyStr + 'T00:00:00');
         else if (diasRestantes >= 1 && diasRestantes <= 3) {
           console.log(`🟡 Vence en ${diasRestantes} día(s) - Verificando...`);
           
-          const { data: yaEnviadoHoy } = await supabaseAdmin
+          const { data: yaEnviadoHoy } = await supabase
   .from('notificaciones_enviadas')
   .select('id')
   .eq('gasto_id', gasto.id)
@@ -199,7 +200,7 @@ if (yaEnviadoHoy && yaEnviadoHoy.length > 0) {
 
         // Registrar notificación
         const tipoNotif = diasRestantes <= 0 ? 'vencido' : 'proximo';
-        const { error: insertError } = await supabaseAdmin
+        const { error: insertError } = await supabase
           .from('notificaciones_enviadas')
           .insert({
             gasto_id: gasto.id,

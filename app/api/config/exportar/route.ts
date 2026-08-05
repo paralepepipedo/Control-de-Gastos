@@ -1,8 +1,9 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 import * as XLSX from 'xlsx';
 
 export async function GET(request: Request) {
+    const supabase = await createClient();
   try {
     const { searchParams } = new URL(request.url);
     const tipo = searchParams.get('tipo') || 'mes';

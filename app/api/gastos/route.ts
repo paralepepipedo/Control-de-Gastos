@@ -1,13 +1,14 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 
 export async function GET(request: Request) {
+  const supabase = await createClient();
   try {
     const { searchParams } = new URL(request.url);
     const fecha_inicio = searchParams.get('fecha_inicio');
     const fecha_fin = searchParams.get('fecha_fin');
 
-    let query = supabaseAdmin
+    let query = supabase
       .from('gastos')
       .select(`
         *,
@@ -52,7 +53,12 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const supabase = await createClient();
   try {
+    // 1. Validar identidad
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) throw new Error("No autenticado");
+
     const body = await request.json();
 
     // Si es un gasto con cuotas
@@ -79,11 +85,11 @@ export async function POST(request: Request) {
           cuota_numero: i,
           cuotas_totales: cuotasTotales,
           gasto_cuota_id: gastoCuotaId,
-          usuario_id: '56e61383-7f6b-482a-a9b2-e9761c4b3039'
+          usuario_id: user.id // <-- DINÁMICO Y SEGURO
         });
       }
 
-      const { data, error } = await supabaseAdmin
+      const { data, error } = await supabase
         .from('gastos')
         .insert(cuotasInsert)
         .select();
@@ -98,7 +104,7 @@ export async function POST(request: Request) {
     }
 
     // Gasto normal (sin cuotas)
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('gastos')
       .insert([{
         fecha: body.fecha,
@@ -108,7 +114,7 @@ export async function POST(request: Request) {
         metodo_pago: body.metodo_pago || 'efectivo',
         pagado: body.pagado || false,
         es_cuota: false,
-        usuario_id: '56e61383-7f6b-482a-a9b2-e9761c4b3039'
+        usuario_id: user.id // <-- DINÁMICO Y SEGURO
       }])
       .select();
 
@@ -129,11 +135,12 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
+  const supabase = await createClient();
   try {
     const body = await request.json();
     const { id, ...updateData } = body;
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('gastos')
       .update(updateData)
       .eq('id', id)
@@ -156,11 +163,12 @@ export async function PUT(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  const supabase = await createClient();
   try {
     const body = await request.json();
     const { id, ...updateData } = body;
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('gastos')
       .update(updateData)
       .eq('id', id)
@@ -183,6 +191,7 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  const supabase = await createClient();
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -194,7 +203,7 @@ export async function DELETE(request: Request) {
       }, { status: 400 });
     }
 
-    const { error } = await supabaseAdmin
+    const { error } = await supabase
       .from('gastos')
       .delete()
       .eq('id', id);

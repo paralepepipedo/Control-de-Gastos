@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { formatCurrency, formatDate } from "@/lib/utils";
@@ -7,9 +7,14 @@ import Input from "@/components/ui/Input";
 
 export default function FondosPage() {
   const [fondos, setFondos] = useState<any[]>([]);
-  const [resumen, setResumen] = useState<any>(null); // Estado para el saldo
+  const [resumen, setResumen] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  
+  // NUEVO: Estados para manejar la edición
+  const [isEditing, setIsEditing] = useState(false);
+  const [editId, setEditId] = useState<number | null>(null);
+
   const [formData, setFormData] = useState({
     fecha_pago: new Date().toISOString().split('T')[0],
     mes_que_cubre: new Date().toISOString().slice(0, 7) + '-01',
@@ -28,7 +33,7 @@ export default function FondosPage() {
       const result = await response.json();
       if (result.success) {
         setFondos(result.data);
-        setResumen(result.resumen); // Guardamos el resumen calculado
+        setResumen(result.resumen);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -40,31 +45,68 @@ export default function FondosPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const method = isEditing ? 'PUT' : 'POST';
+      const bodyData = isEditing 
+        ? { id: editId, ...formData, monto: parseFloat(formData.monto) }
+        : { ...formData, monto: parseFloat(formData.monto) };
+
       const response = await fetch('/api/fondos', {
-        method: 'POST',
+        method: method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          monto: parseFloat(formData.monto)
-        })
+        body: JSON.stringify(bodyData)
       });
 
       const result = await response.json();
       if (result.success) {
-        alert('¡Fondo registrado! ✅');
-        setShowForm(false);
-        setFormData({
-          fecha_pago: new Date().toISOString().split('T')[0],
-          mes_que_cubre: new Date().toISOString().slice(0, 7) + '-01',
-          tipo: 'sueldo',
-          monto: '',
-          descripcion: ''
-        });
+        alert(isEditing ? '¡Fondo actualizado! ✅' : '¡Fondo registrado! ✅');
+        cerrarFormulario();
         cargarFondos();
       }
     } catch (error) {
       alert('Error al guardar');
     }
+  };
+
+  const handleEdit = (fondo: any) => {
+    setFormData({
+      fecha_pago: fondo.fecha_pago,
+      mes_que_cubre: fondo.mes_que_cubre,
+      tipo: fondo.tipo,
+      monto: fondo.monto.toString(),
+      descripcion: fondo.descripcion || ''
+    });
+    setEditId(fondo.id);
+    setIsEditing(true);
+    setShowForm(true);
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm('¿Estás seguro de que deseas eliminar este ingreso? Esto afectará tu saldo líquido.')) return;
+    
+    try {
+      const response = await fetch(`/api/fondos?id=${id}`, { method: 'DELETE' });
+      const result = await response.json();
+      if (result.success) {
+        cargarFondos();
+      } else {
+        alert('Error al eliminar');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const cerrarFormulario = () => {
+    setShowForm(false);
+    setIsEditing(false);
+    setEditId(null);
+    setFormData({
+      fecha_pago: new Date().toISOString().split('T')[0],
+      mes_que_cubre: new Date().toISOString().slice(0, 7) + '-01',
+      tipo: 'sueldo',
+      monto: '',
+      descripcion: ''
+    });
   };
 
   if (loading) return <div className="text-center py-12">Cargando...</div>;
@@ -76,14 +118,13 @@ export default function FondosPage() {
         <Button onClick={() => setShowForm(true)}>+ Registrar Ingreso</Button>
       </div>
 
-      {/* Ficha de Saldo Líquido Real (NUEVO) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6 rounded-lg shadow">
           <p className="text-sm opacity-90 mb-1">Saldo Líquido Disponible (Efectivo)</p>
           <p className="text-4xl font-bold">{formatCurrency(resumen?.saldo_liquido || 0)}</p>
           <p className="text-xs opacity-75 mt-2">Ingresos Totales - Gastos Pagados en Efectivo</p>
         </div>
-        
+
         <div className="bg-white p-6 rounded-lg shadow flex flex-col justify-center">
           <div className="flex justify-between border-b pb-2 mb-2">
             <span className="text-gray-600">Total Ingresos Histórico</span>
@@ -99,7 +140,7 @@ export default function FondosPage() {
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h2 className="text-xl font-bold mb-4">Registrar Ingreso</h2>
+            <h2 className="text-xl font-bold mb-4">{isEditing ? 'Editar Ingreso' : 'Registrar Ingreso'}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Fecha de Pago</label>
@@ -125,8 +166,8 @@ export default function FondosPage() {
                 <Input type="text" placeholder="Opcional" value={formData.descripcion} onChange={(e) => setFormData({...formData, descripcion: e.target.value})} />
               </div>
               <div className="flex gap-2">
-                <Button type="button" variant="outline" onClick={() => setShowForm(false)} className="flex-1">Cancelar</Button>
-                <Button type="submit" className="flex-1">💾 Guardar</Button>
+                <Button type="button" variant="outline" onClick={cerrarFormulario} className="flex-1">Cancelar</Button>
+                <Button type="submit" className="flex-1">💾 {isEditing ? 'Actualizar' : 'Guardar'}</Button>
               </div>
             </form>
           </div>
@@ -144,7 +185,14 @@ export default function FondosPage() {
                   Pagado: {formatDate(fondo.fecha_pago)} • Cubre: {formatDate(fondo.mes_que_cubre)} (Solo mes/año)
                 </p>
               </div>
-              <p className="text-2xl font-bold text-green-600">{formatCurrency(fondo.monto)}</p>
+              <div className="flex flex-col items-end gap-2">
+                <p className="text-2xl font-bold text-green-600">{formatCurrency(fondo.monto)}</p>
+                {/* NUEVO: Botones de acción */}
+                <div className="flex items-center gap-3 text-sm">
+                  <button onClick={() => handleEdit(fondo)} className="text-blue-600 hover:underline font-medium">Editar</button>
+                  <button onClick={() => handleDelete(fondo.id)} className="text-red-600 hover:underline font-medium">Eliminar</button>
+                </div>
+              </div>
             </div>
           </div>
         ))}

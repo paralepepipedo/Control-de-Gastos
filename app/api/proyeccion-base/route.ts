@@ -1,10 +1,11 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 
 // GET - Obtener configuración de ambas tablas
 export async function GET() {
+    const supabase = await createClient();
   try {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('proyeccion_base')
       .select('*')
       .order('tabla', { ascending: true });
@@ -26,6 +27,7 @@ export async function GET() {
 
 // POST - Guardar o actualizar configuración de una tabla
 export async function POST(request: Request) {
+    const supabase = await createClient();
   try {
     const body = await request.json();
     const { tabla, saldo_inicial, ingresos_mes } = body;
@@ -46,7 +48,7 @@ export async function POST(request: Request) {
     }
 
     // Upsert (insertar o actualizar)
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('proyeccion_base')
       .upsert(
         {

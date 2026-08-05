@@ -1,8 +1,9 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 
 // LISTAR gastos fijos
 export async function GET() {
+  const supabase = await createClient();
   try {
     const { data, error } = await supabase.from('gastos_fijos')
       .select(`
@@ -27,7 +28,12 @@ export async function GET() {
 
 // CREAR gasto fijo
 export async function POST(request: Request) {
+  const supabase = await createClient();
   try {
+    // 1. Validar identidad
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) throw new Error("No autenticado");
+
     const body = await request.json();
 
     const { nombre, dia_vencimiento, monto_provision, categoria_id, metodo_pago, tipo } = body;
@@ -47,7 +53,8 @@ export async function POST(request: Request) {
         categoria_id: categoria_id || null,
         metodo_pago,
         tipo: tipo || 'fijo',
-        activo: true
+        activo: true,
+        usuario_id: user.id // <-- INYECCIÓN DE USUARIO
       }])
       .select()
       .single();
@@ -63,6 +70,7 @@ export async function POST(request: Request) {
 
 // ACTUALIZAR gasto fijo
 export async function PUT(request: Request) {
+  const supabase = await createClient();
   try {
     const body = await request.json();
     const { id, ...fields } = body;
@@ -94,6 +102,7 @@ export async function PUT(request: Request) {
 
 // ELIMINAR / DESACTIVAR gasto fijo (opcional; aquí lo desactivamos)
 export async function DELETE(request: Request) {
+  const supabase = await createClient();
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');

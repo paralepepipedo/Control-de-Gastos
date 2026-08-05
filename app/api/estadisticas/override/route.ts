@@ -1,30 +1,20 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 
 export async function POST(request: Request) {
+    const supabase = await createClient();
   try {
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) throw new Error("No autenticado");
+
     const { tipo, referencia_id, anio, mes, monto_override, descripcion } = await request.json();
 
     if (!tipo || referencia_id === undefined || referencia_id === null || !anio || !mes || monto_override === undefined) {
-      return NextResponse.json(
-        { error: 'Parámetros requeridos faltando' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Parámetros requeridos faltando' }, { status: 400 });
     }
 
-    const supabase = supabaseAdmin;
+    await supabase.from('proyeccion_overrides').delete().match({ tipo, referencia_id, anio, mes });
 
-    // 1. ELIMINAMOS TODOS los registros duplicados o viejos que existan para esta celda
-    await supabase.from('proyeccion_overrides')
-      .delete()
-      .match({
-        tipo: tipo,
-        referencia_id: referencia_id,
-        anio: anio,
-        mes: mes
-      });
-
-    // 2. INSERTAMOS el nuevo valor como el ÚNICO registro válido
     const { data, error } = await supabase.from('proyeccion_overrides')
       .insert({
         tipo,
@@ -34,24 +24,19 @@ export async function POST(request: Request) {
         monto_override: Number(monto_override),
         descripcion,
         updated_at: new Date().toISOString(),
+        usuario_id: user.id
       })
       .select();
 
     if (error) throw error;
-
     return NextResponse.json({ success: true, data });
-
   } catch (error: any) {
-    console.error('Error guardando override:', error);
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
-// Eliminar override (volver al valor original)
 export async function DELETE(request: Request) {
+    const supabase = await createClient();
   try {
     const { searchParams } = new URL(request.url);
     const tipo = searchParams.get('tipo');
@@ -59,22 +44,13 @@ export async function DELETE(request: Request) {
     const anio = searchParams.get('anio');
     const mes = searchParams.get('mes');
 
-    const supabase = supabaseAdmin;
-
     const { error } = await supabase.from('proyeccion_overrides')
       .delete()
       .match({ tipo, referencia_id, anio: Number(anio), mes: Number(mes) });
 
     if (error) throw error;
-
     return NextResponse.json({ success: true });
-
   } catch (error: any) {
-    console.error('Error eliminando override:', error);
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-

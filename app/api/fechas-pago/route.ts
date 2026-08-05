@@ -1,10 +1,11 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 
 // GET - Obtener todas las fechas de pago
 export async function GET() {
+    const supabase = await createClient();
   try {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('fechas_pago')
       .select('*')
       .order('anio', { ascending: true })
@@ -20,11 +21,12 @@ export async function GET() {
 
 // POST - Crear/Actualizar fecha de pago
 export async function POST(request: Request) {
+    const supabase = await createClient();
   try {
     const body = await request.json();
     const { mes, anio, fecha_pago, descripcion } = body;
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('fechas_pago')
       .upsert({
         mes,
@@ -47,11 +49,12 @@ export async function POST(request: Request) {
 
 // DELETE - Eliminar fecha de pago
 export async function DELETE(request: Request) {
+    const supabase = await createClient();
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 
-    const { error } = await supabaseAdmin
+    const { error } = await supabase
       .from('fechas_pago')
       .delete()
       .eq('id', id);

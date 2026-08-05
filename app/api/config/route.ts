@@ -1,8 +1,9 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 
 // GET: Leer configuración por clave
 export async function GET(request: Request) {
+    const supabase = await createClient();
   try {
     const { searchParams } = new URL(request.url);
     const clave = searchParams.get('clave');
@@ -32,6 +33,7 @@ export async function GET(request: Request) {
 
 // POST: Crear o actualizar configuración
 export async function POST(request: Request) {
+    const supabase = await createClient();
   try {
     const body = await request.json();
     const { clave, valor_numeric, descripcion, valor_text } = body;

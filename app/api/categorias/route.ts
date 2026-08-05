@@ -1,8 +1,9 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 
 // GET: Listar categorías
 export async function GET() {
+  const supabase = await createClient();
   try {
     const { data, error } = await supabase.from('categorias')
       .select('*')
@@ -16,27 +17,31 @@ export async function GET() {
   }
 }
 
-// POST: Crear categoría (AQUÍ ESTÁ LA CORRECCIÓN)
+// POST: Crear categoría
 export async function POST(request: Request) {
+  const supabase = await createClient();
   try {
+    // 1. Validar identidad
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) throw new Error("No autenticado");
+
     const body = await request.json();
-    
-    // Si la interfaz no envía 'tipo', usamos 'gasto' por defecto para evitar el error
+
     const { nombre, icono, tipo } = body;
 
     if (!nombre || !icono) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Nombre e icono son obligatorios' 
+      return NextResponse.json({
+        success: false,
+        error: 'Nombre e icono son obligatorios'
       }, { status: 400 });
     }
 
     const { data, error } = await supabase.from('categorias')
-      .insert([{ 
-        nombre, 
+      .insert([{
+        nombre,
         icono,
-        // CORRECCIÓN: Si 'tipo' es null/undefined, insertamos 'gasto'
-        tipo: tipo || 'gasto' 
+        tipo: tipo || 'gasto',
+        usuario_id: user.id // <-- INYECCIÓN DE USUARIO
       }])
       .select()
       .single();
@@ -52,6 +57,7 @@ export async function POST(request: Request) {
 
 // DELETE: Eliminar categoría
 export async function DELETE(request: Request) {
+  const supabase = await createClient();
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -73,6 +79,7 @@ export async function DELETE(request: Request) {
 }
 // UPDATE: Actualizar categoría
 export async function PUT(request: Request) {
+  const supabase = await createClient();
   try {
     const body = await request.json();
     const { id, nombre, icono, tipo } = body;

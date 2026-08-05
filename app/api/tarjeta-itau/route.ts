@@ -1,7 +1,8 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 
 export async function GET(request: Request) {
+    const supabase = await createClient();
   try {
     const { searchParams } = new URL(request.url);
     const mes = searchParams.get('mes') || new Date().toISOString().slice(0, 7) + '-01';
@@ -13,7 +14,6 @@ export async function GET(request: Request) {
 
     if (error && error.code !== 'PGRST116') throw error;
 
-    // Calcular total gastado del período
     if (data) {
       const fechaDesde = data.fecha_inicio_real || data.fecha_inicio_estimada;
       const fechaHasta = data.fecha_fin_real || data.fecha_fin_estimada;
@@ -33,7 +33,6 @@ export async function GET(request: Request) {
 
       data.total_gastado = totalGastado;
     }
-
     return NextResponse.json({ success: true, data });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
@@ -41,10 +40,13 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+    const supabase = await createClient();
   try {
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) throw new Error("No autenticado");
+
     const body = await request.json();
-    
-    // Registrar factura
+
     const { data, error } = await supabase.from('tarjeta_credito_itau')
       .update({
         fecha_inicio_real: body.fecha_inicio_real,
@@ -62,30 +64,29 @@ export async function POST(request: Request) {
 
     if (error) throw error;
 
-    // Crear gastos pendientes
     const categoriaTC = await supabase.from('categorias').select('id').eq('nombre', 'TC Itaú').single();
-    
-    await supabase.from('gastos')
-      .insert({
-        fecha: body.fecha_vencimiento,
-        monto: body.monto_minimo,
-        categoria_id: categoriaTC.data?.id,
-        metodo_pago: 'efectivo',
-        descripcion: 'Pago mínimo TC Itaú',
-        estado: 'pendiente',
-        fecha_vencimiento: body.fecha_vencimiento
-      });
 
-    await supabase.from('gastos')
-      .insert({
-        fecha: body.fecha_pago_resto || data.fecha_pago_resto,
-        monto: body.total_gastado - body.monto_minimo,
-        categoria_id: categoriaTC.data?.id,
-        metodo_pago: 'efectivo',
-        descripcion: 'Resto TC Itaú (Total - Mínimo)',
-        estado: 'pendiente',
-        fecha_vencimiento: body.fecha_pago_resto || data.fecha_pago_resto
-      });
+    await supabase.from('gastos').insert({
+      fecha: body.fecha_vencimiento,
+      monto: body.monto_minimo,
+      categoria_id: categoriaTC.data?.id,
+      metodo_pago: 'efectivo',
+      descripcion: 'Pago mínimo TC Itaú',
+      estado: 'pendiente',
+      fecha_vencimiento: body.fecha_vencimiento,
+      usuario_id: user.id
+    });
+
+    await supabase.from('gastos').insert({
+      fecha: body.fecha_pago_resto || data.fecha_pago_resto,
+      monto: body.total_gastado - body.monto_minimo,
+      categoria_id: categoriaTC.data?.id,
+      metodo_pago: 'efectivo',
+      descripcion: 'Resto TC Itaú (Total - Mínimo)',
+      estado: 'pendiente',
+      fecha_vencimiento: body.fecha_pago_resto || data.fecha_pago_resto,
+      usuario_id: user.id
+    });
 
     return NextResponse.json({ success: true, data });
   } catch (error: any) {
@@ -94,9 +95,9 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+    const supabase = await createClient();
   try {
     const body = await request.json();
-    
     const { data, error } = await supabase.from('tarjeta_credito_itau')
       .update({
         fecha_inicio_estimada: body.fecha_inicio_estimada,
@@ -108,10 +109,8 @@ export async function PATCH(request: Request) {
       .single();
 
     if (error) throw error;
-
     return NextResponse.json({ success: true, data });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
-

@@ -1,13 +1,14 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 
 export async function POST(request: Request) {
+    const supabase = await createClient();
   try {
     const body = await request.json();
     const { mensaje } = body;
 
     // Obtener configuración
-    const { data: config } = await supabaseAdmin
+    const { data: config } = await supabase
       .from('config_notificaciones')
       .select('telegram_token, telegram_chat_id, telegram_activo')
       .single();

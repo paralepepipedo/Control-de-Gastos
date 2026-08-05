@@ -1,10 +1,11 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 
 // GET - Obtener configuración
 export async function GET() {
+    const supabase = await createClient();
   try {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('config_notificaciones')
       .select('*')
       .single();
@@ -25,11 +26,12 @@ export async function GET() {
 
 // POST - Guardar configuración
 export async function POST(request: Request) {
+    const supabase = await createClient();
   try {
     const body = await request.json();
     const { telegram_token, telegram_chat_id, telegram_activo, pwa_activo } = body;
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('config_notificaciones')
       .update({
         telegram_token,

@@ -1,13 +1,14 @@
 ﻿import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 import { addMonths, format } from 'date-fns';
 
 export async function GET(request: Request) {
+    const supabase = await createClient();
   try {
     const { searchParams } = new URL(request.url);
     const meses = parseInt(searchParams.get('meses') || '12');
 
-    const supabase = supabaseAdmin;
+    
 
     // 1. OBTENER CONFIGURACIÓN BASE
     const { data: configData, error: errorConfig } = await supabase.from('app_config')
