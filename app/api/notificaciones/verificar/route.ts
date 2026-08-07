@@ -1,27 +1,36 @@
-﻿import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase-server';
+﻿export const dynamic = 'force-dynamic';
+import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
 export async function GET() {
-    const supabase = await createClient();
+  // Usamos la Llave Maestra para que el Cron Job salte el bloqueo de seguridad
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
+
+  if (!supabaseUrl || !supabaseServiceKey) {
+    return NextResponse.json({ success: false, error: 'Faltan variables de entorno de Supabase' }, { status: 500 });
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseServiceKey);
   try {
     console.log('🚀 INICIO verificación notificaciones');
 
     const ahoraChile = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Santiago' }));
-const horaActual = ahoraChile.getHours();
+    const horaActual = ahoraChile.getHours();
 
-// Construir fecha de hoy en Chile sin pasar por UTC
-const hoyStr = ahoraChile.getFullYear() + '-' +
-  String(ahoraChile.getMonth() + 1).padStart(2, '0') + '-' +
-  String(ahoraChile.getDate()).padStart(2, '0');
+    // Construir fecha de hoy en Chile sin pasar por UTC
+    const hoyStr = ahoraChile.getFullYear() + '-' +
+      String(ahoraChile.getMonth() + 1).padStart(2, '0') + '-' +
+      String(ahoraChile.getDate()).padStart(2, '0');
 
-const limiteDate = new Date(ahoraChile);
-limiteDate.setDate(limiteDate.getDate() + 3);
-const limiteStr = limiteDate.getFullYear() + '-' +
-  String(limiteDate.getMonth() + 1).padStart(2, '0') + '-' +
-  String(limiteDate.getDate()).padStart(2, '0');
+    const limiteDate = new Date(ahoraChile);
+    limiteDate.setDate(limiteDate.getDate() + 3);
+    const limiteStr = limiteDate.getFullYear() + '-' +
+      String(limiteDate.getMonth() + 1).padStart(2, '0') + '-' +
+      String(limiteDate.getDate()).padStart(2, '0');
 
-// hoy como objeto Date para calcular diasRestantes — construido desde hoyStr, no desde UTC
-const hoy = new Date(hoyStr + 'T00:00:00');
+    // hoy como objeto Date para calcular diasRestantes — construido desde hoyStr, no desde UTC
+    const hoy = new Date(hoyStr + 'T00:00:00');
 
     console.log('📅 Fecha hoy:', hoyStr);
     console.log('📅 Fecha límite (hoy+3):', limiteStr);
@@ -30,7 +39,7 @@ const hoy = new Date(hoyStr + 'T00:00:00');
     // 🧹 LIMPIEZA AUTOMÁTICA
     const hace7dias = new Date(hoy);
     hace7dias.setDate(hace7dias.getDate() - 7);
-    
+
     const { error: deleteError } = await supabase
       .from('notificaciones_enviadas')
       .delete()
@@ -86,7 +95,7 @@ const hoy = new Date(hoyStr + 'T00:00:00');
       .order('fecha', { ascending: true });
 
     console.log('🔍 Gastos encontrados:', gastosProximos?.length || 0);
-    
+
     if (errorGastos) console.error('❌ Error gastos:', errorGastos);
 
     if (gastosProximos && gastosProximos.length > 0) {
@@ -109,27 +118,27 @@ const hoy = new Date(hoyStr + 'T00:00:00');
           console.log(`🔴 VENCIDO/HOY - Enviar SIEMPRE`);
           debeEnviar = true;
         }
-        
+
         // 2️⃣ PRÓXIMOS (1-3 días): Enviar solo si NO se envió hoy
         else if (diasRestantes >= 1 && diasRestantes <= 3) {
           console.log(`🟡 Vence en ${diasRestantes} día(s) - Verificando...`);
-          
-          const { data: yaEnviadoHoy } = await supabase
-  .from('notificaciones_enviadas')
-  .select('id')
-  .eq('gasto_id', gasto.id)
-  .gte('fecha_envio', hoyStr + 'T00:00:00')
-  .limit(1);
 
-if (yaEnviadoHoy && yaEnviadoHoy.length > 0) {
+          const { data: yaEnviadoHoy } = await supabase
+            .from('notificaciones_enviadas')
+            .select('id')
+            .eq('gasto_id', gasto.id)
+            .gte('fecha_envio', hoyStr + 'T00:00:00')
+            .limit(1);
+
+          if (yaEnviadoHoy && yaEnviadoHoy.length > 0) {
             console.log(`⏭️ SKIP - Ya notificado hoy`);
             return null;
           }
-          
+
           console.log(`✅ OK - Primera vez hoy`);
           debeEnviar = true;
         }
-        
+
         // 3️⃣ FUERA DE RANGO (>3 días)
         else {
           console.log(`⚪ SKIP - Fuera de rango (${diasRestantes} días)`);
@@ -146,7 +155,7 @@ if (yaEnviadoHoy && yaEnviadoHoy.length > 0) {
 
         let emoji = '🚨';
         let urgencia = 'URGENTE';
-        
+
         if (diasRestantes < 0) {
           emoji = '🔴💀';
           urgencia = `VENCIDO HACE ${Math.abs(diasRestantes)} DÍA${Math.abs(diasRestantes) > 1 ? 'S' : ''}`;
@@ -165,14 +174,14 @@ if (yaEnviadoHoy && yaEnviadoHoy.length > 0) {
         }
 
         const mensaje = `${emoji} ${urgencia}\n\n` +
-  `💳 <b>${gasto.descripcion}</b>\n\n` +
-  `💰 Monto: $${Number(gasto.monto).toLocaleString('es-CL')}\n` +
-  `📅 Fecha: ${fechaGasto.toLocaleDateString('es-CL')}\n` +
-  `⏰ ${diasRestantes < 0 
-    ? `¡VENCIDO hace ${Math.abs(diasRestantes)} día${Math.abs(diasRestantes) > 1 ? 's' : ''}!` 
-    : diasRestantes === 0 
-      ? 'Vence HOY' 
-      : `Faltan ${diasRestantes} día${diasRestantes > 1 ? 's' : ''}`}`;
+          `💳 <b>${gasto.descripcion}</b>\n\n` +
+          `💰 Monto: $${Number(gasto.monto).toLocaleString('es-CL')}\n` +
+          `📅 Fecha: ${fechaGasto.toLocaleDateString('es-CL')}\n` +
+          `⏰ ${diasRestantes < 0
+            ? `¡VENCIDO hace ${Math.abs(diasRestantes)} día${Math.abs(diasRestantes) > 1 ? 's' : ''}!`
+            : diasRestantes === 0
+              ? 'Vence HOY'
+              : `Faltan ${diasRestantes} día${diasRestantes > 1 ? 's' : ''}`}`;
 
 
         console.log('📤 Enviando:', gasto.descripcion);
