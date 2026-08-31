@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatCurrency, formatDate, parseFechaLocal } from "@/lib/utils";
 
 export default function ResumenPage() {
   const [gastos, setGastos] = useState<any[]>([]);
@@ -68,7 +68,7 @@ export default function ResumenPage() {
     
     gastos.forEach(gasto => {
       const fecha = gasto.fecha_vencimiento || gasto.fecha;
-      const dia = new Date(fecha).getDate();
+      const dia = parseFechaLocal(fecha).getDate();
       const key = `${dia}`;
       
       if (!grupos[key]) grupos[key] = [];
@@ -81,7 +81,7 @@ export default function ResumenPage() {
   const getDiasRestantes = (fecha: string) => {
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
-    const vencimiento = new Date(fecha);
+    const vencimiento = parseFechaLocal(fecha);
     vencimiento.setHours(0, 0, 0, 0);
     return Math.ceil((vencimiento.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
   };
@@ -196,7 +196,7 @@ export default function ResumenPage() {
                       </div>
                       <div>
                         <p className="font-semibold text-sm text-gray-600">
-                          {new Date(fechaCompleta).toLocaleDateString('es-CL', { weekday: 'long' })}
+                          {parseFechaLocal(fechaCompleta).toLocaleDateString('es-CL', { weekday: 'long' })}
                         </p>
                         {!todoPagado && diasRestantes !== null && (
                           <p className={`text-xs font-semibold ${

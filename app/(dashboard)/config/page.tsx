@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { formatNombrePeriodo, formatRangoPeriodo } from "@/lib/utils";
+import { formatNombrePeriodo, formatRangoPeriodo, formatDate } from "@/lib/utils";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
@@ -235,14 +235,11 @@ function SeccionPeriodos() {
   };
 
   const abrirModalEditar = (periodo: any) => {
-    // Función que extrae el día exacto que estás viendo en la web (transforma UTC a local)
+    // La fecha ya viene como "YYYY-MM-DD" desde la base de datos: se usa tal cual,
+    // sin pasar por new Date() (que la interpreta como UTC y la corre un día).
     const formatearAFechaLocal = (fechaString: string) => {
       if (!fechaString) return '';
-      const date = new Date(fechaString);
-      const anio = date.getFullYear();
-      const mes = String(date.getMonth() + 1).padStart(2, '0');
-      const dia = String(date.getDate()).padStart(2, '0');
-      return `${anio}-${mes}-${dia}`;
+      return fechaString.slice(0, 10);
     };
 
     setPeriodoEditar({
@@ -351,7 +348,7 @@ function SeccionPeriodos() {
                 )}
                 {periodo.fecha_factura && (
                   <p className="text-xs text-gray-500 mt-1">
-                    Ajustado el {new Date(periodo.fecha_factura).toLocaleDateString('es-CL')}
+                    Ajustado el {formatDate(periodo.fecha_factura)}
                   </p>
                 )}
               </div>

@@ -1,5 +1,6 @@
 ﻿import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase-server';
+import { parseFechaLocal } from '@/lib/utils';
 
 export async function GET(request: Request) {
     const supabase = await createClient();
@@ -13,7 +14,7 @@ export async function GET(request: Request) {
 
     const fechasQueCubre = fondos.map(f => f.mes_que_cubre).filter(Boolean).sort();
     const primerMesQueCubre = fechasQueCubre[0];
-    const base = new Date(primerMesQueCubre);
+    const base = parseFechaLocal(primerMesQueCubre);
     const dia = base.getDate();
     let mesPeriodo = base.getMonth() + 1;
     let anioPeriodo = base.getFullYear();

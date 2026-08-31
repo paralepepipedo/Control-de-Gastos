@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, Fragment } from "react";
-import { formatCurrency, formatNombrePeriodo } from "@/lib/utils";
+import { formatCurrency, formatNombrePeriodo, formatDate } from "@/lib/utils";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
@@ -1499,7 +1499,7 @@ export default function GastosPage() {
                                     <div>
                                       <span className="text-gray-600 text-xs">Fecha: </span>
                                       <span className="font-medium">
-                                        {new Date(gasto.fecha).toLocaleDateString('es-CL')}
+                                        {formatDate(gasto.fecha)}
                                       </span>
                                     </div>
                                     <div>

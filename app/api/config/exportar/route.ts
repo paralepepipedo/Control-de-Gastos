@@ -1,5 +1,6 @@
 ﻿import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase-server';
+import { formatDate } from '@/lib/utils';
 import * as XLSX from 'xlsx';
 
 export async function GET(request: Request) {
@@ -50,7 +51,7 @@ export async function GET(request: Request) {
 
     // Formatear datos para Excel
     const datosExcel = gastosData.map(g => ({
-      'Fecha': new Date(g.fecha).toLocaleDateString('es-CL'),
+      'Fecha': formatDate(g.fecha),
       'Descripción': g.descripcion,
       'Categoría': g.categorias?.nombre || 'Sin categoría',
       'Monto': g.monto,

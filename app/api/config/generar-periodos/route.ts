@@ -1,6 +1,6 @@
 ﻿import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase-server';
-import { calcularPeriodoProvisional } from '@/lib/utils';
+import { calcularPeriodoProvisional, parseFechaLocal } from '@/lib/utils';
 
 export async function POST() {
     const supabase = await createClient();
@@ -16,8 +16,8 @@ export async function POST() {
       return NextResponse.json({ success: false, error: 'No hay gastos registrados' });
     }
 
-    const fechaMasAntigua = new Date(gastos[0].fecha);
-    const fechaMasReciente = new Date(gastos[gastos.length - 1].fecha);
+    const fechaMasAntigua = parseFechaLocal(gastos[0].fecha);
+    const fechaMasReciente = parseFechaLocal(gastos[gastos.length - 1].fecha);
     const periodosACrear: any[] = [];
     const periodosUnicos = new Set<string>();
 

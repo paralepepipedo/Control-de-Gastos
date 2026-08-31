@@ -68,11 +68,8 @@ function calcularIngresosMes(mes: Date, fondos: any[]): number {
 
   return fondos
     .filter((fondo) => {
-      const fechaCubre = new Date(fondo.mes_que_cubre);
-      return (
-        fechaCubre.getMonth() + 1 === mesNumero &&
-        fechaCubre.getFullYear() === anio
-      );
+      const [anioCubre, mesCubre] = String(fondo.mes_que_cubre).slice(0, 7).split('-').map(Number);
+      return mesCubre === mesNumero && anioCubre === anio;
     })
     .reduce((sum, fondo) => sum + Number(fondo.monto), 0);
 }

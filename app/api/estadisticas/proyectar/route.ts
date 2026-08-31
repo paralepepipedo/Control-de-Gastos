@@ -1,6 +1,7 @@
 ﻿import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase-server';
 import { addMonths, format } from 'date-fns';
+import { parseFechaLocal } from '@/lib/utils';
 
 export async function GET(request: Request) {
     const supabase = await createClient();
@@ -19,7 +20,7 @@ export async function GET(request: Request) {
 
     const saldoInicial = configData?.find(c => c.clave === 'saldo_inicial_2026_01')?.valor_numeric || 0;
     const fechaBaseStr = configData?.find(c => c.clave === 'fecha_base_proyeccion')?.valor_text || '2026-01-01';
-    const fechaBase = new Date(fechaBaseStr);
+    const fechaBase = parseFechaLocal(fechaBaseStr);
 
     // 2. OBTENER TODOS LOS PERÍODOS (no solo el actual)
     const { data: todosPeriodos, error: errorPeriodos } = await supabase.from('periodos')

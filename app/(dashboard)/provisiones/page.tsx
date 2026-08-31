@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { formatCurrency, formatNombrePeriodo } from "@/lib/utils";
+import { formatCurrency, formatNombrePeriodo, formatDate, parseFechaLocal } from "@/lib/utils";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 
@@ -341,15 +341,17 @@ export default function ProvisionesPage() {
               ) : (
                 <div className="space-y-3">
                   {pendientes.map((provision: any) => {
+                    const hoySinHora = new Date();
+                    hoySinHora.setHours(0, 0, 0, 0);
                     const diasRestantes = Math.ceil(
-                      (new Date(provision.fecha_vencimiento).getTime() - new Date().getTime()) / 
+                      (parseFechaLocal(provision.fecha_vencimiento).getTime() - hoySinHora.getTime()) /
                       (1000 * 60 * 60 * 24)
                     );
                     const esUrgente = diasRestantes <= 3;
 
                     return (
-                      <div 
-                        key={provision.id} 
+                      <div
+                        key={provision.id}
                         className={`flex justify-between items-center p-4 rounded border-l-4 ${
                           esUrgente ? 'border-red-500 bg-red-50' : 'border-yellow-400 bg-yellow-50'
                         }`}
@@ -359,7 +361,7 @@ export default function ProvisionesPage() {
                             {provision.gastos_fijos?.nombre || 'Sin nombre'}
                           </p>
                           <p className="text-sm text-gray-600">
-                            Vence: {new Date(provision.fecha_vencimiento).toLocaleDateString('es-CL')}
+                            Vence: {formatDate(provision.fecha_vencimiento)}
                             {esUrgente && (
                               <span className="text-red-600 font-semibold ml-2">¡URGENTE!</span>
                             )}
@@ -432,7 +434,7 @@ export default function ProvisionesPage() {
                         </p>
                         <p className="text-sm text-gray-600">
                           Pagado: {provision.fecha_pago
-                            ? new Date(provision.fecha_pago).toLocaleDateString('es-CL')
+                            ? formatDate(provision.fecha_pago)
                             : '-'}
                         </p>
                       </div>

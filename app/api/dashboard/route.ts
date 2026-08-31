@@ -1,5 +1,6 @@
 ﻿import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase-server';
+import { parseFechaLocal } from '@/lib/utils';
 
 export async function GET() {
     const supabase = await createClient();
@@ -99,7 +100,7 @@ export async function GET() {
       const fondosDesdeCiclo = fondos?.filter(f => f.mes_que_cubre >= primerMesQueCubre) || [];
       totalIngresos = fondosDesdeCiclo.reduce((sum, f) => sum + Number(f.monto), 0);
       
-      const base = new Date(primerMesQueCubre);
+      const base = parseFechaLocal(primerMesQueCubre);
       let mesPeriodo = base.getMonth() + 1;
       let anioPeriodo = base.getFullYear();
       
@@ -159,9 +160,11 @@ export async function GET() {
     let proximoPago = null;
     if (fechasPago && fechasPago.length > 0) {
       const fp = fechasPago[0];
-      const diasRestantes = Math.ceil((new Date(fp.fecha_pago).getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
+      const hoySinHora = new Date();
+      hoySinHora.setHours(0, 0, 0, 0);
+      const diasRestantes = Math.ceil((parseFechaLocal(fp.fecha_pago).getTime() - hoySinHora.getTime()) / (1000 * 60 * 60 * 24));
       proximoPago = {
-        fecha: new Date(fp.fecha_pago).toLocaleDateString('es-CL', { day: 'numeric', month: 'long' }),
+        fecha: parseFechaLocal(fp.fecha_pago).toLocaleDateString('es-CL', { day: 'numeric', month: 'long' }),
         dias: diasRestantes,
       };
     }
