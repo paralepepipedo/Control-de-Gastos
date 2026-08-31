@@ -37,18 +37,21 @@ export function formatNombrePeriodo(mes: number, anio: number): string {
  * Formatea el rango de fechas de un período
  */
 export function formatRangoPeriodo(fechaInicio: string, fechaFin: string): string {
-  const inicio = new Date(fechaInicio);
-  const fin = new Date(fechaFin);
-  
-  const formatFecha = (date: Date) => {
-    return date.toLocaleDateString('es-CL', { 
-      day: '2-digit', 
-      month: '2-digit', 
-      year: 'numeric' 
-    });
-  };
-  
-  return `${formatFecha(inicio)} - ${formatFecha(fin)}`;
+  return `${formatDate(fechaInicio)} - ${formatDate(fechaFin)}`;
+}
+
+/**
+ * Convierte una fecha "YYYY-MM-DD" (sin hora) en un objeto Date que representa
+ * medianoche en hora LOCAL, evitando el corrimiento de día que produce
+ * `new Date("YYYY-MM-DD")` al interpretarse como UTC.
+ * Si la fecha ya trae hora/zona, se parsea tal cual.
+ */
+export function parseFechaLocal(fecha: string): Date {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+    const [year, month, day] = fecha.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  }
+  return new Date(fecha);
 }
 
 /**
