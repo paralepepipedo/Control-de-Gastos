@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { formatCurrency } from "@/lib/utils";
+import { toast } from "@/lib/notify";
 
 interface FormGastoProps {
   isOpen: boolean;
@@ -56,7 +57,7 @@ export default function FormGasto({ isOpen, onClose, onSuccess }: FormGastoProps
       const result = await response.json();
 
       if (result.success) {
-        alert('✅ Gasto agregado');
+        toast.success('Gasto agregado');
         setFormData({
           fecha: new Date().toISOString().split('T')[0],
           monto: '',
@@ -68,10 +69,10 @@ export default function FormGasto({ isOpen, onClose, onSuccess }: FormGastoProps
         });
         onSuccess();
       } else {
-        alert(`❌ Error: ${result.error}`);
+        toast.error(`Error: ${result.error}`);
       }
     } catch (error) {
-      alert('Error al guardar el gasto');
+      toast.error('Error al guardar el gasto');
       console.error(error);
     } finally {
       setLoading(false);

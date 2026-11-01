@@ -1,6 +1,7 @@
 import Navbar from "@/components/shared/Navbar";
 import BotonFlotante from "@/components/shared/BotonFlotante";
 import AuthGuard from "@/components/shared/AuthGuard";
+import Toaster from "@/components/shared/Toaster";
 
 export default function DashboardLayout({
   children,
@@ -15,6 +16,7 @@ export default function DashboardLayout({
           {children}
         </main>
         <BotonFlotante />
+        <Toaster />
       </div>
     </AuthGuard>
   );

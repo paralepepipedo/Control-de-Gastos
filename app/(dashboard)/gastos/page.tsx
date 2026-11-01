@@ -4,6 +4,7 @@ import { useEffect, useState, Fragment } from "react";
 import { formatCurrency, formatNombrePeriodo, formatDate } from "@/lib/utils";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import { toast, confirmar, GASTOS_ACTUALIZADOS } from "@/lib/notify";
 
 export default function GastosPage() {
   const [saldoFondos, setSaldoFondos] = useState<number>(0);
@@ -42,6 +43,17 @@ export default function GastosPage() {
     cargarProximoPago();
   }, []);
 
+  // Gasto creado desde el botón flotante: recargar en silencio, sin mover el scroll
+  useEffect(() => {
+    const recargar = () => {
+      cargarGastos(true);
+      cargarProvisionTotal();
+      cargarSaldoFondos();
+    };
+    window.addEventListener(GASTOS_ACTUALIZADOS, recargar);
+    return () => window.removeEventListener(GASTOS_ACTUALIZADOS, recargar);
+  });
+
   useEffect(() => {
     if (periodos.length > 0) {
       cargarGastos();
@@ -65,8 +77,8 @@ export default function GastosPage() {
     }
   };
 
-  const cargarGastos = async () => {
-  setLoading(true);
+  const cargarGastos = async (silencioso = false) => {
+  if (!silencioso) setLoading(true);
   try {
     let url = "/api/gastos";
 
@@ -202,7 +214,7 @@ export default function GastosPage() {
       const result = await response.json();
 
       if (result.success) {
-        alert("✅ Gasto agregado");
+        toast.success("✅ Gasto agregado");
         setModalAgregar(false);
         setNuevoGasto({
           fecha: new Date().toISOString().split("T")[0],
@@ -213,14 +225,14 @@ export default function GastosPage() {
           pagado: false,
           cuotas: 1,
         });
-        cargarGastos();
+        cargarGastos(true);
         cargarProvisionTotal();
         cargarSaldoFondos();
       } else {
-        alert(`❌ Error: ${result.error}`);
+        toast.error(`❌ Error: ${result.error}`);
       }
     } catch (error) {
-      alert("Error al agregar gasto");
+      toast.error("Error al agregar gasto");
     }
   };
 
@@ -253,16 +265,16 @@ export default function GastosPage() {
       const result = await response.json();
 
       if (result.success) {
-        alert("✅ Gasto actualizado");
+        toast.success("✅ Gasto actualizado");
         setModalEditar(false);
-        cargarGastos();
+        cargarGastos(true);
         cargarProvisionTotal();
         cargarSaldoFondos();
       } else {
-        alert(`❌ Error: ${result.error}`);
+        toast.error(`❌ Error: ${result.error}`);
       }
     } catch (error) {
-      alert("Error al actualizar gasto");
+      toast.error("Error al actualizar gasto");
     }
   };
 
@@ -277,19 +289,19 @@ export default function GastosPage() {
       const result = await response.json();
 
       if (result.success) {
-        cargarGastos();
+        cargarGastos(true);
         cargarProvisionTotal();
         cargarSaldoFondos();
       } else {
-        alert(`❌ Error: ${result.error}`);
+        toast.error(`❌ Error: ${result.error}`);
       }
     } catch (error) {
-      alert("Error al actualizar estado");
+      toast.error("Error al actualizar estado");
     }
   };
 
   const eliminarGasto = async (id: number, descripcion: string) => {
-    if (!confirm(`¿Seguro que deseas eliminar el gasto "${descripcion}"?`))
+    if (!(await confirmar(`¿Seguro que deseas eliminar el gasto "${descripcion}"?`)))
       return;
 
     try {
@@ -300,21 +312,21 @@ export default function GastosPage() {
       const result = await response.json();
 
       if (result.success) {
-        alert("✅ Gasto eliminado");
-        cargarGastos();
+        toast.success("✅ Gasto eliminado");
+        cargarGastos(true);
         cargarProvisionTotal();
         cargarSaldoFondos();
       } else {
-        alert(`❌ Error: ${result.error}`);
+        toast.error(`❌ Error: ${result.error}`);
       }
     } catch (error) {
-      alert("Error al eliminar gasto");
+      toast.error("Error al eliminar gasto");
     }
   };
 
   const detectarDuplicados = () => {
     if (!periodos.length || periodoSeleccionado === "todos") {
-      alert("⚠️ Selecciona un período específico para detectar duplicados");
+      toast.warning("⚠️ Selecciona un período específico para detectar duplicados");
       return;
     }
 
@@ -334,7 +346,7 @@ export default function GastosPage() {
     );
 
     if (Object.keys(soloConDuplicados).length === 0) {
-      alert("✅ No se encontraron duplicados en este período");
+      toast.success("✅ No se encontraron duplicados en este período");
       return;
     }
 
@@ -386,20 +398,20 @@ export default function GastosPage() {
       const result = await response.json();
 
       if (result.success) {
-        alert("✅ Gasto actualizado");
+        toast.success("✅ Gasto actualizado");
         cancelarEdicion(gastoId);
-        cargarGastos();
+        cargarGastos(true);
         detectarDuplicados();
       } else {
-        alert(`❌ Error: ${result.error}`);
+        toast.error(`❌ Error: ${result.error}`);
       }
     } catch (error) {
-      alert("Error al actualizar gasto");
+      toast.error("Error al actualizar gasto");
     }
   };
 
   const eliminarGastoInline = async (id: number, descripcion: string) => {
-    if (!confirm(`¿Eliminar "${descripcion}"?`)) return;
+    if (!(await confirmar(`¿Eliminar "${descripcion}"?`))) return;
 
     try {
       const response = await fetch(`/api/gastos/${id}`, {
@@ -409,14 +421,14 @@ export default function GastosPage() {
       const result = await response.json();
 
       if (result.success) {
-        alert("✅ Gasto eliminado");
-        cargarGastos();
+        toast.success("✅ Gasto eliminado");
+        cargarGastos(true);
         detectarDuplicados();
       } else {
-        alert(`❌ Error: ${result.error}`);
+        toast.error(`❌ Error: ${result.error}`);
       }
     } catch (error) {
-      alert("Error al eliminar gasto");
+      toast.error("Error al eliminar gasto");
     }
   };
 

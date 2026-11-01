@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { formatDate } from "@/lib/utils";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import { toast, confirmar } from "@/lib/notify";
 
 export default function EditarGastoPage() {
   const router = useRouter();
@@ -49,12 +50,12 @@ export default function EditarGastoPage() {
           fecha_vencimiento: gasto.fecha_vencimiento ? gasto.fecha_vencimiento.split('T')[0] : ''
         });
       } else {
-        alert('Error al cargar el gasto');
+        toast.error('Error al cargar el gasto');
         router.push('/gastos');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Error al cargar el gasto');
+      toast.error('Error al cargar el gasto');
       router.push('/gastos');
     } finally {
       setLoading(false);
@@ -90,21 +91,21 @@ export default function EditarGastoPage() {
       const result = await response.json();
 
       if (result.success) {
-        alert('✅ Gasto actualizado exitosamente');
+        toast.success('✅ Gasto actualizado exitosamente');
         router.push('/gastos');
       } else {
-        alert(`❌ Error: ${result.error}`);
+        toast.error(`❌ Error: ${result.error}`);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Error al guardar los cambios');
+      toast.error('Error al guardar los cambios');
     } finally {
       setGuardando(false);
     }
   };
 
   const handleEliminar = async () => {
-    if (!confirm('¿Estás seguro de eliminar este gasto?')) return;
+    if (!(await confirmar('¿Estás seguro de eliminar este gasto?'))) return;
 
     try {
       const response = await fetch(`/api/gastos/${id}`, {
@@ -114,14 +115,14 @@ export default function EditarGastoPage() {
       const result = await response.json();
 
       if (result.success) {
-        alert('✅ Gasto eliminado');
+        toast.success('✅ Gasto eliminado');
         router.push('/gastos');
       } else {
-        alert(`❌ Error: ${result.error}`);
+        toast.error(`❌ Error: ${result.error}`);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Error al eliminar el gasto');
+      toast.error('Error al eliminar el gasto');
     }
   };
 

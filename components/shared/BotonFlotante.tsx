@@ -2,12 +2,14 @@
 
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import FormGasto from "@/components/gastos/FormGasto";
+import { GASTOS_ACTUALIZADOS } from "@/lib/notify";
 
 export default function BotonFlotante() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <>
@@ -24,11 +26,14 @@ export default function BotonFlotante() {
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           onSuccess={() => {
-  setIsOpen(false);
-  setTimeout(() => {
-    window.location.href = '/gastos';
-  }, 500);
-}}
+            setIsOpen(false);
+            if (pathname === "/gastos") {
+              // Ya estamos en la lista: recargarla sin refrescar la página ni mover el scroll
+              window.dispatchEvent(new Event(GASTOS_ACTUALIZADOS));
+            } else {
+              router.push("/gastos");
+            }
+          }}
         />
       )}
     </>
